@@ -169,6 +169,8 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
         CityId = providerDetails.CityId,
     };
 
+
+
     var result = await UserManager.CreateAsync(user, providerIdentity.Password);
     if (result.Succeeded)
     {
@@ -180,8 +182,8 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
             ServiceId = providerDetails.ServiceId,
             Available_Day = new List<Available_Day>()
         };
-
         ApplicationDb.Providers.Add(provider);
+        await UserManager.AddToRoleAsync(user, "Provider");
         await ApplicationDb.SaveChangesAsync();
 
         // Retrieve available days from TempData
@@ -193,25 +195,28 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
             {
                 day.ProviderId = provider.Id;
 
-                // Check if a record with the same ProviderId, Day, Start_Time, and End_Time exists
-                var existingDay = ApplicationDb.Available_Day
-                    .FirstOrDefault(d => d.ProviderId == provider.Id && d.Day == day.Day
-                                            && d.Start_Time == day.Start_Time && d.End_Time == day.End_Time);
+                        // Check if a record with the same ProviderId, Day, Start_Time, and End_Time exists
+                        //var existingDay = ApplicationDb.Available_Day
+                        //    .FirstOrDefault(d => d.ProviderId == provider.Id && d.Day == day.Day
+                        //                            && d.Start_Time == day.Start_Time && d.End_Time == day.End_Time);
 
-                if (existingDay == null)
-                {
-                    // If no duplicate is found, add the new available day
-                    ApplicationDb.Available_Day.Add(day);
-                    await ApplicationDb.SaveChangesAsync();
-                }
-                else
-                {
-                    continue;
-                }
+                        //if (existingDay == null)
+                        //{
+                        //    // If no duplicate is found, add the new available day
+                        //    ApplicationDb.Available_Day.Add(day);
+                        //    await ApplicationDb.SaveChangesAsync();
+                        //}
+                        //else
+                        //{
+                        //    continue;
+                        //}
+                        ApplicationDb.Available_Day.Add(day);
 
-            }
-                    
-        }
+                        await ApplicationDb.SaveChangesAsync();
+
+                    }
+
+                }
         // Clear TempData after use
         TempData.Remove("ProviderIdentity");
         TempData.Remove("ProviderDetails");
@@ -275,8 +280,8 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
                 {
                     ApplicationUserId = user.Id
                 };
-
                 ApplicationDb.Customers.Add(customer);
+                await UserManager.AddToRoleAsync(user, "Customer");
                 await ApplicationDb.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Home");
