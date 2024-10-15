@@ -1,0 +1,47 @@
+﻿@model Category
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h2>@Model.Name</h2>
+
+    <h4>Services in this category:</h4>
+    <ul>
+        @foreach (var service in Model.Services)
+        {
+            <li>
+                <strong>Service Name:</strong> @service.Name
+
+                <ul>
+                    <li><strong>Providers for this service:</strong></li>
+                    @if (service.Providers != null && service.Providers.Any())
+                    {
+                        foreach (var provider in service.Providers)
+                        {
+                            <li>
+                                <div>
+                                    <strong>Provider Name:</strong> @provider.ApplicationUser.UserName <br />
+                                    <strong>Provider Name:</strong> @provider.Bio <br />
+                                    <strong>Rating:</strong> @provider.Rating <br />
+                                    <strong>Price Range:</strong> @provider.MinPrice - @provider.MaxPrice
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li>No providers available for this service.</li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+</div>
+
+<div>
+    <a asp-action="GetAll">Back to List</a>
+</div>

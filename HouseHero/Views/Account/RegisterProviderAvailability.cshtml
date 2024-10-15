@@ -1,0 +1,84 @@
+﻿@model HouseHero.Models.ViewModels.ProviderAvailabilityViewModel
+
+<h4>بعض الإضافات لصفحتك الشخصية</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Bio">قم بإضافة وصف لحسابك الشخصي:</label>
+                <textarea asp-for="Bio" class="form-control" placeholder="إختياري"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="day">اليوم</label>
+                <select asp-for="SelectedDays" class="form-control" id="day">
+                   @foreach (var day in Enum.GetValues(typeof(DAL.Models.Day)))
+                    {
+                        <option value="@day">@day</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fromTime">من الساعة</label>
+                <input type="time" asp-for="StartTimes" class="form-control" id="fromTime" />
+            </div>
+
+            <div class="form-group">
+                <label for="toTime">حتى الساعة</label>
+                <input type="time" asp-for="EndTimes" class="form-control" id="toTime" />
+            </div>
+
+            <button type="button" id="addDayButton" class="btn btn-primary">إضافة للجدول</button>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">إنشاء</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h5>جدولك الشخصي:</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>اليوم</th>
+                    <th>من الساعة</th>
+                    <th>حتى الساعة</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleTableBody">
+                <!-- Days will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#addDayButton').on('click', function () {
+                var day = $('#day').val();
+                var fromTime = $('#fromTime').val();
+                var toTime = $('#toTime').val();
+
+                $.ajax({
+                    url: '@Url.Action("AddDayToSchedule", "Account")',
+                    type: 'POST',
+                    data: { day: day, fromTime: fromTime, toTime: toTime },
+                    success: function (result) {
+                        if (result.success === false) {
+                            alert(result.message);
+                        } else {
+                            $('#scheduleTableBody').append(result);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
