@@ -1,15 +1,42 @@
+using BLL.Interface;
+using BLL.Repository;
+using DAL.Data.Context;
+using DAL.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 namespace HouseHero
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            //Add ApplicationDbContext
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Sql"));
+            });
+
+
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+
+            builder.Services.AddAuthentication();
+            builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<ICityRepository, CityRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
             var app = builder.Build();
+
+            await app.Services.SeedIdentityAsync();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

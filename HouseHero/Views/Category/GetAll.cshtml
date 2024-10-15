@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Category> 
+
+<h3>الخدمات المقدمة</h3>
+<div class="card flex-row">
+    @foreach (var category in Model)
+    {
+        <a asp-controller="Category" asp-action="Details" asp-route-id="@category.Id" class="text-decoration-none">
+            <div class="card-title ms-3">
+                <span>@category.Name</span>
+            </div>
+        </a>
+    }
+
+
+ 
+</div>
+
+
