@@ -19,8 +19,8 @@ namespace DAL.Models
         public int Id {  get; set; }
         public int ProviderId {  get; set; }
         public Day Day { get; set; }
-        public DateTime Start_Time { get; set; }
-        public DateTime End_Time { get; set; }
+        public TimeOnly Start_Time { get; set; }
+        public TimeOnly End_Time { get; set; }
         
         public Provider Provider { get; set; } = null!;
     }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -99,8 +99,9 @@ namespace DAL.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
-                    ProfilePicture_ID = table.Column<int>(type: "int", nullable: true),
+                    ProfilePicture_ID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -271,8 +272,8 @@ namespace DAL.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProviderId = table.Column<int>(type: "int", nullable: false),
                     Day = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Start_Time = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End_Time = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Start_Time = table.Column<TimeOnly>(type: "time", nullable: false),
+                    End_Time = table.Column<TimeOnly>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -315,7 +316,7 @@ namespace DAL.Data.Migrations
                     ProviderId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
-                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 10, 15, 10, 25, 8, 1, DateTimeKind.Local).AddTicks(8416)),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 10, 16, 15, 8, 47, 554, DateTimeKind.Local).AddTicks(71)),
                     PreferredCommunication = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)

@@ -28,6 +28,8 @@
                                     <strong>Provider Name:</strong> @provider.Bio <br />
                                     <strong>Rating:</strong> @provider.Rating <br />
                                     <strong>Price Range:</strong> @provider.MinPrice - @provider.MaxPrice
+                                    <br />
+                                    <a asp-controller="Provider" asp-action="Details" asp-route-id="@provider.Id">Details</a>
                                 </div>
                             </li>
                         }

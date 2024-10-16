@@ -129,8 +129,8 @@ namespace HouseHero.Controllers
             availableDays.Add(new Available_Day
             {
                 Day = day,
-                Start_Time = DateTime.Today.Add(TimeSpan.Parse(fromTime)),
-                End_Time = DateTime.Today.Add(TimeSpan.Parse(toTime))
+                Start_Time = TimeOnly.Parse(fromTime), 
+                End_Time = TimeOnly.Parse(toTime)      
             });
 
             // Store the updated list back in TempData
@@ -161,6 +161,7 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
 
     var user = new ApplicationUser
     {
+        Name =providerIdentity.Name,
         UserName = providerIdentity.Name,
         Email = providerIdentity.Email,
         Address = providerDetails.Address,
@@ -222,7 +223,7 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
         TempData.Remove("ProviderDetails");
         TempData.Remove("AvailableDays");
 
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Login");
     }
 
     // Log or display the errors
@@ -265,7 +266,8 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
             // Create customer user
             var user = new ApplicationUser
             {
-                UserName = model.Email,
+                UserName = model.Name,
+                Name = model.Name,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 Age = model.Age,
@@ -284,8 +286,8 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
                 await UserManager.AddToRoleAsync(user, "Customer");
                 await ApplicationDb.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Home");
-                // Redirect to a success page
+                return RedirectToAction("Login");
+                // Redirect to a Login
             }
 
             ModelState.AddModelError("", "Failed to register customer.");

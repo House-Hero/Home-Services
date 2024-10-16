@@ -34,6 +34,8 @@ namespace HouseHero
             builder.Services.AddScoped<ICityRepository, CityRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             var app = builder.Build();
 
             await app.Services.SeedIdentityAsync();

@@ -90,6 +90,9 @@ namespace DAL.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -107,8 +110,8 @@ namespace DAL.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProfilePicture_ID")
-                        .HasColumnType("int");
+                    b.Property<string>("ProfilePicture_ID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -150,11 +153,11 @@ namespace DAL.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("End_Time")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly>("End_Time")
+                        .HasColumnType("time");
 
-                    b.Property<DateTime>("Start_Time")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly>("Start_Time")
+                        .HasColumnType("time");
 
                     b.HasKey("Id", "ProviderId");
 
@@ -324,7 +327,7 @@ namespace DAL.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 10, 15, 10, 25, 8, 1, DateTimeKind.Local).AddTicks(8416));
+                        .HasDefaultValue(new DateTime(2024, 10, 16, 15, 8, 47, 554, DateTimeKind.Local).AddTicks(71));
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
