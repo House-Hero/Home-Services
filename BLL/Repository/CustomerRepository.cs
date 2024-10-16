@@ -1,4 +1,5 @@
-﻿using BLL.Interface;
+﻿using Azure.Core;
+using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
 using System;
@@ -26,7 +27,7 @@ namespace BLL.Repository
             return customer;
         }
 
-        public IEnumerable< SavedProvider> GetSaved(int CustomerId)
+        public IEnumerable<SavedProvider> GetSaved(int CustomerId)
         {
             var customer = _context.SavedProviders.Where(c => c.CustomerId == CustomerId);
             return customer.ToList();
@@ -35,15 +36,21 @@ namespace BLL.Repository
         public void SaveProviders(int CustomerId, int ProviderId)
         {
             var save =new SavedProvider() { CustomerId = CustomerId, ProviderId = ProviderId };
-          // _context.SavedProviders.Add(save);
-           // _context.SaveChanges();
+            _context.SavedProviders.Add(save);
+            _context.SaveChanges();
+        }
+
+        public void SaveRequest(Requests requests)
+        {
+            _context.Requests.Add(requests);
+            _context.SaveChanges();
         }
 
         public void UnSaveProviders(int CustomerId, int ProviderId)
         {
             var save = new SavedProvider() { CustomerId = CustomerId, ProviderId = ProviderId };
-          // _context.SavedProviders.Remove(save);
-          // _context.SaveChanges();
+            _context.SavedProviders.Remove(save);
+            _context.SaveChanges();
         }
     }
 }

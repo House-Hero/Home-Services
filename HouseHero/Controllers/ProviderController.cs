@@ -14,13 +14,13 @@ namespace HouseHero.Controllers
     {
         private readonly IProviderRepository _provider;
         private readonly ICustomerRepository _customer;
-        private readonly ApplicationDbContext _context;
+ 
 
-        public ProviderController(IProviderRepository provider,ICustomerRepository customer , ApplicationDbContext applicationDb)
+        public ProviderController(IProviderRepository provider,ICustomerRepository customer )
         {
             _provider = provider;
             _customer = customer;
-            _context = applicationDb;
+            
         }
         public IActionResult Details(int id)
         {
@@ -59,11 +59,11 @@ namespace HouseHero.Controllers
         public IActionResult RequestService(int id) 
         {
             var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId)).Id;
+            var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));
             var serviceId = _provider.GetServiceIdForProvider(id); 
 
             ViewBag.ProviderId = id;
-            ViewBag.CustomerId = customerId;
+            ViewBag.CustomerId = customerId.Id;
             ViewBag.ServiceId = serviceId;
 
             return View(new RequestServiceViewModel());
@@ -84,8 +84,7 @@ namespace HouseHero.Controllers
                     Comment = requestServiceVM.Comment,
                     Status = Status.on_Review 
                 };
-                _context.Requests.Add(request);
-                _context.SaveChanges();
+                _customer.SaveRequest(request);
                 return RedirectToAction("Details", new { id = requestServiceVM.ProviderId });
             }
             ModelState.AddModelError("", "Failed to add request.");
