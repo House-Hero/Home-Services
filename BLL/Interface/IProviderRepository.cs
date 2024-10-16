@@ -10,5 +10,6 @@ namespace BLL.Interface
     public interface IProviderRepository:IGenericRepository<Provider> 
     {
         public Provider GetProviderWithAllRelatedData(int ProviderId);
+        public int GetServiceIdForProvider(int ProviderId);
     }
 }

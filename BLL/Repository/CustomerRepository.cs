@@ -35,15 +35,15 @@ namespace BLL.Repository
         public void SaveProviders(int CustomerId, int ProviderId)
         {
             var save =new SavedProvider() { CustomerId = CustomerId, ProviderId = ProviderId };
-            _context.SavedProviders.Add(save);
-            _context.SaveChanges();
+          // _context.SavedProviders.Add(save);
+           // _context.SaveChanges();
         }
 
         public void UnSaveProviders(int CustomerId, int ProviderId)
         {
             var save = new SavedProvider() { CustomerId = CustomerId, ProviderId = ProviderId };
-            _context.SavedProviders.Remove(save);
-            _context.SaveChanges();
+          // _context.SavedProviders.Remove(save);
+          // _context.SaveChanges();
         }
     }
 }
