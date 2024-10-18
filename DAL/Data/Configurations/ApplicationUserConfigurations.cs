@@ -13,6 +13,7 @@ namespace DAL.Data.Configurations
             C.HasOne(p => p.City)
             .WithMany(c => c.ApplicationUsers)
             .HasForeignKey(p => p.CityId);
+            
         }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DAL.Data.Migrations
+namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -327,7 +327,7 @@ namespace DAL.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 10, 16, 15, 8, 47, 554, DateTimeKind.Local).AddTicks(71));
+                        .HasDefaultValue(new DateTime(2024, 10, 17, 9, 29, 14, 457, DateTimeKind.Local).AddTicks(5888));
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");

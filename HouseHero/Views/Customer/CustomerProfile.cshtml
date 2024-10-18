@@ -1,0 +1,111 @@
+﻿@model Customer
+
+@{
+    var requestsPerCustomer = ViewBag.RequestesPerCustomer as List<DAL.Models.Requests>;
+}
+
+<div>
+    <h1>@Model.ApplicationUser.UserName</h1>
+    <h2>@Model.ApplicationUser.City.Name</h2>
+    <h3>@Model.ApplicationUser.PhoneNumber</h3>
+</div>
+<div>
+    <label for="statusDropdown">Select Status</label>
+    <select id="statusDropdown" name="selectedStatus" onchange="filterRequests()">
+        <option value="">---- Select Status ----</option>
+        @foreach (var status in ViewBag.StatusList)
+        {
+            <option value="@status.Value">@status.Text</option>
+        }
+    </select>
+</div>
+
+<div>
+    <label for="serviceDropdown">Select Service</label>
+    <select id="serviceDropdown" name="selectedService" onchange="filterRequests()">
+        <option value="">---- Select Service ----</option>
+        @foreach (var service in ViewBag.ServiceList)
+        {
+            <option value="@service.Value">@service.Text</option>
+        }
+    </select>
+</div>
+<div>
+    <button onclick="resetFilters()">Show All Requests</button>
+</div>
+<div>
+    <h4>Request History</h4>
+    <div id="requestHistory">
+        
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        resetFilters();
+    });
+    function resetFilters() {
+        // Clear the dropdowns
+        document.getElementById("statusDropdown").value = "";
+        document.getElementById("serviceDropdown").value = "";
+
+        // Fetch all requests for the customer without filtering
+        filterRequests();
+    }
+    function filterRequests() {
+        var selectedStatus = document.getElementById("statusDropdown").value;
+        var selectedService = document.getElementById("serviceDropdown").value;
+        var customerId = '@Model.Id';
+
+        $.ajax({
+            url: '/Customer/FilterRequests',
+            type: 'POST',
+            data: { customerId: customerId, selectedStatus: selectedStatus, selectedService: selectedService },
+            success: function (result) {
+                var requestHistoryDiv = document.getElementById("requestHistory");
+                requestHistoryDiv.innerHTML = "";
+                console.log(result);
+                if (result.length > 0) {
+                    result.forEach(function (request) {
+                        console.log(request.statusName);
+                        if (request.statusName == "on_Review") {
+                            statusContent = `<button onclick="cancelRequest(${request.requestId})" class="btn btn-warning">Cancel</button>`;
+                        } else if (request.statusName == "Completed") {
+                            statusContent = `<span class="status-circle completed">Completed</span>`;
+                        } else if (request.statusName == "Accepted") {
+                            statusContent = `<span class="status-circle accepted">Accepted</span>`;
+                        }
+                        requestHistoryDiv.innerHTML += `
+                            <div class="card" style="width: 18rem; margin: 10px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Provider: ${request.providerName}</h5>
+                                    <p>Address: ${request.providerAddress}</p>
+                                    <p>Phone: ${request.providerPhone}</p>
+                                    <p>Service: ${request.serviceName}</p>
+                                    <p>Request Date: ${request.requestDate}</p>
+                                    <p>Status: ${request.statusName}</p>
+                                        ${statusContent}
+                                </div>
+                            </div>`;
+                    });
+                } else {
+                    requestHistoryDiv.innerHTML = "<p>No request history available.</p>";
+                }
+            }
+        });
+    }
+    function cancelRequest(requestId) {
+        $.ajax({
+            url: '/Customer/CancelRequest',
+            type: 'POST',
+            data: { requestId: requestId },
+            success: function () {
+                alert("Request canceled successfully.");
+                filterRequests(); // Refresh the list
+            },
+            error: function () {
+                alert("There was an error canceling the request.");
+            }
+        });
+    }
+</script>
