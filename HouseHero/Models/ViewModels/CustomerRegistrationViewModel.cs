@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HouseHero.Models.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace HouseHero.Models.ViewModels
 {
@@ -6,15 +7,24 @@ namespace HouseHero.Models.ViewModels
     {
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(50, ErrorMessage = "Name can't be longer than 50 characters.")]
+        [RegularExpression(@"^[a-zA-Z0-9_.-]*$", ErrorMessage = "The username can only contain letters," +
+            " numbers, underscores, periods, and hyphens.")]
+        [UniqeName]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
+        [UniqeEmail]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 100 characters.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be between" +
+            " 6 and 100 characters.")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$",
+        ErrorMessage = "The password must be at least 6 characters long," +
+            " with at least one uppercase letter, one lowercase letter," +
+            " one number, and one special character.")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Confirm Password is required.")]
@@ -39,7 +49,8 @@ namespace HouseHero.Models.ViewModels
         public int CityId { get; set; }
 
         [Display(Name = "Profile Picture")]
-        [FileExtensions(Extensions = "jpg,jpeg,png", ErrorMessage = "Profile picture must be a JPG, JPEG, or PNG file.")]
+        [FileExtensions(Extensions = "jpg,jpeg,png", ErrorMessage = "Profile picture must" +
+            " be a JPG, JPEG, or PNG file.")]
         public IFormFile? ProfilePicture { get; set; }
     }
 }

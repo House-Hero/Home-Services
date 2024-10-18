@@ -29,5 +29,6 @@ namespace HouseHero.Controllers
 
             return View(category); 
         }
+       
     }
 }

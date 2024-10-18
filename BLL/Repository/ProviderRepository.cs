@@ -35,8 +35,22 @@ namespace BLL.Repository
                     .FirstOrDefault(c => c.Id == ProviderId);
 
             return provider;
+        }
+        public int GetServiceIdForProvider(int ProviderId)
+        {
+            if (ProviderId <= 0)
+            {
+                throw new ArgumentException("ProviderId must be greater than zero.", nameof(ProviderId));
+            }
+            int serviceId = (int) _app.Providers.FirstOrDefault(c => c.Id == ProviderId).ServiceId;
+            return serviceId;
+        }
 
 
+        public void AddReview(Review review)
+        {
+            _app.Reviews.Add(review);
+            _app.SaveChanges();
         }
     }
 }

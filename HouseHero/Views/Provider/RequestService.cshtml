@@ -1,0 +1,32 @@
+﻿@model RequestServiceViewModel
+
+@{
+    ViewData["Title"] = "Request Service";
+}
+
+
+<form asp-action="RequestService" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="ProviderId" value="@ViewBag.ProviderId" />
+    <input type="hidden" asp-for="CustomerId" value="@ViewBag.CustomerId" />
+    <input type="hidden" asp-for="ServiceId" value="@ViewBag.ServiceId" />
+    <input type="hidden" asp-for="RequestDate" value="@DateTime.Now" />
+    <input type="hidden" asp-for="Status" value="3" /> <!-- On Review -->
+
+    <div>
+        <label for="PreferredCommunication">وسيلة التواصل المقترحه :</label>
+        <select asp-for="PreferredCommunication" class="form-control">
+            <option value="0">WhatsApp</option>
+            <option value="1">Call</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="Comment">ملاحظه :</label>
+        <textarea asp-for="Comment" class="form-control"></textarea>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary">اطلب</button>
+    </div>
+</form>

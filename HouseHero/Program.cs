@@ -22,7 +22,7 @@ namespace HouseHero
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Sql"));
             });
-
+             
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -34,6 +34,8 @@ namespace HouseHero
             builder.Services.AddScoped<ICityRepository, CityRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             var app = builder.Build();
 
             await app.Services.SeedIdentityAsync();

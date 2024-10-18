@@ -10,7 +10,8 @@ namespace DAL.Models
     { 
         Accepted = 1,
         rejected = 2,
-        on_Review=3
+        on_Review=3,
+        Completed = 4
     };
     public enum Preferred_Communication
     {
