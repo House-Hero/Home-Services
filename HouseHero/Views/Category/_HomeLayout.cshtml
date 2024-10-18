@@ -31,7 +31,7 @@
           </ul>
         </div>
 
-            @if (!User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated)
             {
                 <div class="profile-dropdown">
                     <button id="profile-btn" class="profile-btn">
