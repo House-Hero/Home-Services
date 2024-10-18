@@ -1,18 +1,68 @@
 ﻿@model IEnumerable<Category> 
 
-<h3>الخدمات المقدمة</h3>
-<div class="card flex-row">
-    @foreach (var category in Model)
-    {
-        <a asp-controller="Category" asp-action="Details" asp-route-id="@category.Id" class="text-decoration-none">
-            <div class="card-title ms-3">
-                <span>@category.Name</span>
+@{
+    ViewData["Title"] = "خدماتك";
+    Layout = "_HomeLayout";
+}
+@section WelcomePage{
+    <div class="containerV1">
+        <div class="welcome-page">
+            <h1>مرحبا بكم في <span>خدماتك</span></h1>
+            <br />
+            <p>
+                <span>خدماتك</span> هو الموقع الذي يجمع بين أصحاب المهارات والحرفيين
+                المحترفين والأشخاص الباحثين عن خدمات منزلية بطريقة سهلة ومريحة.
+                يمكنك اختيار الحرفي المناسب بناءً على تقييمه وحجز موعد معه بكل
+                سهولة. نضمن لك تجربة موثوقة وآمنة للحصول على أفضل الخدمات.
+            </p>
+            <a asp-controller="Account" asp-action="RegisterType" class="button3">انضم معنا الان</a>
+        </div>
+    </div>
+}
+
+<div class="slider" id="slider">
+        <h1>الخدمات المقدمة</h1>
+
+        <div class="flex-con">
+            @foreach (var category in Model)
+            {
+            <a asp-controller="Category" asp-action="Details" asp-route-id="@category.Id">
+                <div class="flex-box">
+                    <img src="~/assets/Home/@category.Name" alt="@category.Name"> @*Edit the category svg names in "/assets/Home"
+                                                                                        To match the category Name*@
+                </div>
+                <h6>@category.Name</h6> 
+            </a>
+            }
+        </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="why-section">
+        <h4>لماذا خدماتك ؟</h4>
+        <p>
+            يقدم موقع خدماتك تجربة مميزة للمستخدمين من خلال عدة خصائص تجعل الحصول
+            على الخدمات المنزلية أسهل وأفضل. يمكنك اختيار الحرفيين بناءً على تقييمات
+            العملاء السابقين لضمان جودة الخدمة، مع إمكانية الحجز بسهولة بضغطة زر،
+            دون الحاجة للاتصالات المطولة أو الانتظار. نضمن لك أيضًا أن جميع أصحاب
+            الحرف مسجلون ومعتمدون لتوفير خدمة مهنية موثوقة. بالإضافة إلى ذلك، يوفر
+            خدماتك مجموعة واسعة من الخدمات المنزلية، سواء كانت صيانة، تنظيف، أو
+            تحسينات منزلية، لتلبية كافة احتياجاتك اليومية بكل يسر.
+        </p>
+        <div class="flex-con2">
+            <div class="flex-box2">
+                <img src="~/assets/Home/Frame 47.svg" alt="">
             </div>
-        </a>
-    }
-
-
- 
-</div>
-
+            <div class="flex-box2">
+                <img src="~/assets/Home/Frame 46.svg" alt="">
+            </div>
+            <div class="flex-box2">
+                <img src="~/assets/Home/Frame 45.svg" alt="">
+            </div>
+            <div class="flex-box2">
+                <img src="~/assets/Home/Frame 43.svg" alt="">
+            </div>
+        </div>
+    </div>
 
