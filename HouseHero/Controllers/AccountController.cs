@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Intrinsics.X86;
 using System.Text.Json;
 
 namespace HouseHero.Controllers
@@ -334,6 +335,7 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
             await SignInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+
 
     }
 

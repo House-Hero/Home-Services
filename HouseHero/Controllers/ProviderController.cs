@@ -90,6 +90,20 @@ namespace HouseHero.Controllers
             ModelState.AddModelError("", "Failed to add request.");
             return View(requestServiceVM);
         }
-
+        [HttpPost]
+        public IActionResult SaveReview(string Comment, int CustomerId, int ProviderId, int Rating)
+        {
+            var review = new Review
+            {
+                Comment = Comment,
+                CustomerId = CustomerId,
+                ProviderId = ProviderId,
+                Rating = Rating
+            };
+            _provider.AddReview(review);
+            int id = ProviderId;
+            return RedirectToAction("Details", new { id = id });
+        }
+       
     }
 }

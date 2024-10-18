@@ -22,7 +22,7 @@ namespace HouseHero
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Sql"));
             });
-
+             
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

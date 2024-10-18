@@ -46,6 +46,7 @@ namespace HouseHero.Models.ViewModels
 
         public List<Available_Day> Days { get; set; }=null!;
         public List<Portfolio_item> Portfolios { get; set; } = null!;
+        public List<Review> Reviews { get; set; }
 
         // convert from Provider to ViewModel Avoid Mapping in Controller
         public static implicit operator ProviderWithAllDataViewModel(Provider provider)
@@ -66,7 +67,8 @@ namespace HouseHero.Models.ViewModels
                 ServiceName = provider.Service?.Name ?? string.Empty,
                 Days = provider.Available_Day?.ToList() ?? new List<Available_Day>(),
                 Portfolios = provider.Portfolio_Item?.ToList() ?? new List<Portfolio_item>(),
-                Save = provider.Saved != null && provider.Saved.Any()
+                Save = provider.Saved != null && provider.Saved.Any(),
+                Reviews=provider.Reviews?.ToList() ?? new List<Review>()
             };
         }
 

@@ -1,6 +1,7 @@
 ﻿using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,11 @@ namespace BLL.Repository
 {
     public class CityRepository : GenericRepository<City>, ICityRepository
     {
-        public CityRepository(ApplicationDbContext appDbContext) : base(appDbContext)
+        private readonly ApplicationDbContext _context;
+
+        public CityRepository(ApplicationDbContext context) : base(context)
         {
+            _context = context;
         }
     }
 }

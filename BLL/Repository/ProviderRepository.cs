@@ -45,5 +45,12 @@ namespace BLL.Repository
             int serviceId = (int) _app.Providers.FirstOrDefault(c => c.Id == ProviderId).ServiceId;
             return serviceId;
         }
+
+
+        public void AddReview(Review review)
+        {
+            _app.Reviews.Add(review);
+            _app.SaveChanges();
+        }
     }
 }

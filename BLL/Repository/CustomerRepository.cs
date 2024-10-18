@@ -52,5 +52,9 @@ namespace BLL.Repository
             _context.SavedProviders.Remove(save);
             _context.SaveChanges();
         }
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }
