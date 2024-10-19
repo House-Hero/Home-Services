@@ -1,69 +1,96 @@
 ﻿@model HouseHero.Models.ViewModels.CustomerRegistrationViewModel
-
 @{
+    ViewData["Title"] = "انشاء حساب";
+
+    Layout = null;
+
     SelectList City = new SelectList(ViewBag.City, "Id", "Name");
 }
 
-<h1>RegisterCustomer</h1>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/register-customer.css" />
+</head>
 
-<h4>CustomerRegistrationViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="RegisterCustomer">
+<body>
+    <div class="top-right-widget">
+        <div class="view">
+            <div class="text-wrapper">خدماتك</div>
+        </div>
+        <img class="img" src="~/assets/frame-7.svg" alt="Icon">
+    </div>
+    <div class="frame">
+        <form asp-action="RegisterCustomer" class="div">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="CityId"></label>
-                <select asp-for="CityId" asp-items="@City">
-                    <option Value="0">---- Select City ----</option>
-                </select>
-                <span asp-validation-for="CityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <p class="text-wrapper">أنشئ حساب وابدأ بحجز خدماتك!</p>
+            <img class="healthicons-ui-user" src="~/assets/healthicons_ui-user-profile.svg" alt="User Profile" />
+            <div class="div-2">
+                <div class="div-3">
+                    <!-- Input Fields with Icons -->
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <input asp-for="Name" type="text" placeholder="الاسم" required />
+                            <img class="img" src="~/assets/material-symbols_person-outline.svg" alt="Person Icon" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input asp-for="Email" type="email" placeholder="البريد الالكتروني" required />
+                            <img class="img" src="~/assets/ic_outline-email.svg" alt="Email Icon" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <input asp-for="Address" type="text" placeholder="العنوان" required />
+                            <img class="img" src="~/assets/mdi_home-outline.svg" alt="Home Icon" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <select asp-for="CityId" asp-items="@City" required>
+                                <option value="">المدينة</option>
+                            </select>
+                            <img class="img" src="~/assets/mi_location.svg" alt="Location Icon" />
+                            <span asp-validation-for="CityId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <input asp-for="Password" type="password" placeholder="كلمة السر" required />
+                            <img class="img" src="~/assets/material-symbols_lock-outline.svg" alt="Lock Icon" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input asp-for="PhoneNumber" type="tel" placeholder="رقم الهاتف" required />
+                            <img class="img" src="~/assets/carbon_phone.svg" alt="Phone Icon" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <input asp-for="ConfirmPassword" type="password" placeholder="تأكيد كلمة السر" required />
+                            <img class="img" src="~/assets/material-symbols_lock-outline.svg" alt="Lock Icon" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input asp-for="Age" type="number" placeholder="العمر" required />
+                            <img class="img" src="~/assets/ic_round-calendar-month.svg" alt="Calendar Icon" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <div class="frame-wrapper-2">
+                    <button type="submit" class="submit-button">انشئ حسابك</button>
+                </div>
             </div>
         </form>
+        <div class="text-wrapper-4">لديك حساب بالفعل؟ <a asp-action="Login">تسجيل الدخول</a></div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</body>
+</html>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
