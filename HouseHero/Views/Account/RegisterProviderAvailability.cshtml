@@ -1,84 +1,112 @@
 ﻿@model HouseHero.Models.ViewModels.ProviderAvailabilityViewModel
+@{
+    ViewData["Title"] = "تسجيل الأوقات المتاحة";
 
-<h4>بعض الإضافات لصفحتك الشخصية</h4>
-<hr />
-
-<div class="row">
-    <div class="col-md-6">
-        <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="Bio">قم بإضافة وصف لحسابك الشخصي:</label>
-                <textarea asp-for="Bio" class="form-control" placeholder="إختياري"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="day">اليوم</label>
-                <select asp-for="SelectedDays" class="form-control" id="day">
-                   @foreach (var day in Enum.GetValues(typeof(DAL.Models.Day)))
-                    {
-                        <option value="@day">@day</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="fromTime">من الساعة</label>
-                <input type="time" asp-for="StartTimes" class="form-control" id="fromTime" />
-            </div>
-
-            <div class="form-group">
-                <label for="toTime">حتى الساعة</label>
-                <input type="time" asp-for="EndTimes" class="form-control" id="toTime" />
-            </div>
-
-            <button type="button" id="addDayButton" class="btn btn-primary">إضافة للجدول</button>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">إنشاء</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="col-md-6">
-        <h5>جدولك الشخصي:</h5>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>اليوم</th>
-                    <th>من الساعة</th>
-                    <th>حتى الساعة</th>
-                </tr>
-            </thead>
-            <tbody id="scheduleTableBody">
-                <!-- Days will be added here dynamically -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
-@section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#addDayButton').on('click', function () {
-                var day = $('#day').val();
-                var fromTime = $('#fromTime').val();
-                var toTime = $('#toTime').val();
-
-                $.ajax({
-                    url: '@Url.Action("AddDayToSchedule", "Account")',
-                    type: 'POST',
-                    data: { day: day, fromTime: fromTime, toTime: toTime },
-                    success: function (result) {
-                        if (result.success === false) {
-                            alert(result.message);
-                        } else {
-                            $('#scheduleTableBody').append(result);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/register-provider-availability.css" />
+</head>
+<body>
+    <div class="frame">
+        <div class="div">
+            <h4 class="text-wrapper">بعض الإضافات لصفحتك الشخصية</h4>
+            <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="frame-wrapper">
+                    <div class="div-2">
+                        <div class="div-3">
+                            <div class="text-wrapper-2">إختياري</div>
+                            <div class="div-wrapper">
+                                <textarea asp-for="Bio" class="custom-input" placeholder="قم بإضافة وصف لحسابك الشخصي..."></textarea>
+                            </div>
+                        </div>
+                        <img class="healthicons-ui-user" src="~/assets/healthicons_ui-user-profile.svg" />
+                    </div>
+                </div>
+                <div class="div-4">
+                    <div class="frame-wrapper-2">
+                        <div class="div-5" id="calendar">
+                            <img class="line" src="~/assets/Line 7.svg" />
+                            <img class="img" src="~/assets/Line 7.svg" />
+                            <img class="line-2" src="~/assets/Line 7.svg" />
+                            <img class="line-3" src="~/assets/Line 7.svg" />
+                            <img class="line-4" src="~/assets/Line 7.svg" />
+                            <img class="line-5" src="~/assets/Line 7.svg" />
+                            <div class="text-wrapper-3">الاحد</div>
+                            <div class="text-wrapper-4">الاثنين</div>
+                            <div class="text-wrapper-5">الثلاثاء</div>
+                            <div class="text-wrapper-6">الاربعاء</div>
+                            <div class="text-wrapper-7">الخميس</div>
+                            <div class="text-wrapper-8">الجمعة</div>
+                            <div class="text-wrapper-9">السبت</div>
+                        </div>
+                    </div>
+                    <div class="div-6">
+                        <div class="div-7">
+                            <div class="frame-wrapper-3">
+                                <div class="custom-dropdown" id="dayDropdown">
+                                    <div class="custom-dropdown-header">
+                                        <span>اليوم</span>
+                                        <img class="oui-arrow-up" src="~/assets/Vector.svg" />
+                                    </div>
+                                    <div class="custom-dropdown-list"></div>
+                                </div>
+                            </div>
+                            <div class="frame-wrapper-4">
+                                <div class="custom-dropdown" id="startTimeDropdown">
+                                    <div class="custom-dropdown-header">
+                                        <span>من الساعة</span>
+                                        <img class="oui-arrow-up" src="~/assets/Vector.svg" />
+                                    </div>
+                                    <div class="custom-dropdown-list"></div>
+                                </div>
+                            </div>
+                            <div class="frame-wrapper-4">
+                                <div class="custom-dropdown" id="endTimeDropdown">
+                                    <div class="custom-dropdown-header">
+                                        <span>حتى الساعة</span>
+                                        <img class="oui-arrow-up" src="~/assets/Vector.svg" />
+                                    </div>
+                                    <div class="custom-dropdown-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="div-wrapper-3" id="addToScheduleBtn" disabled>
+                            <div class="text-wrapper-12">إضافة للجدول</div>
+                        </button>
+                    </div>
+                </div>
+                @for (int i = 0; i < 7; i++)
+
+                {
+                    <input type="hidden" asp-for="SelectedDays[i]" />
+                    <input type="hidden" asp-for="StartTimes[i]" />
+                    <input type="hidden" asp-for="EndTimes[i]" />
+                }
+                <button type="submit" class="frame-wrapper-5" id="createAccountBtn">
+                    <div class="div-wrapper-4">
+                        <div class="text-wrapper-13">انشئ الحساب</div>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="confirmation-dialog" id="confirmationDialog">
+        <p>هل أنت متأكد أنك تريد إزالة هذا الوقت؟</p>
+        <button id="confirmYes">نعم</button>
+        <button id="confirmNo">لا</button>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script src="~/js/availability.js"></script>
+    }
+</body>
+</html>
