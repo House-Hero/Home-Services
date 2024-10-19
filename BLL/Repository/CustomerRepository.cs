@@ -2,6 +2,7 @@
 using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,18 @@ namespace BLL.Repository
         public void Dispose()
         {
             _context.Dispose();
+        }
+        public Customer GetCustomerById(int CustomerId)
+        {
+            if (CustomerId <= 0)
+            {
+                throw new ArgumentException("ProviderId must be greater than zero.", nameof(CustomerId));
+            }
+            var customer = _context.Customers
+                .Include(AU => AU.ApplicationUser)
+                .FirstOrDefault(c => c.Id == CustomerId);
+
+            return customer;
         }
     }
 }

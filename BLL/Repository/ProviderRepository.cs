@@ -24,15 +24,17 @@ namespace BLL.Repository
             {
                 throw new ArgumentException("ProviderId must be greater than zero.", nameof(ProviderId));
             }
-            var provider= _app.Providers
-                    .Include(s=>s.Service)
-                    .Include(AU => AU.ApplicationUser)
-                    .Include(p=>p.Portfolio_Item)
-                    .ThenInclude(p=>p.Portfolio_Image)
-                    .Include(av=>av.Available_Day)
-                    .Include(R=>R.Reviews)
-                    .Include(R=>R.Requests)
-                    .FirstOrDefault(c => c.Id == ProviderId);
+            var provider = _app.Providers
+                .Include(p => p.Service)
+                .Include(p => p.ApplicationUser)
+                .Include(p => p.Portfolio_Item)
+                .ThenInclude(p => p.Portfolio_Image)
+                .Include(p => p.Available_Day)
+                .Include(p => p.Requests)
+                .Include(p => p.Reviews)
+                .ThenInclude(r => r.Customer) // Include Customer here
+                .ThenInclude(c => c.ApplicationUser) // Include ApplicationUser here
+                .FirstOrDefault(c => c.Id == ProviderId);
 
             return provider;
         }
