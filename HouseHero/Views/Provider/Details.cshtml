@@ -104,7 +104,21 @@
                 }
             </ul>
         </dd>
-        <form asp-action="SaveReview" method="post">
+        <!-- Reviews Section -->
+        <h4>Reviews</h4>
+        <div id="reviewsSection">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="review">
+                    <p><strong>Customer:</strong> @review.Customer?.ApplicationUser?.UserName</p>
+                    <p><strong>Comment:</strong> @review.Comment</p>
+                    <p><strong>Rating:</strong> @review.Rating</p>
+                </div>
+                <hr />
+            }
+        </div>
+        <!-- Add Review Form -->
+        <form id="addReviewForm" asp-action="SaveReview" method="post" onsubmit="return addReview(event)">
             <input type="hidden" name="ProviderId" value="@Model.ProviderId" />
             <input type="hidden" name="CustomerId" value="@ViewBag.CustomerId" />
 
@@ -126,8 +140,9 @@
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+
         <dt>
-            <a asp-controller="Provider" asp-action="RequestService" asp-route-id="@Model.ProviderId"  class="text-decoration-none"> اطلب الخدمة الان</a>
+            <a asp-controller="Provider" asp-action="RequestService" asp-route-id="@Model.ProviderId" class="text-decoration-none"> اطلب الخدمة الان</a>
         </dt>
         @if (User.IsInRole("Provider"))
         {
@@ -149,7 +164,6 @@
                 <h5 class="modal-title" id="saveModalLabel">Notification</h5>
             </div>
             <div class="modal-body">
-                
             </div>
         </div>
     </div>
@@ -180,12 +194,39 @@
 
                 setTimeout(function () {
                     $('#saveModal').modal('hide');
-                }, 1500); 
+                }, 1500);
             },
             error: function (xhr, status, error) {
                 console.error("An error occurred while saving the state.");
             }
         });
+    }
+    function addReview(event) {
+        event.preventDefault();
+
+        var form = $('#addReviewForm');
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function (response) {
+                // Append the new review to the reviews section dynamically
+                $('#reviewsSection').append(
+                    `<div class="review">
+                                <p><strong>Customer:</strong> ${response.customerName}</p>
+                                <p><strong>Comment:</strong> ${response.comment}</p>
+                                <p><strong>Rating:</strong> ${response.rating}</p>
+                                <hr />
+                            </div>`
+                );
+                form[0].reset(); // Clear the form after submission
+            },
+            error: function (xhr, status, error) {
+                console.error("An error occurred while adding the review.");
+            }
+        });
+
+        return false;
     }
 
     // Optionally trigger save before user leaves the page
@@ -200,5 +241,3 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 }
-
-
