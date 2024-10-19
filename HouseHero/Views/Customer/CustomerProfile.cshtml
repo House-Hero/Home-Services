@@ -1,9 +1,5 @@
 ﻿@model Customer
 
-@{
-    var requestsPerCustomer = ViewBag.RequestesPerCustomer as List<DAL.Models.Requests>;
-}
-
 <div>
     <h1>@Model.ApplicationUser.UserName</h1>
     <h2>@Model.ApplicationUser.City.Name</h2>
@@ -74,7 +70,10 @@
                             statusContent = `<span class="status-circle completed">Completed</span>`;
                         } else if (request.statusName == "Accepted") {
                             statusContent = `<span class="status-circle accepted">Accepted</span>`;
+                        } else if (request.statusName == "rejected") {
+                            statusContent = `<span class="status-circle accepted">rejected</span>`;
                         }
+
                         requestHistoryDiv.innerHTML += `
                             <div class="card" style="width: 18rem; margin: 10px;">
                                 <div class="card-body">
@@ -83,7 +82,6 @@
                                     <p>Phone: ${request.providerPhone}</p>
                                     <p>Service: ${request.serviceName}</p>
                                     <p>Request Date: ${request.requestDate}</p>
-                                    <p>Status: ${request.statusName}</p>
                                         ${statusContent}
                                 </div>
                             </div>`;

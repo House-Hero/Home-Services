@@ -33,9 +33,18 @@
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="CustomerProfile" asp-route-UserName="@User.Identity.Name">Welcome @User.Identity.Name</a>
-                            </li>
+                            @if (User.IsInRole("Customer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="CustomerProfile" asp-route-UserName="@User.Identity.Name">Welcome @User.Identity.Name</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Provider"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Provider" asp-action="Details" asp-route-UserName="@User.Identity.Name">Welcome @User.Identity.Name</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout" >Logout</a>
                             </li>
