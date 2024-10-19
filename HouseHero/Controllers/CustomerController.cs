@@ -40,13 +40,6 @@ namespace HouseHero.Controllers
             // Populate services dropdown
             ViewBag.ServiceList = new SelectList(ApplicationDb.Services, "Id", "Name");
 
-            // Get all requests for this customer
-            ViewBag.RequestesPerCustomer = ApplicationDb.Requests
-                .Include(r => r.Provider)
-                .ThenInclude(p => p.ApplicationUser)
-                .Include(s => s.Service)
-                .Where(x => x.CustomerId == customer.Id).ToList();
-
             return View(customer);
         }
 
@@ -88,10 +81,10 @@ namespace HouseHero.Controllers
         [HttpPost]
         public IActionResult CancelRequest(int requestId)
         {
-            var request = ApplicationDb.Requests.Find(requestId);
+            var request = ApplicationDb.Requests.FirstOrDefault(i => i.Id == requestId);
             if (request != null && request.Status == Status.on_Review)
             {
-                request.Status = Status.rejected; // Update the status to Rejected
+                ApplicationDb.Requests.Remove(request); // Update the status to Rejected
                 ApplicationDb.SaveChanges();
                 return Ok();
             }
