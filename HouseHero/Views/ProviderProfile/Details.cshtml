@@ -7,9 +7,13 @@
 <h1>Details</h1>
 
 <div>
-    <a asp-controller="EditProviderProfile" asp-action="Edit" asp-route-id="@Model.ProviderId" class="text-decoration-none"> اعدادات الحساب</a>
+    <a asp-action="Edit" asp-route-id="@Model.ProviderId" class="text-decoration-none"> اعدادات الحساب</a>
     <hr />
     <dl class="row">
+        <dd>
+
+        <img src="@Model.ProfilePicture_ID" width="75px" class="img-fluid rounded-circle" alt="Provider Image"/>
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProviderName)
         </dt>
@@ -38,7 +42,7 @@
             @Html.DisplayNameFor(model => model.ProfilePicture_ID)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProfilePicture_ID)
+            <a href="@Model.ProfilePicture_ID" target="_blank">Click Here</a>
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address)
@@ -51,12 +55,6 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Password)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Rating)
@@ -97,7 +95,6 @@
                         <strong>Day:</strong> @day.Day <br />
                         <strong>Start Time:</strong> @day.Start_Time.ToString("hh:mm tt") <br />
                         <strong>End Time:</strong> @day.End_Time.ToString("hh:mm tt")
-                        <p>Customer ID: @ViewBag.CustomerId</p>
                     </li>
                 }
             </ul>
@@ -105,17 +102,19 @@
         <!-- Portfolio Section -->
 
         <!-- Reviews Section -->
-        <h4>Reviews</h4>
-        <div id="reviewsSection">
-            @foreach (var review in Model.Reviews)
-            {
-                <div class="review">
-                    <p><strong>Customer:</strong> @review.Customer?.ApplicationUser?.UserName</p>
-                    <p><strong>Comment:</strong> @review.Comment</p>
-                    <p><strong>Rating:</strong> @review.Rating</p>
-                </div>
-                <hr />
-            }
+        <div class="container">
+            <h4>Reviews</h4>
+            <div id="reviewsSection" class="border p-3" style="height: 200px; overflow-y: auto;">
+                @foreach (var review in Model.Reviews)
+                {
+                    <div class="review mb-2">
+                        <p><strong>Customer:</strong> @review.Customer?.ApplicationUser?.UserName</p>
+                        <p><strong>Comment:</strong> @review.Comment</p>
+                        <p><strong>Rating:</strong> @review.Rating</p>
+                    </div>
+                    <hr />
+                }
+            </div>
         </div>
             <dt>
                 <a asp-controller="RequestHistory" asp-action="GetRequests" asp-route-id="@Model.ProviderId" class="text-decoration-none">خانت الخدمات  </a>

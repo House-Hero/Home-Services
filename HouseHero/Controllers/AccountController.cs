@@ -3,6 +3,8 @@ using BLL.Repository;
 using DAL.Data.Context;
 using DAL.Models;
 using HouseHero.Models.ViewModels;
+using HouseHero.Models.ViewModels.Customer;
+using HouseHero.Models.ViewModels.Provider;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

@@ -1,6 +1,7 @@
 ﻿@model Customer
 
 <div>
+    <img src="@Model.ApplicationUser.ProfilePicture_ID" width="75" class="img-fluid rounded-circle" alt="Customer Image" />
     <h1>@Model.ApplicationUser.UserName</h1>
     <h2>@Model.ApplicationUser.City.Name</h2>
     <h3>@Model.ApplicationUser.PhoneNumber</h3>
@@ -35,6 +36,7 @@
         
     </div>
 </div>
+<a asp-action="Edit" asp-controller="EditCustomerProfile" asp-route-id="@Model.Id" class="btn-danger"> Edit</a>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

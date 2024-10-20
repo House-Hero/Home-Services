@@ -1,7 +1,7 @@
 ﻿using HouseHero.Models.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace HouseHero.Models.ViewModels
+namespace HouseHero.Models.ViewModels.Customer
 {
     public class CustomerRegistrationViewModel
     {

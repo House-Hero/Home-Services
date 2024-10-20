@@ -99,24 +99,26 @@
                         <strong>Day:</strong> @day.Day <br />
                         <strong>Start Time:</strong> @day.Start_Time.ToString("hh:mm tt") <br />
                         <strong>End Time:</strong> @day.End_Time.ToString("hh:mm tt")
-                        <p>Customer ID: @ViewBag.CustomerId</p>
                     </li>
                 }
             </ul>
         </dd>
         <!-- Reviews Section -->
-        <h4>Reviews</h4>
-        <div id="reviewsSection">
-            @foreach (var review in Model.Reviews)
-            {
-                <div class="review">
-                    <p><strong>Customer:</strong> @review.Customer?.ApplicationUser?.UserName</p>
-                    <p><strong>Comment:</strong> @review.Comment</p>
-                    <p><strong>Rating:</strong> @review.Rating</p>
-                </div>
-                <hr />
-            }
+        <div class="container">
+            <h4>Reviews</h4>
+            <div id="reviewsSection" class="border p-3" style="height: 100px; overflow-y: auto;">
+                @foreach (var review in Model.Reviews)
+                {
+                    <div class="review mb-2">
+                        <p><strong>Customer:</strong> @review.Customer?.ApplicationUser?.UserName</p>
+                        <p><strong>Comment:</strong> @review.Comment</p>
+                        <p><strong>Rating:</strong> @review.Rating</p>
+                    </div>
+                    <hr />
+                }
+            </div>
         </div>
+        
         <!-- Add Review Form -->
         <form id="addReviewForm" asp-action="SaveReview" method="post" onsubmit="return addReview(event)">
             <input type="hidden" name="ProviderId" value="@Model.ProviderId" />

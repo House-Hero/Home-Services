@@ -35,7 +35,6 @@ namespace BLL.Repository
                 .ThenInclude(r => r.Customer) // Include Customer here
                 .ThenInclude(c => c.ApplicationUser) // Include ApplicationUser here
                 .FirstOrDefault(c => c.Id == ProviderId);
-
             return provider;
         }
         public int GetServiceIdForProvider(int ProviderId)
@@ -59,6 +58,26 @@ namespace BLL.Repository
             var provider = _app.Providers
                    .FirstOrDefault(c => c.ApplicationUserId == ApplicationUserId);
             return provider;
+        }
+
+        public void UpdateProviderApplactionUser(Provider P, ApplicationUser user)
+        {
+            if (user is not null)
+            {
+                var result = _app.Users.AsNoTracking().Where(c => c.Id == user.Id).FirstOrDefault();
+                if (result != null)
+                {
+                    
+                    result.ProfilePicture_ID = user.ProfilePicture_ID;
+                    result.Name = user.Name;
+                    result.Age = user.Age;
+                    result.Address = user.Address;
+                    result.PhoneNumber = user.PhoneNumber;
+                    _app.Users.Update(result);
+                    _app.Providers.Update(P);
+                    _app.SaveChanges();
+                }
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using DAL.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace HouseHero.Models.ViewModels
+namespace HouseHero.Models.ViewModels.Provider
 {
     public class ProviderAvailabilityViewModel
     {

@@ -2,6 +2,7 @@
 using DAL.Data.Context;
 using DAL.Models;
 using HouseHero.Models.ViewModels;
+using HouseHero.Models.ViewModels.Provider;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
