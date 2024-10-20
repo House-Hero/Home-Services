@@ -1,0 +1,185 @@
+﻿@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+
+* {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+}
+
+html, body {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), url("../assets/wp11829508-topographic-white-wallpapers.jpg") lightgray 50% / cover no-repeat;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Generic focus style */
+button:focus-visible {
+    outline: 2px solid #4a90e2 !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --primary: rgba(175, 189, 175, 1);
+    --d-9d-9d-9: rgba(49, 62, 66, 1);
+    --sign-in-icons-color: rgba(119, 119, 119, 1);
+    --variable-collection-color: rgba(0, 0, 0, 1);
+}
+
+/* Top Right Widget Styles */
+.top-right-widget {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+    gap: 15px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: transparent;
+    border: none;
+}
+
+.top-right-widget .view {
+    position: relative;
+    width: 111px;
+    height: 59px;
+}
+
+.top-right-widget .text-wrapper {
+    position: relative; /* Use relative positioning to respect the flexbox layout */
+    font-family: Changa, Helvetica;
+    font-weight: 800;
+    color: white;;
+    font-size: 32px;
+    text-align: left;
+    text-shadow: 0px 4px 4px #00000040;
+    direction: ltr; /* Ensure left-to-right text flow */
+}
+
+.top-right-widget .img {
+    position: relative;
+    width: 74.02px;
+    height: 75.69px;
+}
+
+
+/* Main Login Form Styles */
+.frame {
+    display: inline-flex;
+    height: auto;
+    align-items: center;
+    gap: 8.15px;
+    padding: 20px 42.39px;
+    background-color: rgba(255, 255, 255, 0.95); /* Slight transparency to blend with background */
+    border-radius: 20.38px;
+    border: 2.45px solid transparent;
+    max-width: 400px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    align-items: center;
+}
+
+.text-wrapper {
+    font-family: Changa, Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 29.3px;
+    text-align: center;
+    direction: rtl;
+}
+
+.p {
+    font-family: Changa, Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 19.6px;
+    text-align: center;
+    direction: rtl;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse; /* Reverse the order of items */
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 8.15px;
+    padding: 10px;
+}
+
+.input-field {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-family: Changa, Helvetica;
+    font-size: 16px;
+    direction: rtl;
+    text-align: right; /* Ensure text starts from the right */
+}
+
+.input-group img {
+    width: 19.57px;
+    height: 19.57px;
+    margin-right: 10px; /* Changed from margin-left to margin-right */
+    margin-left: 0; /* Reset left margin if it was set before */
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    font-family: Changa, Helvetica;
+    font-size: 16.3px;
+    color: #ffffff;
+    background-color: #303e42;
+    border: none;
+    border-radius: 8.15px;
+    cursor: pointer;
+    text-align: center;
+}
+
+    .submit-button:hover {
+        background-color: #2a3437;
+    }
+
+.div-5 {
+    font-family: Changa, Helvetica;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+    direction: rtl;
+}
+
+.span {
+    color: #000000;
+}
+
+.text-wrapper-4 {
+    color: #303e42;
+    text-decoration: underline;
+}
+
+    .text-wrapper-4:hover {
+        color: #2a3437;
+    }

@@ -1,63 +1,92 @@
+
 ﻿@model ProviderDetailsViewModel
 
 @{
+
+    ViewData["Title"] = "انشاء حساب";
+
+    Layout = null;
     SelectList Services = new SelectList(ViewBag.Services, "Id", "Name");
+
     SelectList City = new SelectList(ViewBag.City, "Id", "Name");
 }
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/register-provider-details.css" />
+</head>
 
-<h4>ProviderDetailsViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="RegisterProviderDetails">
+<body>
+    <div class="top-right-widget">
+        <div class="view">
+            <div class="text-wrapper">خدماتك</div>
+        </div>
+        <img class="img" src="~/assets/frame-7.svg" alt="Icon">
+    </div>
+    <div class="frame">
+        <form asp-action="RegisterProviderDetails" class="div">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="CityId"></label>
-                <select asp-for="CityId" asp-items="@City">
-                    <option Value="0">---- Select City ----</option>
-                </select>
-                <span asp-validation-for="CityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NationalId" class="control-label"></label>
-                <input asp-for="NationalId" class="form-control" />
-                <span asp-validation-for="NationalId" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="ServiceId"></label>
-                <select asp-for="ServiceId" asp-items="@Services">
-                    <option Value="0">---- Select Service ----</option>
-                </select>
-                <span asp-validation-for="ServiceId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <p class="text-wrapper">ادخل بعض البيانات الشخصية</p>
+            <div class="div-2">
+                <div class="div-3">
+                    <!-- Input Fields with Icons -->
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <input asp-for="Address" type="text" placeholder="العنوان" required />
+                            <img class="img" src="~/assets/mdi_home-outline.svg" alt="Home Icon" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <select asp-for="CityId" asp-items="@City" required>
+                                <option value="">المدينة</option>
+                            </select>
+                            <img class="img" src="~/assets/mi_location.svg" alt="Location Icon" />
+                            <span asp-validation-for="CityId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <input asp-for="NationalId" type="text" placeholder="الرقم القومي" required />
+                            <img class="img" src="~/assets/tabler_id.svg" alt="ID Icon" />
+                            <span asp-validation-for="NationalId" class="text-danger"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input asp-for="PhoneNumber" type="tel" placeholder="رقم الهاتف" required />
+                            <img class="img" src="~/assets/carbon_phone.svg" alt="Phone Icon" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <select asp-for="ServiceId" asp-items="@Services" required>
+                                <option value="">الخدمة / الحرفة</option>
+                            </select>
+                            <img class="img" src="~/assets/nimbus_tools.svg" alt="Service Icon" />
+                            <span asp-validation-for="ServiceId" class="text-danger"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input asp-for="Age" type="number" placeholder="العمر" required />
+                            <img class="img" src="~/assets/ic_round-calendar-month.svg" alt="Calendar Icon" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <div class="frame-wrapper-2">
+                    <div class="button-container">
+                        <button type="button" class="submit-button" onclick="history.back()">الصفحة السابقة</button>
+                        <button type="submit" class="cancel-button">الصفحة التالية</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</body>
+</html>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }
