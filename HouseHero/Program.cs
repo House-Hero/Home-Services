@@ -1,5 +1,6 @@
 using BLL.Interface;
 using BLL.Repository;
+using CloudinaryDotNet;
 using DAL.Data.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +23,9 @@ namespace HouseHero
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Sql"));
             });
-             
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+
+            builder.Services.AddTransient<ICloudinaryService, CloudinaryService>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -30,6 +33,7 @@ namespace HouseHero
 
 
             builder.Services.AddAuthentication();
+            builder.Services.AddScoped<ISavedProviderRepository, SavedProviderRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
             builder.Services.AddScoped<ICityRepository, CityRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

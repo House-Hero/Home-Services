@@ -1,26 +1,27 @@
 ﻿@model ProviderWithAllDataViewModel
 
 @{
-    ViewData["Title"] = "Editing";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Editing</h1>
+<h1>Edit</h1>
 
 <h4>ProviderWithAllDataViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Editing">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <img src="@Model.ProfilePicture_ID" width="75" class="img-fluid rounded-circle" alt="Provider Image" />
+            <div class="form-group">
+                <input type="file" id="imageInput" name="Image" class="form-control" />
+                <span id="sizeError" class="text-danger" 
+                style="display:none;">File size must be less than 2MB.</span>
+            </div>
             <div class="form-group">
                 <label asp-for="ProviderName" class="control-label"></label>
                 <input asp-for="ProviderName" class="form-control" />
                 <span asp-validation-for="ProviderName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Age" class="control-label"></label>
@@ -33,29 +34,14 @@
                 <span asp-validation-for="Bio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProfilePicture_ID" class="control-label"></label>
-                <input asp-for="ProfilePicture_ID" class="form-control" />
-                <span asp-validation-for="ProfilePicture_ID" class="text-danger"></span>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="Bio" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MinPrice" class="control-label"></label>
@@ -68,16 +54,6 @@
                 <span asp-validation-for="MaxPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ServiceName" class="control-label"></label>
-                <input asp-for="ServiceName" class="form-control" />
-                <span asp-validation-for="ServiceName" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Save" /> @Html.DisplayNameFor(model => model.Save)
-                </label>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -85,9 +61,25 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Details">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    document.getElementById('imageForm').addEventListener('submit', function (event) {
+        var fileInput = document.getElementById('imageInput');
+        var file = fileInput.files[0];
+        var sizeError = document.getElementById('sizeError');
+
+        if (file && file.size > 2 * 1024 * 1024) {
+            event.preventDefault();
+            sizeError.style.display = 'block';
+        } else {
+            sizeError.style.display = 'none';
+        }
+    });
+</script>
 }
+
+

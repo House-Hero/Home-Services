@@ -2,30 +2,26 @@
 using HouseHero.Models.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace HouseHero.Models.ViewModels
+namespace HouseHero.Models.ViewModels.Provider
 {
     public class ProviderWithAllDataViewModel
     {
+        public int ApplactionUserId { get; set; }
         public int ProviderId { get; set; }
         [Display(Name = "Provider Name")]
-        [Required(ErrorMessage = "User Name is required.")]
-        [StringLength(256, ErrorMessage = "The {0} must be at least {2} and at most {1}" +
-            " characters long.", MinimumLength = 3)]
-        [RegularExpression(@"^[a-zA-Z0-9_.-]*$", 
-            ErrorMessage = "The username can only contain letters," +
-            " numbers, underscores, periods, and hyphens.")]
-        [UniqeName]
+        [Required(ErrorMessage = "Name is required.")]
         public string ProviderName { get; set; } = null!;
         [UniqeEmail]
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         [Display(Name = "Email Address")]
-        public string Email { get; set; } =null!;
+        public string Email { get; set; } = null!;
         public int? Age { get; set; }
         public string? Bio { get; set; } = null!;
 
         [Display(Name = "Profile Picture")]
         public string? ProfilePicture_ID { get; set; }
+        public IFormFile? Image { get; set; }
         public string Address { get; set; } = null!;
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = null!;
@@ -41,20 +37,20 @@ namespace HouseHero.Models.ViewModels
         public int Rating { get; set; }
         public int? MinPrice { get; set; }
         public int? MaxPrice { get; set; }
-        public string ServiceName { get; set; } =null !;
-        public bool Save {  get; set; }
+        public string ServiceName { get; set; } = null!;
+        public bool Save { get; set; }
 
-        public List<Available_Day> Days { get; set; }=null!;
-        public List<Portfolio_item> Portfolios { get; set; } = null!;
-        public List<Review> Reviews { get; set; }
+        public List<Available_Day>? Days { get; set; } = null!;
+        public List<Portfolio_item>? Portfolios { get; set; } = null!;
+        public List<Review>? Reviews { get; set; }
 
         // convert from Provider to ViewModel Avoid Mapping in Controller
-        public static implicit operator ProviderWithAllDataViewModel(Provider provider)
+        public static implicit operator ProviderWithAllDataViewModel(DAL.Models.Provider provider)
         {
             return new ProviderWithAllDataViewModel
             {
-                ProviderId =provider.Id,
-                ProviderName = provider.ApplicationUser?.UserName ?? string.Empty, 
+                ProviderId = provider.Id,
+                ProviderName = provider.ApplicationUser?.UserName ?? string.Empty,
                 Email = provider.ApplicationUser?.Email ?? string.Empty,
                 Age = provider.ApplicationUser?.Age,
                 Bio = provider.Bio,
@@ -68,29 +64,35 @@ namespace HouseHero.Models.ViewModels
                 Days = provider.Available_Day?.ToList() ?? new List<Available_Day>(),
                 Portfolios = provider.Portfolio_Item?.ToList() ?? new List<Portfolio_item>(),
                 Save = provider.Saved != null && provider.Saved.Any(),
-                Reviews=provider.Reviews?.ToList() ?? new List<Review>()
+                Reviews = provider.Reviews?.ToList() ?? new List<Review>()
             };
         }
 
         // Implicit conversion from ViewModel to Provider entity
-        public static implicit operator Provider(ProviderWithAllDataViewModel viewModel)
+        public static implicit operator DAL.Models.Provider(ProviderWithAllDataViewModel viewModel)
         {
-            return new Provider
+            return new DAL.Models.Provider
             {
+                Id=viewModel.ProviderId,
                 Bio = viewModel.Bio,
                 MinPrice = viewModel.MinPrice,
                 MaxPrice = viewModel.MaxPrice,
                 Available_Day = viewModel.Days,
                 Portfolio_Item = viewModel.Portfolios,
-                ApplicationUser = new ApplicationUser
-                {
-                    UserName = viewModel.ProviderName,
-                    Email = viewModel.Email,
-                    Age = viewModel.Age ?? 0,
-                    Address = viewModel.Address,
-                    PhoneNumber = viewModel.PhoneNumber,
-                    ProfilePicture_ID = viewModel.ProfilePicture_ID
-                }
+                ApplicationUserId=viewModel.ApplactionUserId
+            };
+        }
+        public static implicit operator DAL.Models.ApplicationUser(ProviderWithAllDataViewModel viewModel)
+        {
+            return new ApplicationUser
+            {
+                Id=viewModel.ApplactionUserId,
+                UserName = viewModel.ProviderName,
+                Email = viewModel.Email,
+                Age = viewModel.Age ?? 0,
+                Address = viewModel.Address,
+                PhoneNumber = viewModel.PhoneNumber,
+                ProfilePicture_ID = viewModel.ProfilePicture_ID
             };
         }
     }

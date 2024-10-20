@@ -1,0 +1,48 @@
+﻿@model EditCustomerViewModel
+@{
+   // SelectList listItems = new SelectList(ViewBag.cityList, "Id", "Name");
+}
+<form method="post" class="form form-control" asp-action="SaveChange" enctype="multipart/form-data" asp-controller="EditCustomerProfile">
+    <input name="id" value="@Model.CustomerId" hidden />
+    <img src="@Model.ImageUrl" width="75" class="img-fluid rounded-circle" alt="Customer Image" />
+
+    <input asp-for="@Model.ApplicationUserId" hidden /> 
+    <div>
+        <label asp-for="@Model.CustomerName"></label>
+        <input asp-for="@Model.CustomerName" class="form form-control" />
+    </div>
+    <div>
+        <select name="CityId">
+        @foreach (var item in @Model.Cities)
+        {
+            if (@item.Id == @Model.CityID)
+            {
+                <option value="@item.Id" selected>@item.Name</option>
+            }
+            else
+            {
+                 <option  value="@item.Id" >@item.Name</option>
+            }
+
+        }
+        </select>
+    </div>
+    <div>
+        <label asp-for="@Model.Address"></label>
+        <input asp-for="@Model.Address" class="form form-control" />
+    </div>
+    <div>
+        <label asp-for="@Model.PhoneNumber"></label>
+        <input asp-for="@Model.PhoneNumber" class="form form-control" />
+    </div>
+    <div>
+        <label asp-for="@Model.Age"></label>
+        <input asp-for="@Model.Age" class="form form-control" />
+    </div>
+    <div>
+       <label asp-for="@Model.Image"></label>
+       <input asp-for="@Model.Image" />
+    </div>
+    <br />
+    <input type="submit" value="Save change" class="btn btn-success" />
+</form>

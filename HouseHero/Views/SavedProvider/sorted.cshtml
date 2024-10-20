@@ -1,0 +1,57 @@
+﻿@using DAL.VM
+@model PaginatedVM<Provider>
+<h1>Saved Provider</h1>
+<div>
+    <form method="post" asp-action="sorted" asp-controller="SavedProvider">
+        <input name="id" hidden value="@ViewBag.CustomerId" />
+        <label>Sort by Service</label>
+        <select name="serviceid" id="serviceid">
+            <option value="0" selected>select service</option>
+            @foreach (var item in Model.Services)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+        <br />
+        <input type="submit" value="sort">
+    </form>
+</div>
+<div>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>Service Name</th>
+            <th>Provider Name</th>
+            <th>Bio</th>
+            <th>Rating</th>
+        </tr>
+        @foreach (var Provider in Model.item)
+        {
+            <tr>
+                <th>@Provider.Service.Name</th>
+                <th>@Provider.ApplicationUser.UserName</th>
+                <th>@Provider.Bio</th>
+                <th>@Provider.Rating</th>
+            </tr>
+        }
+    </table>
+</div>
+<div>
+    <form asp-action="sorted" asp-controller="SavedProvider">
+        @if (Model.Haspreviouspage)
+        {
+            <input name="id" hidden value="@ViewBag.CustomerId" />
+            <input name="serviceid" hidden value="@ViewBag.Serviceid" />
+            <input name="pagenumber" hidden value="@(Model.pagenum-1)" />
+            <input type="submit" value="Previous" class="btn btn-primary">
+        }
+        <span>page @Model.pagenum of @Model.totalpage</span>
+        @if (Model.Hasnextpage)
+        {
+            <input name="id" hidden value="@ViewBag.CustomerId" />
+            <input name="serviceid" hidden value="@ViewBag.Serviceid" />
+            <input name="pagenumber" hidden value="@(Model.pagenum+1)" />
+            <input type="submit" value="Next" class="btn btn-primary">
+        }
+
+    </form>
+</div>

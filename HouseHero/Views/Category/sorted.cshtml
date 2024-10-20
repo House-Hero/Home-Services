@@ -1,0 +1,103 @@
+﻿@using DAL.Models;
+@using DAL.VM;
+@model PaginatedVM<Provider>
+
+@{
+    ViewData["Title"] = "sorted";
+    
+}
+
+<h1>sorted</h1>
+<div>
+    <form method="post" asp-action="sorted" asp-controller="Category">
+        <input name="CategoryID" id="CategoryID" hidden value="@ViewBag.CategoryID" />
+        <label>Sort by Service</label>
+        <select name="serviceid" id="serviceid">
+            <option value="0" selected>select service</option>
+            @foreach (var item in Model.Services)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+        <br />
+        <label>Sort by City</label>
+        <select name="cityid" id="cityid">
+            <option value="0">Select City</option>
+            @foreach (var item in ViewBag.City)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+        <br />
+        <lable> Rating </lable>
+        <select name="rating" id="rating">
+
+            <option value="0">Select Reting</option>
+            @for (int i = 1; i <= 5; i++)
+            {
+                <option value="@i" >@i</option>
+            }
+        </select>
+        <br />
+        <input type="submit" value="sort">
+    </form>
+</div>
+<div>
+    <h2>@ViewBag.CategoryName</h2>
+
+    <h4>Services in this category:</h4>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>Service Name</th>
+            <th>Provider Name</th>
+            <th>Bio</th>
+            <th>Rating</th>
+        </tr>
+        @foreach (var service in Model.Services)
+        {
+            foreach (var item in Model.item)
+            {
+                if (service.Id == item.ServiceId)
+                {
+                    <tr>
+                        <th>@service.Name</th>
+                        <th>@item.ApplicationUser.UserName</th>
+                        <th>@item.Bio</th>
+                        <th>@item.Rating</th>
+                    </tr>
+
+                }
+            }
+
+        }
+    </table>
+</div>
+<div>
+    <form method="post" asp-action="sorted" asp-controller="Category">
+        @if (Model.Haspreviouspage)
+        {
+            <input name="CategoryID" id="CategoryID" hidden value="@ViewBag.CategoryID" />
+            <input name="serviceid" id="serviceid" hidden value="@ViewBag.serviceid" />
+            <input name="rating" id="rating" hidden value="@ViewBag.rating" />
+            <input name="cityid" id="cityid" hidden value="@ViewBag.cityid" />
+            <input name="pagenumber"  hidden value="@(Model.pagenum-1)" />
+            <input type="submit" value="Previous" class="btn btn-primary">
+        }
+        <span>page @Model.pagenum of @Model.totalpage</span>
+        @if (Model.Hasnextpage)
+        {
+            <input name="CategoryID" id="CategoryID" hidden value="@ViewBag.CategoryID" />
+            <input name="serviceid" id="serviceid" hidden value="@ViewBag.serviceid" />
+            <input name="rating" id="rating" hidden value="@ViewBag.rating" />
+            <input name="cityid" id="cityid" hidden value="@ViewBag.cityid" />
+            <input name="pagenumber" hidden value="@(Model.pagenum+1)" />
+            <input type="submit" value="Next" class="btn btn-primary">
+        }
+
+    </form>
+</div>
+
+<div>
+    <a asp-action="GetAll">Back to List</a>
+</div>
+

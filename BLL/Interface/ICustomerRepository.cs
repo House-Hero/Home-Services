@@ -15,6 +15,8 @@ namespace BLL.Interface
         public IEnumerable<SavedProvider> GetSaved(int CustomerId);
         public Customer GetCustomerByApplicationUserId(int applicationUserId);
         public void SaveRequest(Requests requests);
-        
+        public Customer GetCustomerById(int CustomerId);
+        public Customer GetAllCustomerDetiles(int id);
+        public void UpdateCustomerApplactionUser( ApplicationUser user);
     }
 }

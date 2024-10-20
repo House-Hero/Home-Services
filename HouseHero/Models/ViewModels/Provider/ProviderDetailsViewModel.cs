@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace HouseHero.Models.ViewModels
+namespace HouseHero.Models.ViewModels.Provider
 {
     public class ProviderDetailsViewModel
     {

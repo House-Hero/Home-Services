@@ -2,6 +2,7 @@
 using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,9 +53,43 @@ namespace BLL.Repository
             _context.SavedProviders.Remove(save);
             _context.SaveChanges();
         }
-        public void Dispose()
+        public Customer GetCustomerById(int CustomerId)
         {
-            _context.Dispose();
+            if (CustomerId <= 0)
+            {
+                throw new ArgumentException("ProviderId must be greater than zero.", nameof(CustomerId));
+            }
+            var customer = _context.Customers
+                .Include(AU => AU.ApplicationUser)
+                .FirstOrDefault(c => c.Id == CustomerId);
+
+            return customer;
+        }
+        public Customer GetAllCustomerDetiles(int id)
+        {
+            return _context.Customers
+                .Include(c => c.ApplicationUser)
+                .ThenInclude(AU => AU.City)
+                .FirstOrDefault(c => c.Id == id);
+        }
+
+        public void UpdateCustomerApplactionUser(ApplicationUser user)
+        {
+            if(user is not null)
+            {
+            var result = _context.Users.Where(c => c.Id == user.Id).FirstOrDefault();
+                if (result != null)
+                {
+                    result.Address = user.Address;
+                    result.City = user.City;
+                    result.ProfilePicture_ID = user.ProfilePicture_ID;
+                    result.Age = user.Age;
+                    result.Name = user.Name;
+                    result.PhoneNumber = user.PhoneNumber;
+                    _context.Users.Update(result);
+                    _context.SaveChanges();
+                }
+            }
         }
     }
 }

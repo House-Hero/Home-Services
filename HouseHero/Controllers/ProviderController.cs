@@ -2,6 +2,7 @@
 using DAL.Data.Context;
 using DAL.Models;
 using HouseHero.Models.ViewModels;
+using HouseHero.Models.ViewModels.Provider;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -14,13 +15,13 @@ namespace HouseHero.Controllers
     {
         private readonly IProviderRepository _provider;
         private readonly ICustomerRepository _customer;
- 
 
-        public ProviderController(IProviderRepository provider,ICustomerRepository customer )
+
+        public ProviderController(IProviderRepository provider, ICustomerRepository customer)
         {
             _provider = provider;
             _customer = customer;
-            
+
         }
         public IActionResult Details(int id)
         {
@@ -28,7 +29,7 @@ namespace HouseHero.Controllers
             ProviderWithAllDataViewModel ViewModel = Result;
             var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));
-            var CheckSave=_customer.GetSaved(customerId.Id);
+            var CheckSave = _customer.GetSaved(customerId.Id);
             foreach (var item in CheckSave)
             {
                 if (customerId.Id == item.CustomerId && ViewModel.ProviderId == item.ProviderId)
@@ -49,18 +50,18 @@ namespace HouseHero.Controllers
             }
             else
             {
-                _customer.UnSaveProviders(customerId,providerId);
+                _customer.UnSaveProviders(customerId, providerId);
             }
 
             return Json(new { success = true });
         }
 
-      [HttpGet]
-        public IActionResult RequestService(int id) 
+        [HttpGet]
+        public IActionResult RequestService(int id)
         {
             var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));
-            var serviceId = _provider.GetServiceIdForProvider(id); 
+            var serviceId = _provider.GetServiceIdForProvider(id);
 
             ViewBag.ProviderId = id;
             ViewBag.CustomerId = customerId.Id;
@@ -82,7 +83,7 @@ namespace HouseHero.Controllers
                     RequestDate = DateTime.Now,
                     PreferredCommunication = requestServiceVM.PreferredCommunication,
                     Comment = requestServiceVM.Comment,
-                    Status = Status.on_Review 
+                    Status = Status.on_Review
                 };
                 _customer.SaveRequest(request);
                 return RedirectToAction("Details", new { id = requestServiceVM.ProviderId });
@@ -93,6 +94,9 @@ namespace HouseHero.Controllers
         [HttpPost]
         public IActionResult SaveReview(string Comment, int CustomerId, int ProviderId, int Rating)
         {
+            // Retrieve the customer using the CustomerId
+            var customer = _customer.GetCustomerById(CustomerId);
+
             var review = new Review
             {
                 Comment = Comment,
@@ -101,9 +105,11 @@ namespace HouseHero.Controllers
                 Rating = Rating
             };
             _provider.AddReview(review);
-            int id = ProviderId;
-            return RedirectToAction("Details", new { id = id });
+
+            // Return the review data as JSON for the AJAX success callback
+            return Json(new { customerName = customer.ApplicationUser?.UserName ?? "Unknown", comment = review.Comment, rating = review.Rating });
+
         }
-       
+
     }
 }
