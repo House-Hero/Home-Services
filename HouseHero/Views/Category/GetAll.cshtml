@@ -28,8 +28,8 @@
             {
             <a asp-controller="Category" asp-action="Details" asp-route-id="@category.Id">
                 <div class="flex-box">
-                    <img src="~/assets/Home/@category.Name" alt="@category.Name"> @*Edit the category svg names in "/assets/Home"
-                                                                                        To match the category Name*@
+                    <img src="@Url.Content("~/assets/Home/" + @category.Name + ".svg")" alt="@category.Name">   @*Name the Categories in the DB just 
+                                                                                                                like the images in /assets/home (in arabic)*@
                 </div>
                 <h6>@category.Name</h6> 
             </a>
