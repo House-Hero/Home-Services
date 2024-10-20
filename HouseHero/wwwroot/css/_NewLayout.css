@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Changa", sans-serif;
+    outline:none;
 }
 
 html {
@@ -19,6 +20,13 @@ body {
     width: 100%;
 }
 
+.main {
+    background: url('/assets/ServiceSelection/siteBackground.png');
+    background-size: cover;
+    background-position: top 25% right 0;
+    width: 100%;
+    position: relative;
+}
 
 /* Header */
 
@@ -33,7 +41,7 @@ body {
     padding: 5px 60px;
     background-color: #00000088;
     z-index: 999;
-    position: sticky;
+    position: fixed;
     width: 100%;
     top: 0;
     right: 0;
