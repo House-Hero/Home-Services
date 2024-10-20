@@ -54,5 +54,11 @@ namespace BLL.Repository
             _app.Reviews.Add(review);
             _app.SaveChanges();
         }
+        public Provider GetProviderByApplicationUserId(int ApplicationUserId)
+        {
+            var provider = _app.Providers
+                   .FirstOrDefault(c => c.ApplicationUserId == ApplicationUserId);
+            return provider;
+        }
     }
 }

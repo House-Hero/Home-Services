@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>ProviderWithAllDataViewModel</h4>
+    <a asp-controller="EditProviderProfile" asp-action="Edit" asp-route-id="@Model.ProviderId" class="text-decoration-none"> اعدادات الحساب</a>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -85,9 +85,7 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Save)
         </dt>
-        <dd class="col-sm-10">
-            @Html.CheckBoxFor(model => model.Save, new { @id = "saveCheckbox", @onchange = "saveProvider()" })
-        </dd>
+  
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Days)
         </dt>
@@ -104,6 +102,8 @@
                 }
             </ul>
         </dd>
+        <!-- Portfolio Section -->
+
         <!-- Reviews Section -->
         <h4>Reviews</h4>
         <div id="reviewsSection">
@@ -117,35 +117,12 @@
                 <hr />
             }
         </div>
-        <!-- Add Review Form -->
-        <form id="addReviewForm" asp-action="SaveReview" method="post" onsubmit="return addReview(event)">
-            <input type="hidden" name="ProviderId" value="@Model.ProviderId" />
-            <input type="hidden" name="CustomerId" value="@ViewBag.CustomerId" />
-
-            <div class="form-group">
-                <label for="Comment">Comment</label>
-                <textarea class="form-control" id="Comment" name="Comment" rows="3"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="Rating">Rating (1-5)</label>
-                <select class="form-control" id="Rating" name="Rating">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-
-        <dt>
-            <a asp-controller="Provider" asp-action="RequestService" asp-route-id="@Model.ProviderId" class="text-decoration-none"> اطلب الخدمة الان</a>
-        </dt>
+            <dt>
+                <a asp-controller="RequestHistory" asp-action="GetRequests" asp-route-id="@Model.ProviderId" class="text-decoration-none">خانت الخدمات  </a>
+            </dt>     
     </dl>
 </div>
+
 <div>
     <a asp-controller="Category" asp-action="GetAll">Back to List</a>
 </div>
@@ -164,70 +141,7 @@
 </div>
 
 
-<script>
-    function saveProvider() {
-        var isChecked = document.getElementById('saveCheckbox').checked;
-        var providerId = '@Model.ProviderId';
-        var customerId = '@ViewBag.CustomerId';
-        var providerName = '@Model.ProviderName';
 
-        $.ajax({
-            url: '@Url.Action("SavedProvider", "Provider")',
-            type: 'POST',
-            data: {
-                customerId: customerId,
-                providerId: providerId,
-                isSaved: isChecked
-            },
-            success: function (response) {
-                var message = isChecked
-                    ? providerName + " has been saved successfully!"
-                    : providerName + " has been removed from the saved list!";
-                $('.modal-body').text(message);
-                $('#saveModal').modal('show');
-
-                setTimeout(function () {
-                    $('#saveModal').modal('hide');
-                }, 1500);
-            },
-            error: function (xhr, status, error) {
-                console.error("An error occurred while saving the state.");
-            }
-        });
-    }
-    function addReview(event) {
-        event.preventDefault();
-
-        var form = $('#addReviewForm');
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: form.serialize(),
-            success: function (response) {
-                // Append the new review to the reviews section dynamically
-                $('#reviewsSection').append(
-                    `<div class="review">
-                                <p><strong>Customer:</strong> ${response.customerName}</p>
-                                <p><strong>Comment:</strong> ${response.comment}</p>
-                                <p><strong>Rating:</strong> ${response.rating}</p>
-                                <hr />
-                            </div>`
-                );
-                form[0].reset(); // Clear the form after submission
-            },
-            error: function (xhr, status, error) {
-                console.error("An error occurred while adding the review.");
-            }
-        });
-
-        return false;
-    }
-
-    // Optionally trigger save before user leaves the page
-    // window.onbeforeunload = function () {
-    //     saveProvider();
-    // };
-</script>
 
 @section ModalValid {
     <!-- Include Bootstrap and jQuery (necessary for the modal) -->

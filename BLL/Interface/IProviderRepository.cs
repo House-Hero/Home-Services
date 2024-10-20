@@ -12,5 +12,6 @@ namespace BLL.Interface
         public Provider GetProviderWithAllRelatedData(int ProviderId);
         public int GetServiceIdForProvider(int ProviderId);
         public void AddReview(Review review);
+        public Provider GetProviderByApplicationUserId(int ApplicationUserId);
     }
 }
