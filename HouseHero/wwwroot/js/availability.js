@@ -1,4 +1,6 @@
-﻿document.addEventListener('DOMContentLoaded', function() {
+﻿document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM fully loaded and parsed");
+
     const dayDropdown = document.getElementById('dayDropdown');
     const startTimeDropdown = document.getElementById('startTimeDropdown');
     const endTimeDropdown = document.getElementById('endTimeDropdown');
@@ -9,8 +11,10 @@
     const confirmYes = document.getElementById('confirmYes');
     const confirmNo = document.getElementById('confirmNo');
 
+    console.log("Dropdowns:", dayDropdown, startTimeDropdown, endTimeDropdown);
+
     const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-    const hours = Array.from({length: 24}, (_, i) => `${i.toString().padStart(2, '0')}:00`);
+    const hours = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
 
     let selectedDay = '';
     let selectedStartTime = '';
@@ -18,47 +22,79 @@
     let scheduleEvents = [];
 
     function initializeDropdowns() {
-      initializeDropdown(dayDropdown, days);
-      initializeDropdown(startTimeDropdown, hours);
-      initializeDropdown(endTimeDropdown, hours);
+        console.log("Initializing dropdowns");
+        initializeDropdown(dayDropdown, days);
+        initializeDropdown(startTimeDropdown, hours);
+        initializeDropdown(endTimeDropdown, hours);
     }
 
     function initializeDropdown(dropdown, items) {
-      const header = dropdown.querySelector('.custom-dropdown-header span');
-      const list = dropdown.querySelector('.custom-dropdown-list');
-      const arrow = dropdown.querySelector('.oui-arrow-up');
+        console.log("Initializing dropdown:", dropdown.id);
+        const header = dropdown.querySelector('.custom-dropdown-header');
+        const headerText = header.querySelector('span');
+        const list = dropdown.querySelector('.custom-dropdown-list');
 
-      items.forEach(item => {
-        const listItem = document.createElement('div');
-        listItem.classList.add('custom-dropdown-item');
-        listItem.textContent = item;
-        listItem.addEventListener('click', () => {
-          header.textContent = item;
-          list.style.display = 'none';
-          arrow.style.transform = 'rotate(0deg)';
-          updateSelectedValues(dropdown, item);
+        items.forEach(item => {
+            const listItem = document.createElement('div');
+            listItem.classList.add('custom-dropdown-item');
+            listItem.textContent = item;
+            listItem.addEventListener('click', () => {
+                console.log("Item clicked:", item);
+                headerText.textContent = item;
+                closeDropdown(dropdown);
+                updateSelectedValues(dropdown, item);
+            });
+            list.appendChild(listItem);
         });
-        list.appendChild(listItem);
-      });
 
-      dropdown.addEventListener('click', (e) => {
-        if (!e.target.closest('.custom-dropdown-list')) {
-          list.style.display = list.style.display === 'block' ? 'none' : 'block';
-          arrow.style.transform = list.style.display === 'block' ? 'rotate(180deg)' : 'rotate(0deg)';
+        header.addEventListener('click', (e) => {
+            console.log("Header clicked:", dropdown.id);
+            e.stopPropagation();
+            toggleDropdown(dropdown);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            console.log("Document clicked, closing all dropdowns");
+            closeAllDropdowns();
+        });
+    }
+
+    function toggleDropdown(dropdown) {
+        console.log("Toggling dropdown:", dropdown.id);
+        const isOpen = dropdown.classList.contains('open');
+        closeAllDropdowns();
+        if (!isOpen) {
+            openDropdown(dropdown);
         }
-      });
+    }
+
+    function openDropdown(dropdown) {
+        console.log("Opening dropdown:", dropdown.id);
+        dropdown.classList.add('open');
+    }
+
+    function closeDropdown(dropdown) {
+        console.log("Closing dropdown:", dropdown.id);
+        dropdown.classList.remove('open');
+    }
+
+    function closeAllDropdowns() {
+        console.log("Closing all dropdowns");
+        [dayDropdown, startTimeDropdown, endTimeDropdown].forEach(closeDropdown);
     }
 
     function updateSelectedValues(dropdown, value) {
-      if (dropdown === dayDropdown) {
-        selectedDay = value;
-      } else if (dropdown === startTimeDropdown) {
-        selectedStartTime = value;
-        updateEndTimeDropdown();
-      } else if (dropdown === endTimeDropdown) {
-        selectedEndTime = value;
-      }
-      updateAddToScheduleButton();
+        console.log("Updating selected value:", dropdown.id, value);
+        if (dropdown === dayDropdown) {
+            selectedDay = value;
+        } else if (dropdown === startTimeDropdown) {
+            selectedStartTime = value;
+            updateEndTimeDropdown();
+        } else if (dropdown === endTimeDropdown) {
+            selectedEndTime = value;
+        }
+        updateAddToScheduleButton();
     }
 
     function updateEndTimeDropdown() {
@@ -144,8 +180,6 @@
         alert('يرجى إضافة فترة زمنية واحدة على الأقل قبل إنشاء الحساب');
       }
     });
-
-    initializeDropdowns();
     function addEventToCalendar() {
         const event = { day: selectedDay, start: selectedStartTime, end: selectedEndTime };
         scheduleEvents.push(event);
@@ -165,4 +199,7 @@
     document.getElementById('availabilityForm').addEventListener('submit', function (e) {
         updateHiddenFields();
     });
+
+    console.log("Initializing dropdowns");
+    initializeDropdowns();
   });
