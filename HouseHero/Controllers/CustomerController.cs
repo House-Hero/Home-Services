@@ -4,31 +4,37 @@ using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
 using HouseHero.Models.ViewModels;
+using HouseHero.Models.ViewModels.Customer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace HouseHero.Controllers
 {
     [Authorize]
     public class CustomerController : Controller
     {
-        private readonly ApplicationDbContext ApplicationDb;
         private readonly IServiceRepository _serviceRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IRequestRepository _requestRepository;
 
-        public CustomerController(ApplicationDbContext context, IServiceRepository serviceRepository)
+        public CustomerController( IServiceRepository serviceRepository ,ICustomerRepository customerRepository
+                               , IRequestRepository requestRepository)
         {
-            ApplicationDb = context;
             _serviceRepository = serviceRepository;
+            _customerRepository = customerRepository;
+            _requestRepository = requestRepository;
         }
         [HttpGet]
-        public IActionResult CustomerProfile(string UserName)
+        public IActionResult CustomerProfile()
         {
             // Fetch customer data
-            var applicationUser = ApplicationDb.Users.Include(x => x.City).FirstOrDefault(x => x.UserName == UserName);
-            var customer = ApplicationDb.Customers.Include(x => x.ApplicationUser)
-                .FirstOrDefault(x => x.ApplicationUserId == applicationUser.Id);
+            var applicationUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var applicationUser = _customerRepository.GetApplicationUserByApplicationUserId(applicationUserId);
+            var customer = _customerRepository.GetCustomerByApplicationUserId(applicationUser.Id);
 
             // Populate status dropdown
             ViewBag.StatusList = new SelectList(
@@ -38,7 +44,7 @@ namespace HouseHero.Controllers
                 "Value", "Text");
 
             // Populate services dropdown
-            ViewBag.ServiceList = new SelectList(ApplicationDb.Services, "Id", "Name");
+            ViewBag.ServiceList = new SelectList(_serviceRepository.GetAll(), "Id", "Name");
 
             return View(customer);
         }
@@ -47,45 +53,17 @@ namespace HouseHero.Controllers
         public IActionResult FilterRequests(int customerId, int? selectedStatus, int? selectedService)
         {
             // Retrieve requests for the specific customer
-            var filteredRequests = ApplicationDb.Requests
-                .Include(r => r.Provider)
-                .ThenInclude(p => p.ApplicationUser)
-                .Include(s => s.Service)
-                .Where(r => r.CustomerId == customerId);
+            var filteredRequests = _customerRepository.GetFilterRequests(customerId, selectedStatus, selectedService);  
 
-            // Apply status filter if a status is selected
-            if (selectedStatus.HasValue)
-            {
-                filteredRequests = filteredRequests.Where(r => (int)r.Status == selectedStatus.Value);
-            }
-
-            // Apply service filter if a service is selected
-            if (selectedService.HasValue)
-            {
-                filteredRequests = filteredRequests.Where(r => r.ServiceId == selectedService.Value);
-            }
-
-            // Select the data needed for the view
-            var result = filteredRequests.Select(r => new {
-                ProviderName = r.Provider.ApplicationUser.UserName,
-                ProviderAddress = r.Provider.ApplicationUser.Address,
-                ProviderPhone = r.Provider.ApplicationUser.PhoneNumber,
-                ServiceName = r.Service.Name,
-                RequestDate = r.RequestDate.ToString("dd MMM yyyy"),
-                StatusName = r.Status.ToString(),
-                RequestId =r.Id
-            }).ToList();
-
-            return Json(result);
+            return Json(filteredRequests);
         }
         [HttpPost]
         public IActionResult CancelRequest(int requestId)
         {
-            var request = ApplicationDb.Requests.FirstOrDefault(i => i.Id == requestId);
+            var request = _requestRepository.Get(requestId);
             if (request != null && request.Status == Status.on_Review)
             {
-                ApplicationDb.Requests.Remove(request); // Update the status to Rejected
-                ApplicationDb.SaveChanges();
+                _requestRepository.Delete(request);
                 return Ok();
             }
             return BadRequest();
