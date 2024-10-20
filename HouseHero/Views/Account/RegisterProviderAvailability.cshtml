@@ -1,112 +1,276 @@
 ﻿@model HouseHero.Models.ViewModels.ProviderAvailabilityViewModel
 @{
-    ViewData["Title"] = "تسجيل الأوقات المتاحة";
-
+    ViewData["Title"] = "Provider Availability";
     Layout = null;
 }
 
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HouseHero.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/register-provider-availability.css" />
-</head>
-<body>
-    <div class="frame">
-        <div class="div">
-            <h4 class="text-wrapper">بعض الإضافات لصفحتك الشخصية</h4>
-            <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="frame-wrapper">
-                    <div class="div-2">
-                        <div class="div-3">
-                            <div class="text-wrapper-2">إختياري</div>
-                            <div class="div-wrapper">
-                                <textarea asp-for="Bio" class="custom-input" placeholder="قم بإضافة وصف لحسابك الشخصي..."></textarea>
-                            </div>
-                        </div>
-                        <img class="healthicons-ui-user" src="~/assets/healthicons_ui-user-profile.svg" />
-                    </div>
-                </div>
-                <div class="div-4">
-                    <div class="frame-wrapper-2">
-                        <div class="div-5" id="calendar">
-                            <img class="line" src="~/assets/Line 7.svg" />
-                            <img class="img" src="~/assets/Line 7.svg" />
-                            <img class="line-2" src="~/assets/Line 7.svg" />
-                            <img class="line-3" src="~/assets/Line 7.svg" />
-                            <img class="line-4" src="~/assets/Line 7.svg" />
-                            <img class="line-5" src="~/assets/Line 7.svg" />
-                            <div class="text-wrapper-3">الاحد</div>
-                            <div class="text-wrapper-4">الاثنين</div>
-                            <div class="text-wrapper-5">الثلاثاء</div>
-                            <div class="text-wrapper-6">الاربعاء</div>
-                            <div class="text-wrapper-7">الخميس</div>
-                            <div class="text-wrapper-8">الجمعة</div>
-                            <div class="text-wrapper-9">السبت</div>
-                        </div>
-                    </div>
-                    <div class="div-6">
-                        <div class="div-7">
-                            <div class="frame-wrapper-3">
-                                <div class="custom-dropdown" id="dayDropdown">
-                                    <div class="custom-dropdown-header">
-                                        <span>اليوم</span>
-                                        <img class="oui-arrow-up" src="~/assets/Vector.svg" />
-                                    </div>
-                                    <div class="custom-dropdown-list"></div>
-                                </div>
-                            </div>
-                            <div class="frame-wrapper-4">
-                                <div class="custom-dropdown" id="startTimeDropdown">
-                                    <div class="custom-dropdown-header">
-                                        <span>من الساعة</span>
-                                        <img class="oui-arrow-up" src="~/assets/Vector.svg" />
-                                    </div>
-                                    <div class="custom-dropdown-list"></div>
-                                </div>
-                            </div>
-                            <div class="frame-wrapper-4">
-                                <div class="custom-dropdown" id="endTimeDropdown">
-                                    <div class="custom-dropdown-header">
-                                        <span>حتى الساعة</span>
-                                        <img class="oui-arrow-up" src="~/assets/Vector.svg" />
-                                    </div>
-                                    <div class="custom-dropdown-list"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="div-wrapper-3" id="addToScheduleBtn" disabled>
-                            <div class="text-wrapper-12">إضافة للجدول</div>
-                        </button>
-                    </div>
-                </div>
-                @for (int i = 0; i < 7; i++)
 
-                {
-                    <input type="hidden" asp-for="SelectedDays[i]" />
-                    <input type="hidden" asp-for="StartTimes[i]" />
-                    <input type="hidden" asp-for="EndTimes[i]" />
+<div class="frame">
+    <div class="div">
+        <div class="text-wrapper">بعض الإضافات لصفحتك الشخصية</div>
+        <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="frame-wrapper">
+                <div class="div-2">
+                    <div class="div-3">
+                        <div class="text-wrapper-2">إختياري</div>
+                        <div class="div-wrapper">
+                            <input asp-for="Bio" type="text" class="custom-input" placeholder="قم بإضافة وصف لحسابك الشخصي...">
+                        </div>
+                    </div>
+                    <img class="healthicons-ui-user" src="~/assets/healthicons_ui-user-profile.svg" />
+                </div>
+            </div>
+            <div class="div-4">
+                <div class="frame-wrapper-2">
+                    <div class="div-5" id="calendar">
+                        <img class="line" src="~/assets/Line 7.svg" />
+                        <img class="img" src="~/assets/Line 7.svg" />
+                        <img class="line-2" src="~/assets/Line 7.svg" />
+                        <img class="line-3" src="~/assets/Line 7.svg" />
+                        <img class="line-4" src="~/assets/Line 7.svg" />
+                        <img class="line-5" src="~/assets/Line 7.svg" />
+                        <div class="text-wrapper-3">الاحد</div>
+                        <div class="text-wrapper-4">الاثنين</div>
+                        <div class="text-wrapper-5">الثلاثاء</div>
+                        <div class="text-wrapper-6">الاربعاء</div>
+                        <div class="text-wrapper-7">الخميس</div>
+                        <div class="text-wrapper-8">الجمعة</div>
+                        <div class="text-wrapper-9">السبت</div>
+                    </div>
+                </div>
+                <div class="div-6">
+                    <div class="div-7">
+                        <div class="frame-wrapper-3">
+                            <div class="custom-dropdown" id="dayDropdown">
+                                <div class="custom-dropdown-header">
+                                    <span>اليوم</span>
+                                    <img class="oui-arrow-up" src="~/assets/Vector.svg" />
+                                </div>
+                                <div class="custom-dropdown-list"></div>
+                            </div>
+                        </div>
+                        <div class="frame-wrapper-4">
+                            <div class="custom-dropdown" id="startTimeDropdown">
+                                <div class="custom-dropdown-header">
+                                    <span>من الساعة</span>
+                                    <img class="oui-arrow-up" src="~/assets/Vector.svg" />
+                                </div>
+                                <div class="custom-dropdown-list"></div>
+                            </div>
+                        </div>
+                        <div class="frame-wrapper-4">
+                            <div class="custom-dropdown" id="endTimeDropdown">
+                                <div class="custom-dropdown-header">
+                                    <span>حتى الساعة</span>
+                                    <img class="oui-arrow-up" src="~/assets/Vector.svg" />
+                                </div>
+                                <div class="custom-dropdown-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="div-wrapper-3" id="addToScheduleBtn" disabled>
+                        <div class="text-wrapper-12">إضافة للجدول</div>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="frame-wrapper-5" id="createAccountBtn">
+                <div class="div-wrapper-4">
+                    <div class="text-wrapper-13">انشئ الحساب</div>
+                </div>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="confirmation-dialog" id="confirmationDialog">
+    <p>هل أنت متأكد أنك تريد إزالة هذا الوقت؟</p>
+    <button id="confirmYes">نعم</button>
+    <button id="confirmNo">لا</button>
+</div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dayDropdown = document.getElementById('dayDropdown');
+            const startTimeDropdown = document.getElementById('startTimeDropdown');
+            const endTimeDropdown = document.getElementById('endTimeDropdown');
+            const addToScheduleBtn = document.getElementById('addToScheduleBtn');
+            const createAccountBtn = document.getElementById('createAccountBtn');
+            const calendar = document.getElementById('calendar');
+            const confirmationDialog = document.getElementById('confirmationDialog');
+            const confirmYes = document.getElementById('confirmYes');
+            const confirmNo = document.getElementById('confirmNo');
+
+            const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            const hours = Array.from({length: 24}, (_, i) => `${i.toString().padStart(2, '0')}:00`);
+
+            let selectedDay = '';
+            let selectedStartTime = '';
+            let selectedEndTime = '';
+            let scheduleEvents = [];
+
+            function initializeDropdowns() {
+                initializeDropdown(dayDropdown, days);
+                initializeDropdown(startTimeDropdown, hours);
+                initializeDropdown(endTimeDropdown, hours);
+            }
+
+            function initializeDropdown(dropdown, items) {
+                const header = dropdown.querySelector('.custom-dropdown-header span');
+                const list = dropdown.querySelector('.custom-dropdown-list');
+                const arrow = dropdown.querySelector('.oui-arrow-up');
+
+                items.forEach(item => {
+                    const listItem = document.createElement('div');
+                    listItem.classList.add('custom-dropdown-item');
+                    listItem.textContent = item;
+                    listItem.addEventListener('click', () => {
+                        header.textContent = item;
+                        list.style.display = 'none';
+                        arrow.style.transform = 'rotate(0deg)';
+                        updateSelectedValues(dropdown, item);
+                    });
+                    list.appendChild(listItem);
+                });
+
+                dropdown.addEventListener('click', (e) => {
+                    if (!e.target.closest('.custom-dropdown-list')) {
+                        list.style.display = list.style.display === 'block' ? 'none' : 'block';
+                        arrow.style.transform = list.style.display === 'block' ? 'rotate(180deg)' : 'rotate(0deg)';
+                    }
+                });
+            }
+
+            function updateSelectedValues(dropdown, value) {
+                if (dropdown === dayDropdown) {
+                    selectedDay = value;
+                } else if (dropdown === startTimeDropdown) {
+                    selectedStartTime = value;
+                    updateEndTimeDropdown();
+                } else if (dropdown === endTimeDropdown) {
+                    selectedEndTime = value;
                 }
-                <button type="submit" class="frame-wrapper-5" id="createAccountBtn">
-                    <div class="div-wrapper-4">
-                        <div class="text-wrapper-13">انشئ الحساب</div>
-                    </div>
-                </button>
-            </form>
-        </div>
-    </div>
+                updateAddToScheduleButton();
+            }
 
-    <div class="confirmation-dialog" id="confirmationDialog">
-        <p>هل أنت متأكد أنك تريد إزالة هذا الوقت؟</p>
-        <button id="confirmYes">نعم</button>
-        <button id="confirmNo">لا</button>
-    </div>
+            function updateEndTimeDropdown() {
+                const endTimeList = endTimeDropdown.querySelector('.custom-dropdown-list');
+                endTimeList.innerHTML = '';
+                const startIndex = hours.indexOf(selectedStartTime) + 1;
+                hours.slice(startIndex).forEach(hour => {
+                    const listItem = document.createElement('div');
+                    listItem.classList.add('custom-dropdown-item');
+                    listItem.textContent = hour;
+                    listItem.addEventListener('click', () => {
+                        endTimeDropdown.querySelector('.custom-dropdown-header span').textContent = hour;
+                        endTimeList.style.display = 'none';
+                        endTimeDropdown.querySelector('.oui-arrow-up').style.transform = 'rotate(0deg)';
+                        updateSelectedValues(endTimeDropdown, hour);
+                    });
+                    endTimeList.appendChild(listItem);
+                });
+            }
 
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-        <script src="~/js/availability.js"></script>
-    }
-</body>
-</html>
+            function updateAddToScheduleButton() {
+                addToScheduleBtn.disabled = !(selectedDay && selectedStartTime && selectedEndTime);
+            }
+
+            function addEventToCalendar() {
+                const event = { day: selectedDay, start: selectedStartTime, end: selectedEndTime };
+                scheduleEvents.push(event);
+                renderCalendarEvents();
+                resetDropdowns();
+                updateHiddenInputs();
+            }
+
+            function renderCalendarEvents() {
+                // Clear existing events
+                calendar.querySelectorAll('.calendar-event').forEach(el => el.remove());
+
+                scheduleEvents.forEach(event => {
+                    const eventElement = document.createElement('div');
+                    eventElement.classList.add('calendar-event');
+                    eventElement.textContent = `${event.start} - ${event.end}`;
+                    eventElement.style.top = `${days.indexOf(event.day) * 36 + 20}px`;
+                    eventElement.style.left = '10px';
+                    eventElement.style.width = 'calc(100% - 20px)';
+
+                    eventElement.addEventListener('click', () => showConfirmationDialog(event));
+
+                    calendar.appendChild(eventElement);
+                });
+            }
+
+            function resetDropdowns() {
+                selectedDay = '';
+                selectedStartTime = '';
+                selectedEndTime = '';
+                dayDropdown.querySelector('.custom-dropdown-header span').textContent = 'اليوم';
+                startTimeDropdown.querySelector('.custom-dropdown-header span').textContent = 'من الساعة';
+                endTimeDropdown.querySelector('.custom-dropdown-header span').textContent = 'حتى الساعة';
+                updateAddToScheduleButton();
+            }
+
+            function showConfirmationDialog(event) {
+                confirmationDialog.style.display = 'block';
+                confirmYes.onclick = () => {
+                    removeEvent(event);
+                    confirmationDialog.style.display = 'none';
+                };
+                confirmNo.onclick = () => {
+                    confirmationDialog.style.display = 'none';
+                };
+            }
+
+            function removeEvent(event) {
+                scheduleEvents = scheduleEvents.filter(e => e !== event);
+                renderCalendarEvents();
+                updateHiddenInputs();
+            }
+
+            function updateHiddenInputs() {
+                // Clear existing hidden inputs
+                document.querySelectorAll('input[name^="SelectedDays"], input[name^="StartTimes"], input[name^="EndTimes"]').forEach(el => el.remove());
+
+                // Add new hidden inputs for each event
+                scheduleEvents.forEach((event, index) => {
+                    const dayInput = document.createElement('input');
+                    dayInput.type = 'hidden';
+                    dayInput.name = `SelectedDays[${index}]`;
+                    dayInput.value = days.indexOf(event.day).toString();
+                    document.getElementById('availabilityForm').appendChild(dayInput);
+
+                    const startTimeInput = document.createElement('input');
+                    startTimeInput.type = 'hidden';
+                    startTimeInput.name = `StartTimes[${index}]`;
+                    startTimeInput.value = event.start;
+                    document.getElementById('availabilityForm').appendChild(startTimeInput);
+
+                    const endTimeInput = document.createElement('input');
+                    endTimeInput.type = 'hidden';
+                    endTimeInput.name = `EndTimes[${index}]`;
+                    endTimeInput.value = event.end;
+                    document.getElementById('availabilityForm').appendChild(endTimeInput);
+                });
+            }
+
+            addToScheduleBtn.addEventListener('click', addEventToCalendar);
+
+            createAccountBtn.addEventListener('click', (e) => {
+                if (scheduleEvents.length === 0) {
+                    e.preventDefault();
+                    alert('يرجى إضافة فترة زمنية واحدة على الأقل قبل إنشاء الحساب');
+                }
+            });
+
+            initializeDropdowns();
+        });
+    </script>
