@@ -68,6 +68,11 @@ namespace HouseHero.Controllers
             _provider.UpdateProviderApplactionUser(provider,user);
             return RedirectToAction("Index", "Home");
         }
+
+        //public ActionResult EditPortfolios(int provider)
+        //{
+        //    // add view for Portfolios and add action post to save it
+        //}
     }
 
 

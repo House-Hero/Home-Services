@@ -26,6 +26,8 @@ namespace HouseHero.Models.ViewModels.Provider
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = null!;
 
+        
+
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -42,6 +44,7 @@ namespace HouseHero.Models.ViewModels.Provider
 
         public List<Available_Day>? Days { get; set; } = null!;
         public List<Portfolio_item>? Portfolios { get; set; } = null!;
+        public List<Portfolio_image>? PortfolioImages { get; set; }
         public List<Review>? Reviews { get; set; }
 
         // convert from Provider to ViewModel Avoid Mapping in Controller
