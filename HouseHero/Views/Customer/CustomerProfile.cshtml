@@ -13,7 +13,7 @@
     </div>
 
     <div class="profile-optn">
-        <a href="#" class="fav">
+        <a asp-controller="SavedProvider" asp-action="GetAll" class="fav">
             <i class="fa-solid fa-bookmark"> قائمة المفضلين</i>
         </a>
         <a asp-action="Edit" asp-controller="EditCustomerProfile" asp-route-id="@Model.Id" class="settings">
