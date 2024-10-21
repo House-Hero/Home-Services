@@ -94,6 +94,7 @@ body {
         color: rgba(255, 255, 255, 0.62);
         transition: 0.3s ease;
         position: relative;
+        white-space: nowrap;
     }
 
         #navbar li a:hover {
@@ -179,6 +180,7 @@ body {
 .profile-dropdown span {
     font-size: medium;
     font-weight: 600;
+    color: white;
 }
 
 /* Dropdown menu styles */

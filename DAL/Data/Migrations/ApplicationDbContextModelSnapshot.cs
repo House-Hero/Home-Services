@@ -327,7 +327,7 @@ namespace DAL.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 10, 16, 15, 8, 47, 554, DateTimeKind.Local).AddTicks(71));
+                        .HasDefaultValue(new DateTime(2024, 10, 18, 14, 58, 20, 421, DateTimeKind.Local).AddTicks(2321));
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
