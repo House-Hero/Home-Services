@@ -66,7 +66,7 @@ namespace HouseHero.Controllers
             }
 
             _provider.UpdateProviderApplactionUser(provider,user);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("GetAll", "Category");
         }
     }
 
