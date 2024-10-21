@@ -1,5 +1,152 @@
 ﻿@model Customer
+@{
+    Layout = "_CustomerProfileLayout";
+}
+<div class="profile">
+    <div class="mydata">
+        <img src="@Model.ApplicationUser.ProfilePicture_ID" class="profile-pic" alt="صورة المستخدم" />
+        <div class="profile-info">
+            <h6>@Model.ApplicationUser.UserName</h6>
+            <p><i class="fa-solid fa-location-dot"></i> @Model.ApplicationUser.City.Name</p>
+        </div>
+    </div>
 
+    <div class="profile-optn">
+        <a href="#" class="fav">
+            <i class="fa-solid fa-bookmark"> قائمة المفضلين</i>
+        </a>
+        <a asp-action="Edit" asp-controller="EditCustomerProfile" asp-route-id="@Model.Id" class="settings">
+            <i class="fa-solid fa-gear"></i>
+        </a>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="container">
+    <div class="title">
+        <p>سجل الطلبات</p>
+    </div>
+
+    <div class="sorting">
+
+
+        <div class="dropdown">
+            <select id="serviceDropdown" name="selectedService" onchange="filterRequests()">
+                <option value="" selected disabled hidden>الخدمة</option>
+                @foreach (var service in ViewBag.ServiceList)
+                {
+                    <option value="@service.Value">@service.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="dropdown">
+            <select id="statusDropdown" name="selectedStatus" onchange="filterRequests()">
+                <option value="" selected disabled hidden>حالة الطلب</option>
+                @foreach (var status in ViewBag.StatusList)
+                {
+                    <option value="@status.Value">@status.Text</option>
+                }
+            </select>
+        </div>
+    </div>
+    <button onclick="resetFilters()" class="submit">عرض الطلبات</button>
+    </div>
+
+    @section CustomerProfile{
+        <link rel="stylesheet" href="~/css/CustomerProfile.css" />
+
+    }
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        resetFilters();
+    });
+    function resetFilters() {
+        // Clear the dropdowns
+        document.getElementById("statusDropdown").value = "";
+        document.getElementById("serviceDropdown").value = "";
+
+        // Fetch all requests for the customer without filtering
+        filterRequests();
+    }
+    function filterRequests() {
+        var selectedStatus = document.getElementById("statusDropdown").value;
+        var selectedService = document.getElementById("serviceDropdown").value;
+        var customerId = '@Model.Id';
+
+        $.ajax({
+            url: '/Customer/FilterRequests',
+            type: 'POST',
+            data: { customerId: customerId, selectedStatus: selectedStatus, selectedService: selectedService },
+            success: function (result) {
+                var requestHistoryDiv = document.getElementById("requestHistory");
+                requestHistoryDiv.innerHTML = "";
+                console.log(result);
+                if (result.length > 0) {
+                    result.forEach(function (request) {
+                        console.log(request.statusName);
+                        if (request.statusName == "on_Review") {
+                            statusContent = `<button onclick="cancelRequest(${request.requestId})" class="refuse">إلغاء</button>`;
+                        } else if (request.statusName == "Completed") {
+                            statusContent = `<span class="done">اكتملت</span>`;
+                        } else if (request.statusName == "Accepted") {
+                            statusContent = `<span class="accepted">تم القبول</span>`;
+                        } else if (request.statusName == "rejected") {
+                            statusContent = `<span class="rejected">تم الرفض</span>`;
+                        }
+
+                        requestHistoryDiv.innerHTML += `
+                                   <div class="cards">
+                                       <div class="card">
+                                        <div class="card-top-side">
+                                               <a href="#">
+                                                    <img src="./Images/ProfilePic.png" class="card-image" />
+                                               </a>
+                                            <div class="card-info">
+                                               <a href="#">
+                                                  <h6>${request.providerName}</h6>
+                                               </a>
+                                               <p>${request.serviceName}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="description">
+                                            <p>تاريخ الطلب : ${request.requestDate}</p>
+                                        </div>
+
+                                        <div class="state-check">
+                                                ${statusContent}
+                                        </div>
+                                 </div>
+                            </div>
+                                `;
+                    });
+                } else {
+                    requestHistoryDiv.innerHTML = "<p>لا يوجد سجل طلبات متاح</p>";
+                }
+            }
+        });
+    }
+    function cancelRequest(requestId) {
+        $.ajax({
+            url: '/Customer/CancelRequest',
+            type: 'POST',
+            data: { requestId: requestId },
+            success: function () {
+                alert("تم إلفاء الطلب بنجاح");
+                filterRequests(); // Refresh the list
+            },
+            error: function () {
+                alert("حدث خطأ اثناء إالغاء الطلب");
+            }
+        });
+    }
+</script>
+
+
+@*
 <div>
     <img src="@Model.ApplicationUser.ProfilePicture_ID" width="75" class="img-fluid rounded-circle" alt="Customer Image" />
     <h1>@Model.ApplicationUser.UserName</h1>
@@ -37,7 +184,10 @@
     </div>
 </div>
 <a asp-action="Edit" asp-controller="EditCustomerProfile" asp-route-id="@Model.Id" class="btn-danger"> Edit</a>
+*@
 
+
+@*
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         resetFilters();
@@ -109,3 +259,4 @@
         });
     }
 </script>
+*@
