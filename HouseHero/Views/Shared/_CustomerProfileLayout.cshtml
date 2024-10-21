@@ -12,6 +12,7 @@
           referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/_CustomerProfileLayout.css" />
     @RenderSection("CustomerProfile", required: false)
+    @RenderSection("EditCustomerProfile", required: false)
 
 </head>
 <body>
@@ -41,7 +42,7 @@
 
                         <ul id="profile-menu" class="dropdown-menu" style="display: none">
                             <li><a asp-controller="Customer" asp-action="CustomerProfile" asp-route-UserName="@User.Identity.Name">الصفحة الشخصية</a></li>
-                            <li><a asp-controller="EditCustomerProfile" asp-action="Edit" asp-route-id="">تعديل الحساب</a></li>
+                            @*<li><a asp-controller="EditCustomerProfile" asp-action="Edit" asp-route-id="">تعديل الحساب</a></li>*@
                             <li><a asp-controller="Account" asp-action="Logout">تسجيل خروج</a></li>
                         </ul>
                     </div>
@@ -55,8 +56,8 @@
                         </button>
 
                         <ul id="profile-menu" class="dropdown-menu" style="display: none">
-                            <li><a asp-controller="Provider" asp-action="Details" asp-route-UserName="@User.Identity.Name">الصفحة الشخصية</a></li>
-                            <li><a asp-controller="EditProviderProfile" asp-action="" asp-route-id="">تعديل الحساب</a></li>
+                            <li><a asp-controller="ProviderProfile" asp-action="Details" asp-route-UserName="@User.Identity.Name">الصفحة الشخصية</a></li>
+                            @*<li><a asp-controller="EditProviderProfile" asp-action="" asp-route-id="">تعديل الحساب</a></li>*@
                             <li><a asp-controller="Account" asp-action="Logout">تسجيل خروج</a></li>
                         </ul>
                     </div>
@@ -100,6 +101,10 @@
             </div>
         </footer>
     <script src="~/js/_NewLayout.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
 
 </body>
 </html>

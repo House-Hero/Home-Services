@@ -2,6 +2,7 @@
 @{
     Layout = "_CustomerProfileLayout";
 }
+
 <div class="profile">
     <div class="mydata">
         <img src="@Model.ApplicationUser.ProfilePicture_ID" class="profile-pic" alt="صورة المستخدم" />
@@ -30,7 +31,6 @@
 
     <div class="sorting">
 
-
         <div class="dropdown">
             <select id="serviceDropdown" name="selectedService" onchange="filterRequests()">
                 <option value="" selected disabled hidden>الخدمة</option>
@@ -52,6 +52,12 @@
         </div>
     </div>
     <button onclick="resetFilters()" class="submit">عرض الطلبات</button>
+     <div class="cards">
+        <div id="requestHistory">
+
+        </div>
+    </div>
+
     </div>
 
     @section CustomerProfile{
@@ -98,16 +104,11 @@
                         }
 
                         requestHistoryDiv.innerHTML += `
-                                   <div class="cards">
+                                   
                                        <div class="card">
                                         <div class="card-top-side">
-                                               <a href="#">
-                                                    <img src="./Images/ProfilePic.png" class="card-image" />
-                                               </a>
                                             <div class="card-info">
-                                               <a href="#">
                                                   <h6>${request.providerName}</h6>
-                                               </a>
                                                <p>${request.serviceName}</p>
                                             </div>
                                         </div>
@@ -119,9 +120,7 @@
                                         <div class="state-check">
                                                 ${statusContent}
                                         </div>
-                                 </div>
-                            </div>
-                                `;
+                                 </div>`;
                     });
                 } else {
                     requestHistoryDiv.innerHTML = "<p>لا يوجد سجل طلبات متاح</p>";
@@ -147,6 +146,7 @@
 
 
 @*
+
 <div>
     <img src="@Model.ApplicationUser.ProfilePicture_ID" width="75" class="img-fluid rounded-circle" alt="Customer Image" />
     <h1>@Model.ApplicationUser.UserName</h1>
@@ -184,10 +184,8 @@
     </div>
 </div>
 <a asp-action="Edit" asp-controller="EditCustomerProfile" asp-route-id="@Model.Id" class="btn-danger"> Edit</a>
-*@
 
 
-@*
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         resetFilters();
