@@ -8,6 +8,8 @@
     <div class="header2">
         <h3>بيانات الصفحة الشخصية</h3>
     </div>
+
+    <form class="Data" method="post" asp-action="SaveChange" enctype="multipart/form-data" asp-controller="EditCustomerProfile">
     <div class="profile-info">
         <div class="profile-pic">
             <img src="@Model.ImageUrl" alt="الصورة الشخصية" />
@@ -15,7 +17,6 @@
         </div>
     </div>
 
-    <form class="Data" method="post" asp-action="SaveChange" enctype="multipart/form-data" asp-controller="EditCustomerProfile">
         <div class="grid-data">
         <input name="id" value="@Model.CustomerId" hidden />
         <input asp-for="@Model.ApplicationUserId" hidden />
