@@ -1,0 +1,72 @@
+﻿.frame-container {
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.4);
+     display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.frame {
+    margin-block: 7rem;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 2rem;
+    background-color: white;
+    gap: 10px;
+    border-radius: 15px;
+}
+
+.frame-dropdown select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid#00000091;
+    border-radius: 10px;
+    background-color: #e5e5e5;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.49);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("/assets/ServiceSelection/chevron-down-solid.svg");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    background-position-x: 12px;
+    background-position-y: 50%;
+}
+
+.frame-dropdown option {
+    color: #303e42;
+    font-weight: 500;
+}
+
+.frame-dropdown {
+    position: relative;
+}
+
+.send-request {
+    color: white;
+    background-color: #303e42;
+    border:none;
+    padding: 0.8rem;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 15px;
+    cursor:pointer;
+}
+    .send-request:hover {
+        background-color: #4e5f63;
+    }
+
+.textarea {
+    border: 1px solid#00000091;
+    background-color: #e5e5e5;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.49);
+    resize: none;
+    height: 10rem;
+    width: 100%;
+}

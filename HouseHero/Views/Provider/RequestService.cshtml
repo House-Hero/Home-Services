@@ -1,10 +1,45 @@
 ﻿@model RequestServiceViewModel
 
 @{
-    ViewData["Title"] = "Request Service";
+    ViewData["Title"] = "اطلب خدمتك";
+    Layout = "_NewLayout";
 }
 
+<div class="frame-main" id="frame-main">
+    <form asp-action="RequestService" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input type="hidden" asp-for="ProviderId" value="@ViewBag.ProviderId" />
+        <input type="hidden" asp-for="CustomerId" value="@ViewBag.CustomerId" />
+        <input type="hidden" asp-for="ServiceId" value="@ViewBag.ServiceId" />
+        <input type="hidden" asp-for="RequestDate" value="@DateTime.Now" />
+        <input type="hidden" asp-for="Status" value="3" />
+        <div class="frame-container" id="frame-container">
+            <div class="frame">
+                <div class="contact">
+                    <p class="head">وسيلة التواصل التي تفضلها*</p>
+                    <div class="frame-dropdown">
+                        <select asp-for="PreferredCommunication">
+                            <option selected disabled hidden></option>
+                            <option value="0">واتس آب</option>
+                            <option value="1">مكالمة</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="add-comment">
+                    <p class="head">اضف تعليقاً</p>
+                    <textarea class="textarea" asp-for="Comment"></textarea>
+                </div>
+                <button type="submit" class="send-request">ارسل الطلب</button>
+            </div>
+        </div>
+    </form>
+</div>
 
+@section RequestService{
+    <link href="~/css/RequestService.css" rel="stylesheet" />
+}
+
+@*
 <form asp-action="RequestService" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <input type="hidden" asp-for="ProviderId" value="@ViewBag.ProviderId" />
@@ -30,3 +65,5 @@
         <button type="submit" class="btn btn-primary">اطلب</button>
     </div>
 </form>
+
+*@
