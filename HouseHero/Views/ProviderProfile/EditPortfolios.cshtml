@@ -1,0 +1,47 @@
+﻿@model PortfolioItemViewModel
+
+@{
+    ViewData["Title"] = "EditPortfolios";
+}
+
+<h1>EditPortfolios</h1>
+
+<h4>ProviderWithAllDataViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+    <form method="post" enctype="multipart/form-data" asp-action="EditPortfolioItem">
+    <div class="container">
+            <a asp-action="Edit" asp-route-id="@Model.ProviderID" class="text-decoration-none"> اعدادات الحساب</a>
+    </div>
+        <input asp-for="ProviderID" type="hidden" />
+            
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <textarea asp-for="Name" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label asp-for="Bio"></label>
+            <textarea asp-for="Bio" class="form-control"></textarea>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label for="Images">Upload Images</label>
+                <input type="file" name="Images" id="Images" multiple />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+  
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

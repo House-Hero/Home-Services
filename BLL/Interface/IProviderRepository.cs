@@ -14,6 +14,9 @@ namespace BLL.Interface
         public void AddReview(Review review);
         public Provider GetProviderByApplicationUserId(int ApplicationUserId);
         public void UpdateProviderApplactionUser(Provider P ,ApplicationUser user);
+        public List<Portfolio_item> GetPortfolio(int PortfolioId);
+        public void AddPortfolioItem(Portfolio_item Portfolio);
+        public void AddPortfolioImage(Portfolio_image Images);
 
     }
 }
