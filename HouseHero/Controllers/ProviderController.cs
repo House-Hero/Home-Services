@@ -16,7 +16,6 @@ namespace HouseHero.Controllers
         private readonly IProviderRepository _provider;
         private readonly ICustomerRepository _customer;
 
-
         public ProviderController(IProviderRepository provider, ICustomerRepository customer)
         {
             _provider = provider;
