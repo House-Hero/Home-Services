@@ -65,24 +65,11 @@ namespace HouseHero.Controllers
                 }
             }
 
-            _provider.UpdateProviderApplactionUser(provider,user);
+            _provider.UpdateProviderApplactionUser(provider, user);
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public IActionResult PortfolioDetails()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult PortfolioDetails(PortfolioDetails portfolioDetails)
-        {
-
-            return View();
-        }
     }
-
-
 
 }
 
