@@ -44,39 +44,45 @@ namespace HouseHero.Controllers
         }
 
         [HttpPost]
-        public IActionResult FilterRequests(int customerId, int? selectedStatus, int? selectedService)
+        public IActionResult FilterRequests(int customerId, int? selectedStatus, int? selectedService, int pageNumber = 1, int pageSize = 6)
         {
-            // Retrieve requests for the specific customer
             var filteredRequests = ApplicationDb.Requests
                 .Include(r => r.Provider)
                 .ThenInclude(p => p.ApplicationUser)
                 .Include(s => s.Service)
                 .Where(r => r.CustomerId == customerId);
 
-            // Apply status filter if a status is selected
+            // Apply filters
             if (selectedStatus.HasValue)
             {
                 filteredRequests = filteredRequests.Where(r => (int)r.Status == selectedStatus.Value);
             }
-
-            // Apply service filter if a service is selected
             if (selectedService.HasValue)
             {
                 filteredRequests = filteredRequests.Where(r => r.ServiceId == selectedService.Value);
             }
 
-            // Select the data needed for the view
-            var result = filteredRequests.Select(r => new {
-                ProviderName = r.Provider.ApplicationUser.UserName,
-                ProviderAddress = r.Provider.ApplicationUser.Address,
-                ProviderPhone = r.Provider.ApplicationUser.PhoneNumber,
-                ServiceName = r.Service.Name,
-                RequestDate = r.RequestDate.ToString("dd MMM yyyy"),
-                StatusName = r.Status.ToString(),
-                RequestId =r.Id
-            }).ToList();
+            // Paging
+            var pagedRequests = filteredRequests
+                .OrderBy(r => r.RequestDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(r => new {
+                    ProviderProfile = r.Provider.ApplicationUser.ProfilePicture_ID,
+                    ProviderName = r.Provider.ApplicationUser.UserName,
+                    ProviderAddress = r.Provider.ApplicationUser.Address,
+                    ProviderPhone = r.Provider.ApplicationUser.PhoneNumber,
+                    ServiceName = r.Service.Name,
+                    RequestDate = r.RequestDate.ToString("dd MMM yyyy"),
+                    StatusName = r.Status.ToString(),
+                    RequestId = r.Id
+                })
+                .ToList();
 
-            return Json(result);
+            int totalRequests = filteredRequests.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
+
+            return Json(new { requests = pagedRequests, totalPages });
         }
         [HttpPost]
         public IActionResult CancelRequest(int requestId)
