@@ -16,9 +16,7 @@ p {
     unicode-bidi: embed;
 }
 
-a{
-    text-decoration:none;
-}
+
 
 html {
     scroll-behavior: smooth;

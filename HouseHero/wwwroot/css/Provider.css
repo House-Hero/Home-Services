@@ -203,6 +203,24 @@ td:last-child {
     margin: 10px 300px !important;
 }
 
+.btn-add {
+    border-radius: 13px;
+    background: #495e57 !important;
+    padding: 12px;
+    transition: 0.3s ease;
+    cursor: pointer;
+    color: white !important;
+    text-decoration: none !important;
+    text-align: right !important;
+    width: 170px !important;
+}
+
+    .btn-add:hover {
+        background: #637e75 !important;
+        text-decoration: none !important;
+        color: white !important;
+    }
+
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -218,6 +236,27 @@ td:last-child {
     flex-direction: column;
     position: relative;
 }
+
+.img-options {
+    position: absolute;
+    padding-top: 12px;
+    padding-right: 8px;
+}
+
+    .img-options a {
+        color: #303e42;
+        background-color: white;
+        padding: 12px;
+        padding-block: 5px;
+        border-radius: 50%;
+        transition: 0.3s ease;
+        box-shadow: 0px 2px 4px 2px #00000077;
+    }
+
+        .img-options a:hover {
+            color: white;
+            background-color: #303e42;
+        }
 
 .gallery-img {
     border-radius: 15px;

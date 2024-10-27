@@ -2,9 +2,49 @@
 
 @{
     ViewData["Title"] = "EditPortfolios";
+    Layout = "_NewLayout";
+
 }
 
-<h1>EditPortfolios</h1>
+@section RequestService {
+    <link href="~/css/RequestService.css" rel="stylesheet" />
+}
+
+<div class="frame-main" id="frame-main">
+    <form method="post" enctype="multipart/form-data" asp-action="EditPortfolioItem">
+        <input asp-for="ProviderID" type="hidden" />
+        <div class="frame-container" id="frame-container">
+            <div class="frame">
+
+                <p class="head1">قم باضافة بعض العناصر للمعرض الخاص بك</p>
+                <div class="add-comment">
+                        <p class="head">اسم الالبوم</p>
+                    <input type="text" class="name" asp-for="Name" />
+                </div>
+
+                <div class="add-comment">
+                    <p class="head">اضف وصفاً</p>
+                    <textarea class="textarea" asp-for="Bio"></textarea>
+                </div>
+
+                <p class="head">قم برفع الصور </p>
+                <input type="file" name="Images" id="Images" multiple />
+
+                <button type="submit" class="send-request">حفظ</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@*
+    <h1>EditPortfolios</h1>
 
 <h4>ProviderWithAllDataViewModel</h4>
 <hr />
@@ -15,7 +55,7 @@
             <a asp-action="Edit" asp-route-id="@Model.ProviderID" class="text-decoration-none"> اعدادات الحساب</a>
     </div>
         <input asp-for="ProviderID" type="hidden" />
-            
+
         <div class="form-group">
             <label asp-for="Name"></label>
             <textarea asp-for="Name" class="form-control"></textarea>
@@ -34,7 +74,7 @@
 
         <button type="submit" class="btn btn-success">Save Changes</button>
     </form>
-  
+
     </div>
 </div>
 
@@ -42,6 +82,6 @@
     <a asp-action="Details">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+*@
+
+
