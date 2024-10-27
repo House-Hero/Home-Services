@@ -183,6 +183,7 @@ a {
 .card {
     display: flex;
     flex-direction: column;
+
     /* width: 410px; */
     max-height: 230px;
     padding: 25px 20px;
@@ -323,3 +324,17 @@ a {
     cursor: default;
     color: white;
 }
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination-controls button {
+        margin: 0 5px;
+        padding: 5px 10px;
+    }
+
+        .pagination-controls button.active {
+            font-weight: bold;
+        }
