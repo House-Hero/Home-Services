@@ -322,7 +322,7 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
                         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                             return Redirect(returnUrl);
                         else
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("GetAll", "Category");
                     }
                 }
                 ModelState.AddModelError("", "Invaild User Name and password!");
@@ -335,7 +335,7 @@ public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabili
         {
             //damage cookie
             await SignInManager.SignOutAsync();
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("GetAll", "Category");
         }
 
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -316,7 +316,7 @@ namespace DAL.Data.Migrations
                     ProviderId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
-                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 10, 16, 15, 8, 47, 554, DateTimeKind.Local).AddTicks(71)),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 10, 18, 14, 58, 20, 421, DateTimeKind.Local).AddTicks(2321)),
                     PreferredCommunication = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
