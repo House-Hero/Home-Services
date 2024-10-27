@@ -57,6 +57,9 @@
 
         </div>
     </div>
+    <div id="paginationControls" class="pagination-controls">
+
+    </div>
 
     </div>
 
@@ -77,7 +80,10 @@
         // Fetch all requests for the customer without filtering
         filterRequests();
     }
-    function filterRequests() {
+    let currentPage = 1;
+
+    function filterRequests(page = 1) {
+        currentPage = page;
         var selectedStatus = document.getElementById("statusDropdown").value;
         var selectedService = document.getElementById("serviceDropdown").value;
         var customerId = '@Model.Id';
@@ -85,14 +91,14 @@
         $.ajax({
             url: '/Customer/FilterRequests',
             type: 'POST',
-            data: { customerId: customerId, selectedStatus: selectedStatus, selectedService: selectedService },
+            data: { customerId: customerId, selectedStatus: selectedStatus, selectedService: selectedService, pageNumber: currentPage },
             success: function (result) {
                 var requestHistoryDiv = document.getElementById("requestHistory");
                 requestHistoryDiv.innerHTML = "";
-                console.log(result);
-                if (result.length > 0) {
-                    result.forEach(function (request) {
-                        console.log(request.statusName);
+
+                if (result.requests.length > 0) {
+                    result.requests.forEach(function (request) {
+                        let statusContent;
                         if (request.statusName == "on_Review") {
                             statusContent = `<button onclick="cancelRequest(${request.requestId})" class="refuse">إلغاء</button>`;
                         } else if (request.statusName == "Completed") {
@@ -104,29 +110,43 @@
                         }
 
                         requestHistoryDiv.innerHTML += `
-                                   
-                                       <div class="card">
-                                        <div class="card-top-side">
-                                            <div class="card-info">
-                                                  <h6>${request.providerName}</h6>
-                                               <p>${request.serviceName}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="description">
-                                            <p>تاريخ الطلب : ${request.requestDate}</p>
-                                        </div>
-
-                                        <div class="state-check">
-                                                ${statusContent}
-                                        </div>
-                                 </div>`;
+                            <div class="card">
+                                <div class="card-top-side">
+                                    <div class="card-info">
+                                        <h6>${request.providerName}</h6>
+                                        <p>${request.serviceName}</p>
+                                    </div>
+                                </div>
+                                <div class="description">
+                                    <p>تاريخ الطلب : ${request.requestDate}</p>
+                                </div>
+                                <div class="state-check">
+                                    ${statusContent}
+                                </div>
+                            </div>`;
                     });
+
+                    renderPagination(result.totalPages);
                 } else {
                     requestHistoryDiv.innerHTML = "<p>لا يوجد سجل طلبات متاح</p>";
                 }
             }
         });
+    }
+
+    function renderPagination(totalPages) {
+        const paginationDiv = document.getElementById("paginationControls");
+        paginationDiv.innerHTML = "";
+
+        if (totalPages > 1) {
+            paginationDiv.innerHTML += `<button onclick="filterRequests(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>السابق</button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationDiv.innerHTML += `<button onclick="filterRequests(${i})" class="${currentPage === i ? 'active' : ''}">${i}</button>`;
+            }
+
+            paginationDiv.innerHTML += `<button onclick="filterRequests(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>التالي</button>`;
+        }
     }
     function cancelRequest(requestId) {
         $.ajax({
