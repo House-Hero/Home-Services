@@ -39,12 +39,18 @@ namespace HouseHero.Controllers
 
 
         [HttpPost]
-        public IActionResult FilterRequests(int providerId, int? selectedStatus)
+        public IActionResult FilterRequests(int providerId, int? selectedStatus, int page = 1, int pageSize = 6)
         {
-            // Retrieve requests for the specific customer
-            var filteredRequests = requestRepository.GetFilterRequests(providerId, selectedStatus);
+            // Retrieve paginated requests for the provider based on the selected status
+            var filteredRequests = requestRepository.GetFilterRequests(providerId, selectedStatus)
+                                                    .Skip((page - 1) * pageSize)
+                                                    .Take(pageSize)
+                                                    .ToList();
 
-            return Json(filteredRequests);
+            // Retrieve total count for pagination
+            var totalRequests = requestRepository.GetFilterRequests(providerId, selectedStatus).Count();
+
+            return Json(new { filteredRequests, totalRequests });
         }
         [HttpPost]
         public IActionResult CancelRequest(int requestId)

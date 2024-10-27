@@ -15,21 +15,29 @@
 </div>
 <div>
     <h4>Request History</h4>
-    <div id="requestHistory">
-    </div>
+    <div id="requestHistory"></div>
+</div>
+<div>
+    <button id="prevPage" onclick="prevPage()" disabled>Previous</button>
+    <span id="pageInfo">Page 1</span>
+    <button id="nextPage" onclick="nextPage()">Next</button>
 </div>
 
+
 <script>
+    let currentPage = 1;
+    const pageSize = 6;
+
     document.addEventListener("DOMContentLoaded", function () {
         resetFilters();
     });
-    function resetFilters() {
-        // Clear the dropdowns
-        document.getElementById("statusDropdown").value = "";
 
-        // Fetch all requests for the customer without filtering
+    function resetFilters() {
+        document.getElementById("statusDropdown").value = "";
+        currentPage = 1; // Reset to the first page
         filterRequests();
     }
+
     function filterRequests() {
         var selectedStatus = document.getElementById("statusDropdown").value;
         var providerId = '@Model.Id';
@@ -37,87 +45,62 @@
         $.ajax({
             url: '/RequestHistory/FilterRequests',
             type: 'POST',
-            data: { providerId: providerId, selectedStatus: selectedStatus},
-            success: function (result) {
+            data: { providerId: providerId, selectedStatus: selectedStatus, page: currentPage, pageSize: pageSize },
+            success: function (response) {
                 var requestHistoryDiv = document.getElementById("requestHistory");
                 requestHistoryDiv.innerHTML = "";
-                console.log(result);
-                if (result.length > 0) {
-                    result.forEach(function (request) {
-                        console.log(request.statusName);
-                        if (request.statusName == "on_Review") {
+                const { filteredRequests, totalRequests } = response;
+
+                if (filteredRequests.length > 0) {
+                    filteredRequests.forEach(function (request) {
+                        let statusContent;
+                        if (request.statusName === "on_Review") {
                             statusContent = `<button onclick="cancelRequest(${request.requestId})" class="btn btn-warning">Cancel</button>
-                                            <button onclick="AcceptRequest(${request.requestId})" class="btn btn-warning">Accept</button>  `;
-                        } else if (request.statusName == "Completed") {
+                                             <button onclick="AcceptRequest(${request.requestId})" class="btn btn-warning">Accept</button>`;
+                        } else if (request.statusName === "Completed") {
                             statusContent = `<span class="status-circle completed">Completed</span>`;
-                        } else if (request.statusName == "Accepted") {
+                        } else if (request.statusName === "Accepted") {
                             statusContent = `<span class="status-circle accepted">Accepted</span>
                                              <button onclick="CompleteRequest(${request.requestId})" class="btn btn-warning">Done</button>`;
                         }
-                        if (request.comment != null) {
-                            commentString = `<p>Comment: ${request.comment} </p>`;
-                        } else {
-                            commentString = `<p>Comment: No Comment </p>`;
-                        }
+
+                        let commentString = request.comment ? `<p>Comment: ${request.comment}</p>` : `<p>Comment: No Comment</p>`;
                         requestHistoryDiv.innerHTML += `
-                                <div class="card" style="width: 18rem; margin: 10px;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Customer: ${request.customerName}</h5>
-                                        <p>Address: ${request.customerAddress}</p>
-                                        <p>Phone: ${request.customerPhone}</p>
-                                        <p>Request Date: ${request.requestDate}</p>
-                                        <p>Preferred Communication: ${request.preferredCommunication}</p>
-                                        ${commentString}
-                                        ${statusContent}
-                                    </div>
-                                </div>`;
+                            <div class="card" style="width: 18rem; margin: 10px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Customer: ${request.customerName}</h5>
+                                    <p>Address: ${request.customerAddress}</p>
+                                    <p>Phone: ${request.customerPhone}</p>
+                                    <p>Request Date: ${request.requestDate}</p>
+                                    <p>Preferred Communication: ${request.preferredCommunication}</p>
+                                    ${commentString}
+                                    ${statusContent}
+                                </div>
+                            </div>`;
                     });
                 } else {
                     requestHistoryDiv.innerHTML = "<p>No request history available.</p>";
                 }
+
+                // Update pagination
+                const totalPages = Math.ceil(totalRequests / pageSize);
+                document.getElementById("pageInfo").innerText = `Page ${currentPage} of ${totalPages}`;
+                document.getElementById("prevPage").disabled = currentPage === 1;
+                document.getElementById("nextPage").disabled = currentPage === totalPages;
             }
         });
     }
-    function cancelRequest(requestId) {
-        $.ajax({
-            url: '/RequestHistory/CancelRequest',
-            type: 'POST',
-            data: { requestId: requestId },
-            success: function () {
-                alert("Request canceled successfully.");
-                filterRequests(); // Refresh the list
-            },
-            error: function () {
-                alert("There was an error canceling the request.");
-            }
-        });
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            filterRequests();
+        }
     }
-    function AcceptRequest(requestId) {
-        $.ajax({
-            url: '/RequestHistory/AcceptRequest',
-            type: 'POST',
-            data: { requestId: requestId },
-            success: function () {
-                alert("Request Accepted successfully.");
-                filterRequests(); // Refresh the list
-            },
-            error: function () {
-                alert("There was an error Accepting the request.");
-            }
-        });
+
+    function nextPage() {
+        currentPage++;
+        filterRequests();
     }
-    function CompleteRequest(requestId) {
-        $.ajax({
-            url: '/RequestHistory/CompleteRequest',
-            type: 'POST',
-            data: { requestId: requestId },
-            success: function () {
-                alert("Request Completed successfully.");
-                filterRequests(); // Refresh the list
-            },
-            error: function () {
-                alert("There was an error in the request.");
-            }
-        });
-    }
+
 </script>

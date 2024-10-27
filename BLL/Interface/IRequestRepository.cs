@@ -11,8 +11,9 @@ namespace BLL.Interface
 {
     public interface IRequestRepository : IGenericRepository<Requests>
     {
-        public IEnumerable GetFilterRequests(int providerId, int? selectedStatus);
+        public IQueryable<object> GetFilterRequests(int providerId, int? selectedStatus);
         public void ChangeStatusIntoAccept(Requests request);
         public void ChangeStatusIntoCompleted(Requests request);
+       
     }
 }

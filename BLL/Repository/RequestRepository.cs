@@ -22,7 +22,7 @@ namespace BLL.Repository
             _context = appDbContext;
         }
 
-        public IEnumerable GetFilterRequests(int providerId, int? selectedStatus)
+        public IQueryable<object> GetFilterRequests(int providerId, int? selectedStatus)
         {
             // Retrieve requests for the specific customer
             var filteredRequests = _context.Requests
@@ -48,7 +48,7 @@ namespace BLL.Repository
                 PreferredCommunication = r.PreferredCommunication.ToString(),
                 Comment = r.Comment,
                 RequestId = r.Id
-            }).ToList();
+            }).AsQueryable(); ;
 
             return result;
         }
