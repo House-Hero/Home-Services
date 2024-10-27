@@ -1,6 +1,7 @@
 ﻿
 using Azure.Core;
 using BLL.Interface;
+using BLL.Repository;
 using DAL.Data.Context;
 using DAL.Models;
 using HouseHero.Models.ViewModels;
@@ -20,7 +21,7 @@ namespace HouseHero.Controllers
         private readonly IServiceRepository _serviceRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IRequestRepository _requestRepository;
-        private readonly ApplicationDbContext _context;
+       
 
         public CustomerController( IServiceRepository serviceRepository ,ICustomerRepository customerRepository
                                , IRequestRepository requestRepository)
@@ -51,46 +52,18 @@ namespace HouseHero.Controllers
         }
 
         [HttpPost]
-        public IActionResult FilterRequests(int customerId, int? selectedStatus, int? selectedService, int pageNumber = 1, int pageSize = 6)
+        public IActionResult FilterRequests(int customerId, int? selectedStatus, int? selectedService, int page = 1, int pageSize = 6)
         {
-            var filteredRequests = _context.Requests
-                .Include(r => r.Provider)
-                .ThenInclude(p => p.ApplicationUser)
-                .Include(s => s.Service)
-                .Where(r => r.CustomerId == customerId);
+            var filteredRequests = _requestRepository.GetFilterRequestsForCustomer(customerId, selectedStatus, selectedService)
+                                                  .Skip((page - 1) * pageSize)
+                                                  .Take(pageSize)
+                                                  .ToList();
+            var totalRequests = _requestRepository.GetFilterRequestsForCustomer(customerId, selectedStatus, selectedService).Count();
+            var totalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
 
-            // Apply filters
-            if (selectedStatus.HasValue)
-            {
-                filteredRequests = filteredRequests.Where(r => (int)r.Status == selectedStatus.Value);
-            }
-            if (selectedService.HasValue)
-            {
-                filteredRequests = filteredRequests.Where(r => r.ServiceId == selectedService.Value);
-            }
-
-            // Paging
-            var pagedRequests = filteredRequests
-                .OrderBy(r => r.RequestDate)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(r => new {
-                    ProviderProfile = r.Provider.ApplicationUser.ProfilePicture_ID,
-                    ProviderName = r.Provider.ApplicationUser.UserName,
-                    ProviderAddress = r.Provider.ApplicationUser.Address,
-                    ProviderPhone = r.Provider.ApplicationUser.PhoneNumber,
-                    ServiceName = r.Service.Name,
-                    RequestDate = r.RequestDate.ToString("dd MMM yyyy"),
-                    StatusName = r.Status.ToString(),
-                    RequestId = r.Id
-                })
-                .ToList();
-
-            int totalRequests = filteredRequests.Count();
-            int totalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
-
-            return Json(new { requests = pagedRequests, totalPages });
+            return Json(new { requests = filteredRequests, totalPages });
         }
+
         [HttpPost]
         public IActionResult CancelRequest(int requestId)
         {

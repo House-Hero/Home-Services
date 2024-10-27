@@ -22,9 +22,9 @@ namespace BLL.Repository
             _context = appDbContext;
         }
 
-        public IQueryable<object> GetFilterRequests(int providerId, int? selectedStatus)
+        public IQueryable<object> GetFilterRequestsForProvider(int providerId, int? selectedStatus)
         {
-            // Retrieve requests for the specific customer
+            // Retrieve requests for the specific provider
             var filteredRequests = _context.Requests
                 .Include(r => r.Customer)
                 .ThenInclude(p => p.ApplicationUser)
@@ -37,6 +37,39 @@ namespace BLL.Repository
                 filteredRequests = filteredRequests.Where(r => (int)r.Status == selectedStatus.Value);
             }
 
+            // Select the data needed for the view
+            var result = filteredRequests.Select(r => new
+            {
+                CustomerName = r.Customer.ApplicationUser.Name,
+                CustomerAddress = r.Customer.ApplicationUser.Address,
+                CustomerPhone = r.Customer.ApplicationUser.PhoneNumber,
+                RequestDate = r.RequestDate.ToString("dd MMM yyyy"),
+                StatusName = r.Status.ToString(),
+                PreferredCommunication = r.PreferredCommunication.ToString(),
+                Comment = r.Comment,
+                RequestId = r.Id
+            }).AsQueryable(); ;
+
+            return result;
+        }
+        public IQueryable<object> GetFilterRequestsForCustomer(int CustomerId, int? selectedStatus, int? selectedService)
+        {
+            // Retrieve requests for the specific customer
+            var filteredRequests = _context.Requests
+                 .Include(r => r.Provider)
+                 .ThenInclude(p => p.ApplicationUser)
+                 .Include(s => s.Service)
+                 .Where(r => r.CustomerId == CustomerId);
+
+            // Apply filters
+            if (selectedStatus.HasValue)
+            {
+                filteredRequests = filteredRequests.Where(r => (int)r.Status == selectedStatus.Value);
+            }
+            if (selectedService.HasValue)
+            {
+                filteredRequests = filteredRequests.Where(r => r.ServiceId == selectedService.Value);
+            }
             // Select the data needed for the view
             var result = filteredRequests.Select(r => new
             {

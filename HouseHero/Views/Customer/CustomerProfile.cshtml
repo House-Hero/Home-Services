@@ -70,15 +70,14 @@
     document.addEventListener("DOMContentLoaded", function () {
         resetFilters();
     });
+
+    let currentPage = 1;
+
     function resetFilters() {
-        // Clear the dropdowns
         document.getElementById("statusDropdown").value = "";
         document.getElementById("serviceDropdown").value = "";
-
-        // Fetch all requests for the customer without filtering
         filterRequests();
     }
-    let currentPage = 1;
 
     function filterRequests(page = 1) {
         currentPage = page;
@@ -89,7 +88,7 @@
         $.ajax({
             url: '/Customer/FilterRequests',
             type: 'POST',
-            data: { customerId: customerId, selectedStatus: selectedStatus, selectedService: selectedService, pageNumber: currentPage },
+            data: { customerId: customerId, selectedStatus: selectedStatus, selectedService: selectedService, page: currentPage },
             success: function (result) {
                 var requestHistoryDiv = document.getElementById("requestHistory");
                 requestHistoryDiv.innerHTML = "";
@@ -108,20 +107,20 @@
                         }
 
                         requestHistoryDiv.innerHTML += `
-                            <div class="card">
-                                <div class="card-top-side">
-                                    <div class="card-info">
-                                        <h6>${request.providerName}</h6>
-                                        <p>${request.serviceName}</p>
+                                <div class="card">
+                                    <div class="card-top-side">
+                                        <div class="card-info">
+                                            <h6>${request.providerName}</h6>
+                                            <p>${request.serviceName}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="description">
-                                    <p>تاريخ الطلب : ${request.requestDate}</p>
-                                </div>
-                                <div class="state-check">
-                                    ${statusContent}
-                                </div>
-                            </div>`;
+                                    <div class="description">
+                                        <p>تاريخ الطلب : ${request.requestDate}</p>
+                                    </div>
+                                    <div class="state-check">
+                                        ${statusContent}
+                                    </div>
+                                </div>`;
                     });
 
                     renderPagination(result.totalPages);
@@ -146,21 +145,23 @@
             paginationDiv.innerHTML += `<button onclick="filterRequests(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>التالي</button>`;
         }
     }
+
     function cancelRequest(requestId) {
         $.ajax({
             url: '/Customer/CancelRequest',
             type: 'POST',
             data: { requestId: requestId },
             success: function () {
-                alert("تم إلفاء الطلب بنجاح");
-                filterRequests(); // Refresh the list
+                alert("تم إلغاء الطلب بنجاح");
+                filterRequests(currentPage); // Refresh the list on the current page
             },
             error: function () {
-                alert("حدث خطأ اثناء إالغاء الطلب");
+                alert("حدث خطأ اثناء إلغاء الطلب");
             }
         });
     }
 </script>
+
 
 
 @*
