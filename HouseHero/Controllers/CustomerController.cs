@@ -20,6 +20,7 @@ namespace HouseHero.Controllers
         private readonly IServiceRepository _serviceRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IRequestRepository _requestRepository;
+        private readonly ApplicationDbContext _context;
 
         public CustomerController( IServiceRepository serviceRepository ,ICustomerRepository customerRepository
                                , IRequestRepository requestRepository)
@@ -52,7 +53,7 @@ namespace HouseHero.Controllers
         [HttpPost]
         public IActionResult FilterRequests(int customerId, int? selectedStatus, int? selectedService, int pageNumber = 1, int pageSize = 6)
         {
-            var filteredRequests = ApplicationDb.Requests
+            var filteredRequests = _context.Requests
                 .Include(r => r.Provider)
                 .ThenInclude(p => p.ApplicationUser)
                 .Include(s => s.Service)
@@ -101,13 +102,5 @@ namespace HouseHero.Controllers
             }
             return BadRequest();
         }
-
     }
-
-
-
-
-
-
-
 }
