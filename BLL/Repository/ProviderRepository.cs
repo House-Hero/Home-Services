@@ -79,5 +79,24 @@ namespace BLL.Repository
                 }
             }
         }
+
+        public List<Portfolio_item> GetPortfolio(int PortfolioId)
+        {
+            var portfolioItem = _app.Portfolio_items
+                                .Include(p => p.Portfolio_Image)
+                                .Where(p => p.Id == PortfolioId);
+            return portfolioItem.ToList();
+        }
+
+        public void AddPortfolioItem(Portfolio_item Portfolio)
+        {
+            _app.Portfolio_items.Add(Portfolio);
+            _app.SaveChanges();
+        }
+        public void AddPortfolioImage(Portfolio_image image)
+        {
+            _app.Portfolio_images.Add(image);
+            _app.SaveChanges();
+        }
     }
 }
