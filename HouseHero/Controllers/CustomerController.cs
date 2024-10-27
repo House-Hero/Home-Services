@@ -4,31 +4,37 @@ using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
 using HouseHero.Models.ViewModels;
+using HouseHero.Models.ViewModels.Customer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace HouseHero.Controllers
 {
     [Authorize]
     public class CustomerController : Controller
     {
-        private readonly ApplicationDbContext ApplicationDb;
         private readonly IServiceRepository _serviceRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IRequestRepository _requestRepository;
 
-        public CustomerController(ApplicationDbContext context, IServiceRepository serviceRepository)
+        public CustomerController( IServiceRepository serviceRepository ,ICustomerRepository customerRepository
+                               , IRequestRepository requestRepository)
         {
-            ApplicationDb = context;
             _serviceRepository = serviceRepository;
+            _customerRepository = customerRepository;
+            _requestRepository = requestRepository;
         }
         [HttpGet]
-        public IActionResult CustomerProfile(string UserName)
+        public IActionResult CustomerProfile()
         {
             // Fetch customer data
-            var applicationUser = ApplicationDb.Users.Include(x => x.City).FirstOrDefault(x => x.UserName == UserName);
-            var customer = ApplicationDb.Customers.Include(x => x.ApplicationUser)
-                .FirstOrDefault(x => x.ApplicationUserId == applicationUser.Id);
+            var applicationUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var applicationUser = _customerRepository.GetApplicationUserByApplicationUserId(applicationUserId);
+            var customer = _customerRepository.GetCustomerByApplicationUserId(applicationUser.Id);
 
             // Populate status dropdown
             ViewBag.StatusList = new SelectList(
@@ -38,7 +44,7 @@ namespace HouseHero.Controllers
                 "Value", "Text");
 
             // Populate services dropdown
-            ViewBag.ServiceList = new SelectList(ApplicationDb.Services, "Id", "Name");
+            ViewBag.ServiceList = new SelectList(_serviceRepository.GetAll(), "Id", "Name");
 
             return View(customer);
         }
@@ -87,11 +93,10 @@ namespace HouseHero.Controllers
         [HttpPost]
         public IActionResult CancelRequest(int requestId)
         {
-            var request = ApplicationDb.Requests.FirstOrDefault(i => i.Id == requestId);
+            var request = _requestRepository.Get(requestId);
             if (request != null && request.Status == Status.on_Review)
             {
-                ApplicationDb.Requests.Remove(request); // Update the status to Rejected
-                ApplicationDb.SaveChanges();
+                _requestRepository.Delete(request);
                 return Ok();
             }
             return BadRequest();

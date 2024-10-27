@@ -1,4 +1,5 @@
-﻿using DAL.Data.Context;
+﻿using BLL.Interface;
+using DAL.Data.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,19 +11,21 @@ namespace HouseHero.Controllers
     [Authorize(Roles = "Provider")]
     public class RequestHistoryController : Controller
     {
-        private ApplicationDbContext ApplicationDb;
+        private readonly IProviderRepository providerRepository;
+        private readonly IRequestRepository requestRepository;
 
-
-        public RequestHistoryController(ApplicationDbContext applicationDb) 
+        public RequestHistoryController(IProviderRepository providerRepository,IRequestRepository requestRepository) 
         {
-            this.ApplicationDb = applicationDb;
+            this.providerRepository = providerRepository;
+            this.requestRepository = requestRepository;
         }
 
 
         public IActionResult GetRequests(int id)
         {
             //get provider
-            var provider = ApplicationDb.Providers.FirstOrDefault(x => x.Id == id);
+            var provider = providerRepository.Get(id);
+
             // Populate status dropdown
             ViewBag.StatusList = new SelectList(
                 Enum.GetValues(typeof(Status))
@@ -39,40 +42,17 @@ namespace HouseHero.Controllers
         public IActionResult FilterRequests(int providerId, int? selectedStatus)
         {
             // Retrieve requests for the specific customer
-            var filteredRequests = ApplicationDb.Requests
-                .Include(r => r.Customer)
-                .ThenInclude(p => p.ApplicationUser)
-                .Include(s => s.Service)
-                .Where(r => r.ProviderId == providerId && r.Status != Status.rejected);
+            var filteredRequests = requestRepository.GetFilterRequests(providerId, selectedStatus);
 
-            // Apply status filter if a status is selected
-            if (selectedStatus.HasValue)
-            {
-                filteredRequests = filteredRequests.Where(r => (int)r.Status == selectedStatus.Value);
-            }
-
-            // Select the data needed for the view
-            var result = filteredRequests.Select(r => new {
-                CustomerName = r.Customer.ApplicationUser.Name,
-                CustomerAddress = r.Customer.ApplicationUser.Address,
-                CustomerPhone = r.Customer.ApplicationUser.PhoneNumber,
-                RequestDate = r.RequestDate.ToString("dd MMM yyyy"),
-                StatusName = r.Status.ToString(),
-                PreferredCommunication=r.PreferredCommunication.ToString(),
-                Comment = r.Comment,
-                RequestId = r.Id
-            }).ToList();
-
-            return Json(result);
+            return Json(filteredRequests);
         }
         [HttpPost]
         public IActionResult CancelRequest(int requestId)
         {
-            var request = ApplicationDb.Requests.FirstOrDefault(i => i.Id == requestId);
+            var request = requestRepository.Get(requestId);
             if (request != null && request.Status == Status.on_Review)
             {
-                request.Status = Status.rejected; // Update the status to Rejected
-                ApplicationDb.SaveChanges();
+                requestRepository.Delete(request);
                 return Ok();
             }
             return BadRequest();
@@ -81,11 +61,10 @@ namespace HouseHero.Controllers
         [HttpPost]
         public IActionResult AcceptRequest(int requestId)
         {
-            var request = ApplicationDb.Requests.FirstOrDefault(i => i.Id == requestId);
+            var request = requestRepository.Get(requestId);
             if (request != null && request.Status == Status.on_Review)
             {
-                request.Status = Status.Accepted; // Update the status to Rejected
-                ApplicationDb.SaveChanges();
+                requestRepository.ChangeStatusIntoAccept(request); // Update the status to Rejected
                 return Ok();
             }
             return BadRequest();
@@ -94,11 +73,10 @@ namespace HouseHero.Controllers
         [HttpPost]
         public IActionResult CompleteRequest(int requestId)
         {
-            var request = ApplicationDb.Requests.FirstOrDefault(i => i.Id == requestId);
+            var request = requestRepository.Get(requestId);
             if (request != null && request.Status == Status.Accepted)
             {
-                request.Status = Status.Completed; // Update the status to Rejected
-                ApplicationDb.SaveChanges();
+                requestRepository.ChangeStatusIntoCompleted(request); // Update the status to Rejected
                 return Ok();
             }
             return BadRequest();

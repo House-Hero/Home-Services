@@ -65,12 +65,40 @@ namespace HouseHero.Controllers
                 }
             }
 
-            _provider.UpdateProviderApplactionUser(provider,user);
-            return RedirectToAction("GetAll", "Category");
+
+            _provider.UpdateProviderApplactionUser(provider, user);
+            return RedirectToAction("Index", "Home");
+ 
+        }
+
+        public ActionResult EditPortfolios(int provider)
+        {
+            var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var Provider = _provider.GetProviderByApplicationUserId(int.Parse(applicationUserId));
+            PortfolioItemViewModel viewmodel= new PortfolioItemViewModel();
+            viewmodel.ProviderID = Provider.Id;
+            TempData["ProviderID"] = Provider.Id;
+            return View(viewmodel);
+        }
+        [HttpPost]
+        public async Task<ActionResult> EditPortfolioItem( PortfolioItemViewModel model)
+        {
+            model.ProviderID = TempData["ProviderID"] != null ? (int)TempData["ProviderID"] : 0;
+            Portfolio_item item = model;
+            
+            _provider.AddPortfolioItem(item);
+            int newId = item.Id;
+            foreach (var image in model.Images)
+            {
+                Portfolio_image _Image = new Portfolio_image() {PortfolioId= newId };
+                _Image.Img_Url = await _cloudinary.UploadImageAsync(image);
+                _provider.AddPortfolioImage(_Image);
+            }
+
+
+            return RedirectToAction("Details");
         }
     }
-
-
 
 }
 

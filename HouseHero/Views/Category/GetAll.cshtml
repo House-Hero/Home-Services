@@ -4,6 +4,7 @@
     ViewData["Title"] = "خدماتك";
     Layout = "_HomeLayout";
 }
+
 @section WelcomePage{
     <div class="containerV1">
         <div class="welcome-page">
@@ -15,7 +16,10 @@
                 يمكنك اختيار الحرفي المناسب بناءً على تقييمه وحجز موعد معه بكل
                 سهولة. نضمن لك تجربة موثوقة وآمنة للحصول على أفضل الخدمات.
             </p>
+            @if (!User.Identity.IsAuthenticated)
+            {
             <a asp-controller="Account" asp-action="RegisterType" class="button3">انضم معنا الان</a>
+            }
         </div>
     </div>
 }
