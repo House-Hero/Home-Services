@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:DAL/Data/Migrations/20241101113320_InitialCreate.Designer.cs
-    [Migration("20241101113320_InitialCreate")]
+    [Migration("20241101120353_InitialCreate")]
     partial class InitialCreate
-========
-    [Migration("20241018115823_initial")]
-    partial class initial
->>>>>>>> 9dcf05d0cebf7b08cc947f5f458a4813bb434dcc:DAL/Data/Migrations/20241018115823_initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -335,11 +330,7 @@ namespace DAL.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:DAL/Data/Migrations/20241101113320_InitialCreate.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 11, 1, 13, 33, 20, 0, DateTimeKind.Local).AddTicks(2921));
-========
-                        .HasDefaultValue(new DateTime(2024, 10, 18, 14, 58, 20, 421, DateTimeKind.Local).AddTicks(2321));
->>>>>>>> 9dcf05d0cebf7b08cc947f5f458a4813bb434dcc:DAL/Data/Migrations/20241018115823_initial.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 11, 1, 14, 3, 52, 827, DateTimeKind.Local).AddTicks(3669));
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
