@@ -27,7 +27,7 @@ namespace DAL.Data.Configurations
             R.HasOne(R=>R.Customer)
                 .WithMany(R => R.Requests)
                 .HasForeignKey(R=>R.CustomerId).OnDelete(DeleteBehavior.NoAction);
-            R.Property(x=> x.Comment).HasColumnType("text");
+            R.Property(x=> x.Comment).HasColumnType("nvarchar").HasMaxLength(500);
             R.Property(r => r.Status)
             .HasConversion<string>()
             ;R.Property(r => r.PreferredCommunication)

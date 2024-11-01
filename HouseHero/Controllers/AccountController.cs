@@ -150,8 +150,8 @@ namespace HouseHero.Controllers
             return PartialView("_DaySchedulePartial", model);
         }
 
-[HttpPost]
-[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabilityViewModel model)
         {
             // Validate TempData existence
