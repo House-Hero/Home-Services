@@ -7,7 +7,7 @@
     <div class="mydata">
         <img src="@Model.ApplicationUser.ProfilePicture_ID" class="profile-pic" alt="صورة المستخدم" />
         <div class="profile-info">
-            <h6>@Model.ApplicationUser.UserName</h6>
+            <h6>@Model.ApplicationUser.Name</h6>
             <p><i class="fa-solid fa-location-dot"></i> @Model.ApplicationUser.City.Name</p>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <a asp-controller="SavedProvider" asp-action="GetAll" asp-route-id="@Model.Id" class="fav">
             <i class="fa-solid fa-bookmark"> قائمة المفضلين</i>
         </a>
-        <a asp-action="Edit" asp-controller="EditCustomerProfile" asp-route-id="@Model.Id" class="settings">
+        <a asp-action="Edit" asp-controller="Customer" asp-route-id="@Model.Id" class="settings">
             <i class="fa-solid fa-gear"></i>
         </a>
     </div>
@@ -109,12 +109,14 @@
                         requestHistoryDiv.innerHTML += `
                                 <div class="card">
                                     <div class="card-top-side">
-                                        <div class="card-info">
+                                            <img src=${request.providerPicture}" class="card-image" />
+                                            <div class="card-info">
                                             <h6>${request.providerName}</h6>
                                             <p>${request.serviceName}</p>
                                         </div>
                                     </div>
                                     <div class="description">
+                                        <p>رقم المحمول : ${request.providerPhone}</p>
                                         <p>تاريخ الطلب : ${request.requestDate}</p>
                                     </div>
                                     <div class="state-check">
