@@ -53,6 +53,7 @@ namespace HouseHero.Controllers
 
             return Json(new { filteredRequests, totalRequests });
         }
+
         [HttpPost]
         public IActionResult CancelRequest(int requestId)
         {

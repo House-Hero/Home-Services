@@ -25,49 +25,82 @@ namespace HouseHero.Controllers
         }
         public IActionResult Details(int id)
         {
-            var Result = _provider.GetProviderWithAllRelatedData(id);
-            ProviderWithAllDataViewModel ViewModel = Result;
-            var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));           
-            var CheckSave = _customer.GetSaved(customerId.Id);
-            foreach (var item in CheckSave)
+            try
             {
-                if (customerId.Id == item.CustomerId && ViewModel.ProviderId == item.ProviderId)
+                var Result = _provider.GetProviderWithAllRelatedData(id);
+                if (Result == null)
                 {
-                    ViewModel.Save = true;
-                    break;
+                    return NotFound("Provider not found.");
                 }
+                ProviderWithAllDataViewModel ViewModel = Result;
+                var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));
+                var CheckSave = _customer.GetSaved(customerId.Id);
+                foreach (var item in CheckSave)
+                {
+                    if (customerId.Id == item.CustomerId && ViewModel.ProviderId == item.ProviderId)
+                    {
+                        ViewModel.Save = true;
+                        break;
+                    }
+                }
+                ViewBag.CustomerId = customerId.Id;
+                return View(ViewModel);
             }
-            ViewBag.CustomerId = customerId.Id;
-            return View(ViewModel);
+            catch (Exception ex)
+            {
+                             
+                var req = HttpContext.TraceIdentifier;
+                var errorModel = new ErrorViewModel { RequestId = req };
+                return View("Error", errorModel);
+            }
         }
+
+
+
         [HttpPost]
         public IActionResult SavedProvider(int customerId, int providerId, bool isSaved)
         {
-            if (isSaved)
+            try
             {
-                _customer.SaveProviders(customerId, providerId);
+                if (isSaved)
+                {
+                    _customer.SaveProviders(customerId, providerId);
+                }
+                else
+                {
+                    _customer.UnSaveProviders(customerId, providerId);
+                }
+                return Json(new { success = true });
             }
-            else
+            catch (Exception ex)
             {
-                _customer.UnSaveProviders(customerId, providerId);
+                return Json(new { success = false, message = "An error occurred while saving the provider." });
             }
 
-            return Json(new { success = true });
-        }
+        } 
 
         [HttpGet]
         public IActionResult RequestService(int id)
         {
-            var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));
-            var serviceId = _provider.GetServiceIdForProvider(id);
+            try
+            {
+                var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));
+                var serviceId = _provider.GetServiceIdForProvider(id);
 
-            ViewBag.ProviderId = id;
-            ViewBag.CustomerId = customerId.Id;
-            ViewBag.ServiceId = serviceId;
+                ViewBag.ProviderId = id;
+                ViewBag.CustomerId = customerId.Id;
+                ViewBag.ServiceId = serviceId;
 
-            return View(new RequestServiceViewModel());
+                return View(new RequestServiceViewModel());
+            }
+            catch (Exception ex)
+            {
+                var req = HttpContext.TraceIdentifier;
+                var errorModel = new ErrorViewModel { RequestId = req };
+                return View("Error", errorModel);
+            }
         }
 
         [HttpPost]
@@ -75,39 +108,61 @@ namespace HouseHero.Controllers
         {
             if (ModelState.IsValid)
             {
-                var request = new Requests
+                try
                 {
-                    ProviderId = requestServiceVM.ProviderId,
-                    CustomerId = requestServiceVM.CustomerId,
-                    ServiceId = requestServiceVM.ServiceId,
-                    RequestDate = DateTime.Now,
-                    PreferredCommunication = requestServiceVM.PreferredCommunication,
-                    Comment = requestServiceVM.Comment,
-                    Status = Status.on_Review
-                };
-                _customer.SaveRequest(request);
-                return RedirectToAction("Details", new { id = requestServiceVM.ProviderId });
+                    var request = new Requests
+                    {
+                        ProviderId = requestServiceVM.ProviderId,
+                        CustomerId = requestServiceVM.CustomerId,
+                        ServiceId = requestServiceVM.ServiceId,
+                        RequestDate = DateTime.Now,
+                        PreferredCommunication = requestServiceVM.PreferredCommunication,
+                        Comment = requestServiceVM.Comment,
+                        Status = Status.on_Review
+                    };
+                    _customer.SaveRequest(request);
+                    return RedirectToAction("Details", new { id = requestServiceVM.ProviderId });
+                }
+                catch (Exception ex)
+                {
+                    var req = HttpContext.TraceIdentifier;
+                    var errorModel = new ErrorViewModel { RequestId = req };
+                    return View("Error", errorModel);
+                }
             }
             ModelState.AddModelError("", "Failed to add request.");
             return View(requestServiceVM);
         }
+
+
         [HttpPost]
         public IActionResult SaveReview(string Comment, int CustomerId, int ProviderId, int Rating)
         {
-            // Retrieve the customer using the CustomerId
-            var customer = _customer.GetCustomerById(CustomerId);
-
-            var review = new Review
+            try
             {
-                Comment = Comment,
-                CustomerId = CustomerId,
-                ProviderId = ProviderId,
-                Rating = Rating
-            };
-            _provider.AddReview(review);
+                // Retrieve the customer using the CustomerId
+                var customer = _customer.GetCustomerById(CustomerId);
+                if (customer == null)
+                {
+                    return Json(new { success = false, message = "Customer not found." });
+                }
 
-            // Return the review data as JSON for the AJAX success callback
-            return Json(new { customerName = customer.ApplicationUser?.UserName ?? "Unknown", comment = review.Comment, rating = review.Rating });
+                var review = new Review
+                {
+                    Comment = Comment,
+                    CustomerId = CustomerId,
+                    ProviderId = ProviderId,
+                    Rating = Rating
+                };
+                _provider.AddReview(review);
+
+                // Return the review data as JSON for the AJAX success callback
+                return Json(new { customerName = customer.ApplicationUser?.UserName ?? "Unknown", comment = review.Comment, rating = review.Rating });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred while saving the review." });
+            }
 
         }
 
