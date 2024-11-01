@@ -73,13 +73,14 @@ namespace BLL.Repository
             // Select the data needed for the view
             var result = filteredRequests.Select(r => new
             {
-                CustomerName = r.Customer.ApplicationUser.Name,
-                CustomerAddress = r.Customer.ApplicationUser.Address,
-                CustomerPhone = r.Customer.ApplicationUser.PhoneNumber,
+                ProviderPicture = r.Provider.ApplicationUser.ProfilePicture_ID,
+                ProviderName = r.Provider.ApplicationUser.UserName,
+                ProviderAddress = r.Provider.ApplicationUser.Address,
+                ProviderPhone = r.Provider.ApplicationUser.PhoneNumber,
                 RequestDate = r.RequestDate.ToString("dd MMM yyyy"),
+                ServiceName=r.Service.Name,
                 StatusName = r.Status.ToString(),
                 PreferredCommunication = r.PreferredCommunication.ToString(),
-                Comment = r.Comment,
                 RequestId = r.Id
             }).AsQueryable(); ;
 

@@ -91,7 +91,7 @@ namespace BLL.Repository
                 if (result != null)
                 {
                     result.Address = user.Address;
-                    result.City = user.City;
+                    result.CityId = user.CityId;
                     result.ProfilePicture_ID = user.ProfilePicture_ID;
                     result.Age = user.Age;
                     result.Name = user.Name;
