@@ -110,11 +110,6 @@ namespace HouseHero.Controllers
 
         //---------------------------------------------------------------------------------------------------
 
-        [HttpGet]
-        public IActionResult RegisterProviderAvailability()
-        {
-            return View(new ProviderAvailabilityViewModel());
-        }
         [HttpPost]
         public IActionResult AddDayToSchedule(Day day, string fromTime, string toTime)
         {
@@ -132,8 +127,8 @@ namespace HouseHero.Controllers
             availableDays.Add(new Available_Day
             {
                 Day = day,
-                Start_Time = TimeOnly.Parse(fromTime), 
-                End_Time = TimeOnly.Parse(toTime)      
+                Start_Time = TimeOnly.Parse(fromTime),
+                End_Time = TimeOnly.Parse(toTime)
             });
 
             // Store the updated list back in TempData
@@ -150,117 +145,100 @@ namespace HouseHero.Controllers
             return PartialView("_DaySchedulePartial", model);
         }
 
+        [HttpGet]
+        public IActionResult RegisterProviderAvailability()
+        {
+            return View(new ProviderAvailabilityViewModel());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabilityViewModel model)
         {
-            // Validate TempData existence
-            if (!TempData.ContainsKey("ProviderIdentity") || !TempData.ContainsKey("ProviderDetails"))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Registration session has expired. Please start the registration process again.");
                 return View(model);
             }
 
-            try
+            var providerIdentity = JsonSerializer.Deserialize<ProviderIdentityViewModel>(TempData["ProviderIdentity"].ToString());
+            var providerDetails = JsonSerializer.Deserialize<ProviderDetailsViewModel>(TempData["ProviderDetails"].ToString());
+
+            var user = new ApplicationUser
             {
-                // Deserialize with null checking
-                var providerIdentityJson = TempData["ProviderIdentity"]?.ToString();
-                var providerDetailsJson = TempData["ProviderDetails"]?.ToString();
+                Name = providerIdentity.Name,
+                UserName = providerIdentity.Name,
+                Email = providerIdentity.Email,
+                Address = providerDetails.Address,
+                PhoneNumber = providerDetails.PhoneNumber,
+                Age = providerDetails.Age,
+                CityId = providerDetails.CityId,
+            };
 
-                if (string.IsNullOrEmpty(providerIdentityJson) || string.IsNullOrEmpty(providerDetailsJson))
+
+
+            var result = await UserManager.CreateAsync(user, providerIdentity.Password);
+            if (result.Succeeded)
+            {
+                var provider = new Provider
                 {
-                    ModelState.AddModelError("", "Registration data is incomplete. Please start the registration process again.");
-                    return View(model);
-                }
 
-                var providerIdentity = JsonSerializer.Deserialize<ProviderIdentityViewModel>(providerIdentityJson);
-                var providerDetails = JsonSerializer.Deserialize<ProviderDetailsViewModel>(providerDetailsJson);
-
-                if (providerIdentity == null || providerDetails == null)
-                {
-                    ModelState.AddModelError("", "Failed to process registration data. Please try again.");
-                    return View(model);
-                }
-
-                // Preserve TempData for potential retries
-                TempData.Keep("ProviderIdentity");
-                TempData.Keep("ProviderDetails");
-
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-
-                var user = new ApplicationUser
-                {
-                    Name = providerIdentity.Name,
-                    UserName = providerIdentity.Name,
-                    Email = providerIdentity.Email,
-                    Address = providerDetails.Address,
-                    PhoneNumber = providerDetails.PhoneNumber,
-                    Age = providerDetails.Age,
-                    CityId = providerDetails.CityId,
+                    ApplicationUserId = user.Id,
+                    Bio = model.Bio,
+                    ServiceId = providerDetails.ServiceId,
+                    Available_Day = new List<Available_Day>()
                 };
+                ApplicationDb.Providers.Add(provider);
+                await UserManager.AddToRoleAsync(user, "Provider");
+                await ApplicationDb.SaveChangesAsync();
 
-                var result = await UserManager.CreateAsync(user, providerIdentity.Password);
-                if (result.Succeeded)
+                // Retrieve available days from TempData
+                var availableDays = JsonSerializer.Deserialize<List<Available_Day>>(TempData["AvailableDays"]?.ToString());
+
+                if (availableDays != null)
                 {
-                    var provider = new Provider
+                    foreach (var day in availableDays)
                     {
-                        ApplicationUserId = user.Id,
-                        Bio = model.Bio,
-                        ServiceId = providerDetails.ServiceId,
-                        Available_Day = new List<Available_Day>()
-                    };
+                        day.ProviderId = provider.Id;
 
-                    ApplicationDb.Providers.Add(provider);
-                    await UserManager.AddToRoleAsync(user, "Provider");
-                    await ApplicationDb.SaveChangesAsync();
+                        // Check if a record with the same ProviderId, Day, Start_Time, and End_Time exists
+                        //var existingDay = ApplicationDb.Available_Day
+                        //    .FirstOrDefault(d => d.ProviderId == provider.Id && d.Day == day.Day
+                        //                            && d.Start_Time == day.Start_Time && d.End_Time == day.End_Time);
 
-                    // Process available days
-                    if (TempData.ContainsKey("AvailableDays"))
-                    {
-                        var availableDaysJson = TempData["AvailableDays"]?.ToString();
-                        if (!string.IsNullOrEmpty(availableDaysJson))
-                        {
-                            var availableDays = JsonSerializer.Deserialize<List<Available_Day>>(availableDaysJson);
-                            if (availableDays != null && availableDays.Any())
-                            {
-                                foreach (var day in availableDays)
-                                {
-                                    day.ProviderId = provider.Id;
-                                    ApplicationDb.Available_Day.Add(day);
-                                }
-                                await ApplicationDb.SaveChangesAsync();
-                            }
-                        }
+                        //if (existingDay == null)
+                        //{
+                        //    // If no duplicate is found, add the new available day
+                        //    ApplicationDb.Available_Day.Add(day);
+                        //    await ApplicationDb.SaveChangesAsync();
+                        //}
+                        //else
+                        //{
+                        //    continue;
+                        //}
+                        ApplicationDb.Available_Day.Add(day);
+
+                        await ApplicationDb.SaveChangesAsync();
+
                     }
 
-                    // Clear TempData after successful registration
-                    TempData.Clear();
-
-                    return RedirectToAction("Login");
                 }
+                // Clear TempData after use
+                TempData.Remove("ProviderIdentity");
+                TempData.Remove("ProviderDetails");
+                TempData.Remove("AvailableDays");
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
-            }
-            catch (JsonException ex)
-            {
-                ModelState.AddModelError("", "Error processing registration data. Please try again.");
-                // Log the exception details here
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
-                // Log the exception details here
+                return RedirectToAction("Login");
             }
 
+            // Log or display the errors
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            // Return the view with model state errors
             return View(model);
         }
-
 
 
         //-----------------------------------------------------------------------------------------------------

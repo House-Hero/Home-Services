@@ -37,7 +37,6 @@
                         <h6>@Html.DisplayFor(model => model.ProviderName)</h6>
                         <p class="rating">
                             <i class="fa-solid fa-star"></i> @Html.DisplayFor(model => model.Rating)
-                            <!-- <span>(150 تقييماً)</span> -->
                         </p>
                         <p class="city">
                             @Html.DisplayFor(model => model.ServiceName)
@@ -112,7 +111,7 @@
                         <div class="comment">
                             <div class="comment-topside">
                                 <div class="user-data">
-                                    <img src="" class="user-pic" />
+                                    <img src="@review.Customer.ApplicationUser.ProfilePicture_ID" class="user-pic" />
                                     <div class="user-info">
                                         <p class="user-name">
                                             @review.Customer?.ApplicationUser?.UserName
