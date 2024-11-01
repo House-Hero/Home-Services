@@ -40,6 +40,7 @@ namespace BLL.Repository
             // Select the data needed for the view
             var result = filteredRequests.Select(r => new
             {
+                CustomerProfile = r.Customer.ApplicationUser.ProfilePicture_ID,
                 CustomerName = r.Customer.ApplicationUser.Name,
                 CustomerAddress = r.Customer.ApplicationUser.Address,
                 CustomerPhone = r.Customer.ApplicationUser.PhoneNumber,
