@@ -27,6 +27,7 @@ namespace BLL.Repository
                 .Include(c => c.Services)              // Eager load related services
                 .ThenInclude(s => s.Providers)
                 .ThenInclude(AU=>AU.ApplicationUser)
+                .ThenInclude(C=>C.City)
                 .FirstOrDefault(c => c.Id == categoryId);
         }
     }

@@ -18,7 +18,7 @@ namespace BLL.Repository
         {
             _app = app;
         }
-        public Provider GetProviderWithAllRelatedData(int ProviderId)
+        public Provider GetProviderWithAllRelatedData(int ProviderId)  
         {
             if (ProviderId <= 0)
             {

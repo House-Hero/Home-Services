@@ -2,11 +2,114 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "_CustomerProfileLayout";
+
 }
 
+<div class="profile-container">
+        <div class="header2">
+          <h3>بيانات الصفحة الشخصية</h3>
+        </div>
+                <form asp-action="Edit" enctype="multipart/form-data" class="form">
+                <div asp-validation-summary="ModelOnly"></div>
+        <div class="profile-info">
+          <div class="profile-pic">
+            <img src="@Model.ProfilePicture_ID" alt="Profile Picture" />
+                <input type="file" class="imageInput" name="Image"/>
+                <span id="sizeError" class="text-danger" 
+                style="display:none;">File size must be less than 2MB.</span>
+          </div>
+        </div>
+
+          <div class="bio">
+            <div class="form-group">
+              <label for="name" class="name">نبذة عني </label>
+              <input type="text" asp-for="Bio" />
+              <span asp-validation-for="Bio" class="text-danger"></span>
+            </div>
+          </div>
+
+          <div class="grid-data">
+            <div class="form-group">
+              <label for="name" class="name">الاسم</label>
+              <input type="text" asp-for="ProviderName" />
+              <span asp-validation-for="ProviderName" class="text-danger"></span>
+            </div>
+
+            <!-- <div class="form-group">
+              <label for="city" class="city">المدينة</label>
+              <div class="dropdown">
+                <select>
+                  <option value=""></option>
+                </select>
+              </div>
+            </div> -->
+
+            <div class="form-group">
+              <label for="phone" class="phone">رقم الهاتف</label>
+              <input type="tel" asp-for="PhoneNumber" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="age" class="age">العمر</label>
+                <input type="number" asp-for="Age" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="address" class="address">العنوان</label>
+              <input type="text" asp-for="Address" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="price" class="address"
+              >متوسط سعر الخدمة (جنيه مصري)
+              </label>
+              <div class="inner-grid">
+                <input type="number" asp-for="MinPrice"/>
+                <span asp-validation-for="MinPrice" class="text-danger"></span>
+                <p>&nbsp;&nbsp;:&nbsp;&nbsp;</p>
+                <input type="number" asp-for="MaxPrice"/>
+                <span asp-validation-for="MaxPrice" class="text-danger"></span>
+              </div>
+            </div>
+          </div>
+          <div>
+          <button type="submit" value="Save" class="base">حفظ التغييرات</button>
+
+          </div>
+        </form>
+      </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById('imageForm').addEventListener('submit', function (event) {
+            var fileInput = document.getElementById('imageInput');
+            var file = fileInput.files[0];
+            var sizeError = document.getElementById('sizeError');
+
+            if (file && file.size > 2 * 1024 * 1024) {
+                event.preventDefault();
+                sizeError.style.display = 'block';
+            } else {
+                sizeError.style.display = 'none';
+            }
+        });
+    </script>
+}
+@section EditProviderPRofile{
+    <link href="~/css/EditProviderProfile.css" rel="stylesheet" />
+}
+
+@*
 <h1>Edit</h1>
 
-<h4>ProviderWithAllDataViewModel</h4>
+<h4>test</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -64,22 +167,8 @@
     <a asp-action="Details">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script>
-    document.getElementById('imageForm').addEventListener('submit', function (event) {
-        var fileInput = document.getElementById('imageInput');
-        var file = fileInput.files[0];
-        var sizeError = document.getElementById('sizeError');
 
-        if (file && file.size > 2 * 1024 * 1024) {
-            event.preventDefault();
-            sizeError.style.display = 'block';
-        } else {
-            sizeError.style.display = 'none';
-        }
-    });
-</script>
-}
+*@
+
 
 

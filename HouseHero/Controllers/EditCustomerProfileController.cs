@@ -48,7 +48,7 @@ namespace HouseHero.Controllers
                 }
             }
             Customer.UpdateCustomerApplactionUser( user);
-            return RedirectToAction ("Index","Home");
+            return RedirectToAction ("GetAll","Category");
         }
     }
 }

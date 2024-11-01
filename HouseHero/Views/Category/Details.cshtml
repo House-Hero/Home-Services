@@ -4,10 +4,100 @@
 
 @{
     ViewData["Title"] = "Details";
-
+    Layout = "_NewLayout";
 }
 
-<h1>Details</h1>
+
+<form method="post" asp-action="sorted" asp-controller="Category" class="form">
+    <input name="CategoryID" id="CategoryID" hidden value="@ViewBag.CategoryID " />
+
+    <img src="@Url.Content("~/assets/ServiceSelection/" + @ViewBag.CategoryName + ".png")" alt="" class="service-img" />
+  
+
+    <div class="container">
+        <div class="title">
+            <h3>قم باختيار الشخص المناسب و احجز معاداً !</h3>
+        </div>
+
+        <div class="sorting">
+            <div class="dropdown">
+                <select name="cityid" id="cityid">
+                    <option value="" selected disabled hidden>المدينة</option>
+                    @foreach (var item in ViewBag.City)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+
+            </div>
+
+            <div class="dropdown">
+                <select name="rating" id="rating">
+                    <option value="" selected disabled hidden>التقييم</option>
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </div>
+
+            <div class="dropdown">
+                <select>
+                    <option value="" selected disabled hidden>نوع الخدمة</option>
+                    @foreach (var item in Model.Services)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+            <input type="submit" value="بحث" class="submit">
+
+        <div class="cards">
+
+            @foreach (var service in Model.Services)
+            {
+                foreach (var item in Model.item)
+                {
+                    if (service.Id == item.ServiceId)
+                    {
+                        <a asp-controller="Provider" asp-action="Details" asp-route-id="@item.Id">
+                           <div class="card">
+                                <div class="card-top-side">
+                                <img src="" class="card-image" />    @*صورة اليوزر *@
+
+                                      <div class="card-info">
+                                        <h6>@item.ApplicationUser.UserName</h6>
+                                        <p><i class="fa-solid fa-location-dot"></i>@item.ApplicationUser.City.Name</p>
+                                        <p>
+                                            <i class="fa-solid fa-hand-holding-dollar"></i> @item.MinPrice : @item.MaxPrice
+                                            جنيه
+                                        </p>
+                                </div>
+
+                           <div class="card-rating">
+                              <p dir="ltr">@item.Rating <i class="fa-solid fa-star"></i></p>
+                           </div>
+                    </div>
+
+                    <div class="description">
+                        <p>@item.Bio</p>
+                    </div>
+                </div>
+            </a>
+        }
+    }
+}
+
+        </div>
+      </div>
+</form>
+
+@section Service_selection {
+    <link rel="stylesheet" href="~/css/ServiceSelection.css" />
+}
+
+@* <h1>Details</h1>
 <div>
     <form method="post" asp-action="sorted" asp-controller="Category">
         <input name="CategoryID" id="CategoryID" hidden value="@ViewBag.CategoryID " />
@@ -31,7 +121,7 @@
         <br />
         <lable> Rating </lable>
         <select name="rating" id="rating">
-
+            <i class="fa-solid fa-star"></i>
             <option value="0">Select Reting</option>
             @for (int i = 1; i <= 5; i++)
             {
@@ -76,6 +166,9 @@
         }
     </table>
 </div>
+*@
+
+@*             (PAging part pt1)
 <div>
     <form asp-action="Details" asp-controller="Category">
         @if (Model.Haspreviouspage)
@@ -94,55 +187,4 @@
 <div>
     <a asp-action="GetAll">Back to List</a>
 </div>
-
-
-@* @model Category
-
-@{
-    ViewData["Title"] = "Details";
-}
-
-<h1>Details</h1>
-
-<div>
-    <h2>@Model.Name</h2>
-
-    <h4>Services in this category:</h4>
-    <ul>
-        @foreach (var service in Model.Services)
-        {
-            <li>
-                <strong>Service Name:</strong> @service.Name
-
-                <ul>
-                    <li><strong>Providers for this service:</strong></li>
-                    @if (service.Providers != null && service.Providers.Any())
-                    {
-                        foreach (var provider in service.Providers)
-                        {
-                            <li>
-                                <div>
-                                    <strong>Provider Name:</strong> @provider.ApplicationUser.UserName <br />
-                                    <strong>Provider Bio:</strong> @provider.Bio <br />
-                                    <strong>Rating:</strong> @provider.Rating <br />
-                                    <strong>Price Range:</strong> @provider.MinPrice - @provider.MaxPrice
-                                    <br />
-                                    <a asp-controller="Provider" asp-action="Details" asp-route-id="@provider.Id">Details</a>
-                                </div>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <li>No providers available for this service.</li>
-                    }
-                </ul>
-            </li>
-        }
-    </ul>
-</div>
-
-<div>
-    <a asp-action="GetAll">Back to List</a>
-</div>
- *@
+*@

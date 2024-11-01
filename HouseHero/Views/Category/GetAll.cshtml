@@ -4,6 +4,7 @@
     ViewData["Title"] = "خدماتك";
     Layout = "_HomeLayout";
 }
+
 @section WelcomePage{
     <div class="containerV1">
         <div class="welcome-page">
@@ -15,7 +16,10 @@
                 يمكنك اختيار الحرفي المناسب بناءً على تقييمه وحجز موعد معه بكل
                 سهولة. نضمن لك تجربة موثوقة وآمنة للحصول على أفضل الخدمات.
             </p>
+            @if (!User.Identity.IsAuthenticated)
+            {
             <a asp-controller="Account" asp-action="RegisterType" class="button3">انضم معنا الان</a>
+            }
         </div>
     </div>
 }
@@ -28,8 +32,8 @@
             {
             <a asp-controller="Category" asp-action="Details" asp-route-id="@category.Id">
                 <div class="flex-box">
-                    <img src="~/assets/Home/@category.Name" alt="@category.Name"> @*Edit the category svg names in "/assets/Home"
-                                                                                        To match the category Name*@
+                    <img src="@Url.Content("~/assets/Home/" + @category.Name + ".svg")" alt="@category.Name">   @*Name the Categories in the DB just 
+                                                                                                                like the images in /assets/home (in arabic)*@
                 </div>
                 <h6>@category.Name</h6> 
             </a>

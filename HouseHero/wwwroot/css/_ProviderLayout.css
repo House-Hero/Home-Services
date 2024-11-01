@@ -1,11 +1,23 @@
 ﻿@import url("https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap");
 
 * {
-    margin: 0;
+    direction: rtl !important;
+    margin: 0 !important;
     padding: 0;
     box-sizing: border-box;
     font-family: "Changa", sans-serif;
-    outline:none;
+    outline: none;
+}
+
+p {
+    direction: rtl !important;
+    text-align: right !important;
+    unicode-bidi: embed;
+}
+
+a{
+    text-decoration:none;
 }
 
 html {
@@ -21,49 +33,43 @@ body {
 }
 
 .main {
-    background: url('/assets/ServiceSelection/siteBackground.png');
+    background-image: url("/assets/ServiceSelection/siteBackground.png");
     background-size: cover;
     background-position: top 25% right 0;
+    /* height: 100vh; */
     width: 100%;
-    position: relative;
+    /* position: relative; */
 }
 
 /* Header */
+
+.header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 5px 60px;
+    background-color: #000000c0;
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
 
 .logo {
     max-width: 60px;
     height: auto;
 }
 
-.header {
+.header a {
     display: flex;
     align-items: center;
-    padding: 5px 60px;
-    background-color: #00000088;
-    z-index: 999;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    right: 0;
+    padding: 5px;
 }
-
-    .header a {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
 
 .buttons {
     display: flex;
     gap: 10px;
     margin-right: auto;
-    align-items: center;
-}
-
-.title {
-    color: #313e42;
-    font-size: x-large;
-    font-weight: 700;
 }
 
 #navbar {
@@ -94,7 +100,7 @@ body {
         color: rgba(255, 255, 255, 0.62);
         transition: 0.3s ease;
         position: relative;
-        white-space: nowrap;
+        text-wrap: nowrap;
     }
 
         #navbar li a:hover {
@@ -121,8 +127,8 @@ body {
             color: white;
         }
 
-.button1 {
-    padding: 7px 20px !important;
+.buttons .button1 {
+    padding: 7px 25px;
     border: 2px solid transparent;
     background-color: transparent;
     color: white;
@@ -131,16 +137,14 @@ body {
     border-radius: 15px;
     transition: 0.3s ease;
     height: fit-content;
-    text-decoration: none;
 }
 
-    .button1:hover {
+    .buttons .button1:hover {
         border-color: white;
-        padding: 7px 25px !important;
     }
 
 .button2 {
-    padding: 7px 20px !important;
+    padding: 7px 25px;
     border: none;
     cursor: pointer;
     border-radius: 15px;
@@ -149,13 +153,11 @@ body {
     color: #000;
     font-size: 16px;
     height: fit-content;
-    text-decoration: none;
 }
 
-    .button2:hover {
-        background-color: #afbdaf;
-        padding: 7px 25px !important;
-    }
+.buttons .button2:hover {
+    background-color: #afbdaf;
+}
 
 .profile-dropdown {
     width: 100%;
@@ -189,8 +191,8 @@ body {
     top: 50px;
     left: 0;
     transform: translateX(-5%);
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 15px !important;
     padding: 0;
     list-style: none;
     width: 150px;
@@ -219,69 +221,3 @@ body {
             .dropdown-menu li a:hover {
                 background-color: rgba(255, 255, 255, 0.1);
             }
-
-/* --- footer --- */
-
-footer {
-    background: #495e57;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12rem;
-}
-
-    footer .col {
-        color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-
-    footer .logo {
-        height: 150px;
-        max-width: 150px;
-        padding-bottom: 0.5rem;
-    }
-
-    footer span {
-        font-weight: 800;
-        padding-right: 1rem;
-        font-size: xx-large;
-    }
-
-    footer h4 {
-        font-size: large;
-        color: white;
-        padding-bottom: 20px;
-    }
-
-.social {
-    display: flex;
-    gap: 0.3rem;
-}
-
-    .social i {
-        font-size: 2.5rem;
-    }
-
-footer p {
-    font-size: 16px;
-    color: white;
-    margin: 0 0 8px 0;
-}
-
-footer a {
-    font-size: medium;
-    text-decoration: none;
-    color: white;
-    margin-bottom: 10px;
-}
-
-footer .install .row img {
-    border: 1px solid #088178;
-    border-radius: 6px;
-}
-
-footer .install img {
-    margin: 10px 0 15px 0;
-}
