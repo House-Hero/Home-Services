@@ -32,7 +32,7 @@
         <div class="section">
             <div class="profile">
                 <div class="mydata">
-                    <img src="./Images/ProfilePic.png" class="profile-pic" />
+                    <img src="@Model.ProfilePicture_ID" class="profile-pic" />
                     <div class="profile-info">
                         <h6>@Html.DisplayFor(model => model.ProviderName)</h6>
                         <p class="rating">
@@ -68,18 +68,30 @@
             </div>
                 <a asp-action="EditPortfolios" asp-controller="ProviderProfile" class="btn-add"><i class="fa-solid fa-plus"></i> أضف بعض الاعمال </a>
             <div class="gallery">
-
-                @foreach (var album in Model.Portfolios)
+                @if (Model.Portfolios == null || !Model.Portfolios.Any())
                 {
-                <div class="album">
-                        <div class="img-options">
-                            <a asp-action="" asp-controller=""><i class="fa-solid fa-bars"></i></a>
+                    <p>لا يوجد شئ للعرض</p>
+                }
+                else
+                {
+                    @foreach (var album in Model.Portfolios)
+                    {
+                        @foreach(var image in album.Portfolio_Image)
+                        {
+                    <div class="album">
+                        @*
+                             <div class="img-options">
+                                 <a asp-action="" asp-controller=""><i class="fa-solid fa-bars"></i></a>
+                             </div>
+                        *@
+                        <div class="picpic">
+                                <img src="@image.Img_Url" alt="" class="gallery-img" />
                         </div>
-                    <div class="picpic">
-                            <img src="@album.Portfolio_Image" alt="" class="gallery-img" />
+                        <div class="description">@album.Bio</div>
                     </div>
-                    <div class="description">@album.Bio</div>
-                </div>
+
+                        }
+                    }
                 }
 
             </div>
