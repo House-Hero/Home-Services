@@ -1,28 +1,36 @@
 ﻿@model Provider
+@{
+    Layout = "_CustomerProfileLayout";
+}
 
-<div>
-    <label for="statusDropdown">Select Status</label>
-    <select id="statusDropdown" name="selectedStatus" onchange="filterRequests()">
-        <option value="">---- Select Status ----</option>
-        @foreach (var status in ViewBag.StatusList)
-        {
-            <option value="@status.Value">@status.Text</option>
-        }
-    </select>
-</div>
-<div>
-    <button onclick="resetFilters()">Show All Requests</button>
-</div>
-<div>
-    <h4>Request History</h4>
-    <div id="requestHistory"></div>
-</div>
-<div>
-    <button id="prevPage" onclick="prevPage()" disabled>Previous</button>
-    <span id="pageInfo">Page 1</span>
-    <button id="nextPage" onclick="nextPage()">Next</button>
-</div>
+<div class="container">
+    <div class="title">
+        <p>سجل الطلبات</p>
+    </div>
 
+    <div class="sorting">
+        <div class="dropdown">
+            <select id="statusDropdown" name="selectedStatus" onchange="filterRequests()">
+                <option value="" selected disabled hidden>حالة الطلب</option>
+                @foreach (var status in ViewBag.StatusList)
+                {
+                    <option value="@status.Value">@status.Text</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <button onclick="resetFilters()" class="submit">عرض الطلبات</button>
+
+    <div class="cards" id="requestHistory">
+    </div>
+
+    <div class="paging">
+        <button id="prevPage" onclick="prevPage()" disabled>السابق</button>
+        <span id="pageInfo">صفحة 1</span>
+        <button id="nextPage" onclick="nextPage()">التالي</button>
+    </div>
+</div>
 
 <script>
     let currentPage = 1;
@@ -55,31 +63,37 @@
                     filteredRequests.forEach(function (request) {
                         let statusContent;
                         if (request.statusName === "on_Review") {
-                            statusContent = `<button onclick="cancelRequest(${request.requestId})" class="btn btn-warning">Cancel</button>
-                                             <button onclick="AcceptRequest(${request.requestId})" class="btn btn-warning">Accept</button>`;
+                            statusContent = `<button onclick="cancelRequest(${request.requestId})" class="refuse">الغاء</button>
+                                             <button onclick="AcceptRequest(${request.requestId})" class="accept">اوافق</button>`;
                         } else if (request.statusName === "Completed") {
-                            statusContent = `<span class="status-circle completed">Completed</span>`;
+                            statusContent = `<span class="done">اكتملت</span>`;
                         } else if (request.statusName === "Accepted") {
-                            statusContent = `<span class="status-circle accepted">Accepted</span>
-                                             <button onclick="CompleteRequest(${request.requestId})" class="btn btn-warning">Done</button>`;
+                            statusContent = `<span class="accepted">تم القبول</span>
+                                             <button onclick="CompleteRequest(${request.requestId})" class="accept">تم اكمال الخدمة</button>`;
                         }
 
-                        let commentString = request.comment ? `<p>Comment: ${request.comment}</p>` : `<p>Comment: No Comment</p>`;
+                        let commentString = request.comment ? `<p>${request.comment}</p>` : `<p>لا يوجد تعليق</p>`;
                         requestHistoryDiv.innerHTML += `
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Customer: ${request.customerName}</h5>
-                                    <p>Address: ${request.customerAddress}</p>
-                                    <p>Phone: ${request.customerPhone}</p>
-                                    <p>Request Date: ${request.requestDate}</p>
-                                    <p>Preferred Communication: ${request.preferredCommunication}</p>
-                                    ${commentString}
-                                    ${statusContent}
+                            <div class="card">
+                                <div class="card-top-side">
+                                    <div class="card-info">
+                                        <h6>${request.customerName}</h6>
+                                        <p>${request.preferredCommunication}</p>
+                                    </div>
                                 </div>
-                            </div>`;
+                                <div class="description">
+                                        <p>تاريخ الطلب : ${request.requestDate} </p>
+                                </div>
+                                <div class="comment">
+                                     ${commentString}
+                                </div>
+                                <div class="state-check">
+                                        ${statusContent}
+                                </div>
+                                </div>`;
                     });
                 } else {
-                    requestHistoryDiv.innerHTML = "<p>No request history available.</p>";
+                    requestHistoryDiv.innerHTML = "<p>لا يوجد طلبات متاحة</p>";
                 }
 
                 // Update pagination
@@ -104,3 +118,32 @@
     }
 
 </script>
+
+@section CustomerProfile {
+    <link rel="stylesheet" href="~/css/CustomerProfile.css" />
+
+}
+@*
+<div>
+    <label for="statusDropdown">Select Status</label>
+    <select id="statusDropdown" name="selectedStatus" onchange="filterRequests()">
+        <option value="">---- Select Status ----</option>
+        @foreach (var status in ViewBag.StatusList)
+        {
+            <option value="@status.Value">@status.Text</option>
+        }
+    </select>
+</div>
+<div>
+    <button onclick="resetFilters()">Show All Requests</button>
+</div>
+<div>
+    <h4>Request History</h4>
+    <div id="requestHistory"></div>
+</div>
+<div>
+    <button id="prevPage" onclick="prevPage()" disabled>Previous</button>
+    <span id="pageInfo">Page 1</span>
+    <button id="nextPage" onclick="nextPage()">Next</button>
+</div>
+*@
