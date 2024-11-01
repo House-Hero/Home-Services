@@ -16,7 +16,7 @@ namespace DAL.Data.Configurations
         {
             modelBuilder.ToTable("Providers");
             modelBuilder.HasKey(x => x.Id);
-            modelBuilder.Property(x => x.Bio).HasColumnType("nvarchar");
+            modelBuilder.Property(x => x.Bio).HasColumnType("nvarchar").HasMaxLength(500);
 
             //Service
             modelBuilder.HasOne(p => p.Service)

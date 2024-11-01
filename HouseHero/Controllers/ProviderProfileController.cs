@@ -21,6 +21,7 @@ namespace HouseHero.Controllers
             _customer = customer;
             _cloudinary = cloudinary;
         }
+        
         public IActionResult Details(string DefaultView = "Details")
         {
             var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

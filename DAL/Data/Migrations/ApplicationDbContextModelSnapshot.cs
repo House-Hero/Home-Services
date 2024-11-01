@@ -250,6 +250,7 @@ namespace DAL.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Bio")
+                        .HasMaxLength(500)
                         .HasColumnType("nvarchar");
 
                     b.Property<string>("Name")
@@ -279,6 +280,7 @@ namespace DAL.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bio")
+                        .HasMaxLength(500)
                         .HasColumnType("nvarchar");
 
                     b.Property<int?>("MaxPrice")
@@ -327,7 +329,7 @@ namespace DAL.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 11, 1, 14, 3, 52, 827, DateTimeKind.Local).AddTicks(3669));
+                        .HasDefaultValue(new DateTime(2024, 11, 1, 14, 38, 46, 739, DateTimeKind.Local).AddTicks(6095));
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");

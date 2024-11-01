@@ -14,7 +14,7 @@ namespace DAL.Data.Configurations
         public void Configure(EntityTypeBuilder<Portfolio_item> P)
         {
             P.HasKey(x => x.Id);
-            P.Property(x => x.Bio).HasColumnType("nvarchar");
+            P.Property(x => x.Bio).HasColumnType("nvarchar").HasMaxLength(500);
             P.Property(x => x.Name).HasColumnType("nvarchar").HasMaxLength(50);
 
             P.HasMany(p=>p.Portfolio_Image)

@@ -1,5 +1,4 @@
-﻿
-using Azure.Core;
+﻿using Azure.Core;
 using BLL.Interface;
 using BLL.Repository;
 using DAL.Data.Context;
