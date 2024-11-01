@@ -144,6 +144,13 @@ namespace HouseHero.Controllers
 
             return PartialView("_DaySchedulePartial", model);
         }
+
+        [HttpGet]
+        public IActionResult RegisterProviderAvailability()
+        {
+            return View(new ProviderAvailabilityViewModel());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterProviderAvailability(ProviderAvailabilityViewModel model)
