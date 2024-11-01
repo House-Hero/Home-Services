@@ -64,7 +64,7 @@
                         <a asp-controller="Provider" asp-action="Details" asp-route-id="@item.Id">
                            <div class="card">
                                 <div class="card-top-side">
-                                <img src="" class="card-image" />    @*صورة اليوزر *@
+                                <img src="@item.ApplicationUser.ProfilePicture_ID" class="card-image" />    @*صورة اليوزر *@
 
                                       <div class="card-info">
                                         <h6>@item.ApplicationUser.UserName</h6>

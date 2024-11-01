@@ -11,7 +11,6 @@ namespace HouseHero.Models.ViewModels.Provider
         ////public int ProfilePicture { get; set; }
 
         public List<Day> SelectedDays { get; set; }
-
         public List<TimeSpan> StartTimes { get; set; }
         public List<TimeSpan> EndTimes { get; set; }
     }

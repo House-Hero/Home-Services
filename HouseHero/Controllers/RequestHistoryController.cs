@@ -1,6 +1,7 @@
 ﻿using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
+using HouseHero.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -58,8 +59,18 @@ namespace HouseHero.Controllers
             var request = requestRepository.Get(requestId);
             if (request != null && request.Status == Status.on_Review)
             {
-                requestRepository.Delete(request);
-                return Ok();
+                try
+                {
+
+                    requestRepository.Delete(request);
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    var req = HttpContext.TraceIdentifier;
+                    var errorModel = new ErrorViewModel { RequestId = req };
+                    return View("Error", errorModel);
+                }
             }
             return BadRequest();
         }
@@ -70,8 +81,19 @@ namespace HouseHero.Controllers
             var request = requestRepository.Get(requestId);
             if (request != null && request.Status == Status.on_Review)
             {
-                requestRepository.ChangeStatusIntoAccept(request); // Update the status to Rejected
-                return Ok();
+                try
+                {
+                    requestRepository.ChangeStatusIntoAccept(request); // Update the status to Rejected
+                    return Ok();
+
+                }
+                catch (Exception ex)
+                {
+                    var req = HttpContext.TraceIdentifier;
+                    var errorModel = new ErrorViewModel { RequestId = req };
+                    return View("Error", errorModel);
+                }
+
             }
             return BadRequest();
         }
@@ -82,8 +104,19 @@ namespace HouseHero.Controllers
             var request = requestRepository.Get(requestId);
             if (request != null && request.Status == Status.Accepted)
             {
-                requestRepository.ChangeStatusIntoCompleted(request); // Update the status to Rejected
-                return Ok();
+
+                try
+                {
+
+                    requestRepository.ChangeStatusIntoCompleted(request); // Update the status to Rejected
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    var req = HttpContext.TraceIdentifier;
+                    var errorModel = new ErrorViewModel { RequestId = req };
+                    return View("Error", errorModel);
+                }
             }
             return BadRequest();
         }

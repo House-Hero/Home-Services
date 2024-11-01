@@ -1,6 +1,7 @@
 ﻿using BLL.Interface;
 using DAL.Data.Context;
 using DAL.Models;
+using HouseHero.Models;
 using HouseHero.Models.ViewModels;
 using HouseHero.Models.ViewModels.Provider;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace HouseHero.Controllers
             var Result = _provider.GetProviderWithAllRelatedData(id);
             ProviderWithAllDataViewModel ViewModel = Result;
             var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));
+            var customerId = _customer.GetCustomerByApplicationUserId(int.Parse(applicationUserId));           
             var CheckSave = _customer.GetSaved(customerId.Id);
             foreach (var item in CheckSave)
             {
