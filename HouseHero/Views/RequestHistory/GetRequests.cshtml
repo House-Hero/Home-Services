@@ -69,7 +69,7 @@
                             statusContent = `<span class="done">اكتملت</span>`;
                         } else if (request.statusName === "Accepted") {
                             statusContent = `<span class="accepted">تم القبول</span>
-                                             <button onclick="CompleteRequest(${request.requestId})" class="accept">تم اكمال الخدمة</button>`;
+                                             <button onclick="CompleteRequest(${request.requestId})" class="accept">اضغط لإكمال الخدمة</button>`;
                         }
 
                         let commentString = request.comment ? `<p>${request.comment}</p>` : `<p>لا يوجد تعليق</p>`;
@@ -115,6 +115,49 @@
     function nextPage() {
         currentPage++;
         filterRequests();
+    }
+
+    function cancelRequest(requestId) {
+        $.ajax({
+            url: '/RequestHistory/CancelRequest',
+            type: 'POST',
+            data: { requestId: requestId },
+            success: function () {
+                alert("تم الغاء الطلب بنجاح.");
+                filterRequests(); // Refresh the list
+            },
+            error: function () {
+                alert("There was an error canceling the request.");
+            }
+        });
+    }
+    function AcceptRequest(requestId) {
+        $.ajax({
+            url: '/RequestHistory/AcceptRequest',
+            type: 'POST',
+            data: { requestId: requestId },
+            success: function () {
+                alert("تم قبول الطلب بنجاح.");
+                filterRequests(); // Refresh the list
+            },
+            error: function () {
+                alert("There was an error Accepting the request.");
+            }
+        });
+    }
+    function CompleteRequest(requestId) {
+        $.ajax({
+            url: '/RequestHistory/CompleteRequest',
+            type: 'POST',
+            data: { requestId: requestId },
+            success: function () {
+                alert("تم اكمال الخدمة بنجاح.");
+                filterRequests(); // Refresh the list
+            },
+            error: function () {
+                alert("There was an error in the request.");
+            }
+        });
     }
 
 </script>
