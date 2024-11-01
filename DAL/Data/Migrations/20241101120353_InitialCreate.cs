@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -240,7 +240,7 @@ namespace DAL.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Bio = table.Column<string>(type: "text", nullable: true),
+                    Bio = table.Column<string>(type: "nvarchar", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     MinPrice = table.Column<int>(type: "int", nullable: true),
                     MaxPrice = table.Column<int>(type: "int", nullable: true),
@@ -293,7 +293,7 @@ namespace DAL.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Bio = table.Column<string>(type: "text", nullable: true),
+                    Bio = table.Column<string>(type: "nvarchar", nullable: true),
                     ProviderId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -316,7 +316,7 @@ namespace DAL.Data.Migrations
                     ProviderId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
-                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 10, 18, 14, 58, 20, 421, DateTimeKind.Local).AddTicks(2321)),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 11, 1, 14, 3, 52, 827, DateTimeKind.Local).AddTicks(3669)),
                     PreferredCommunication = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)

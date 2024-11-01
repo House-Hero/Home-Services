@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241018115823_initial")]
-    partial class initial
+    [Migration("20241101120353_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -253,7 +253,7 @@ namespace DAL.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Bio")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -282,7 +282,7 @@ namespace DAL.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bio")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar");
 
                     b.Property<int?>("MaxPrice")
                         .HasColumnType("int");
@@ -330,7 +330,7 @@ namespace DAL.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 10, 18, 14, 58, 20, 421, DateTimeKind.Local).AddTicks(2321));
+                        .HasDefaultValue(new DateTime(2024, 11, 1, 14, 3, 52, 827, DateTimeKind.Local).AddTicks(3669));
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
