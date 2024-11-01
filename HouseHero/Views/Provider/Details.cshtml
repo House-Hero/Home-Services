@@ -46,10 +46,13 @@
                 </div>
 
                 <div class="profile-optn">
-                    <a href="#" class="settings">
-                        <i class="fa-regular fa-bookmark"></i> @Html.CheckBoxFor(model => model.Save, new { @id = "saveCheckbox", @onchange = "saveProvider()" })
+                    <a href="javascript:void(0);" class="settings" onclick="saveProvider()">
+                        <i id="bookmarkIcon" class="@((Model.Save) ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark")" style="margin-left: 75px;"></i>
                     </a>
+                    @* Hidden field to hold the Save state for server use *@
+                    @Html.HiddenFor(model => model.Save, new { @id = "saveState" })
                 </div>
+
             </div>
 
             <div class="bio">
@@ -121,8 +124,8 @@
                         </div>
                     </div>
                 </form>
-
-                <div class="posted-comments" id="reviewsSection">
+                <div class="container">
+                    <div class="posted-comments border p-3" id="reviewsSection" style="height: 150px; overflow-y: auto;">
                     @foreach (var review in Model.Reviews)
                     {
                         <div class="comment">
@@ -148,22 +151,52 @@
                         <hr class="divider" />
                     }
                 </div>
-
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-@section Provider {
-    <link href="~/css/Provider.css" rel="stylesheet" />
-}
+<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel"  aria-hidden="true">
+    <div class="modal-dialog" style="
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    border-radius:15px;
+    margin: 0;
+    width: auto; 
+    max-width: 500px; 
+" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="saveModalLabel">رسالة</h5>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
     function saveProvider() {
-        var isChecked = document.getElementById('saveCheckbox').checked;
+        var icon = document.getElementById('bookmarkIcon');
+        var isSaved = icon.classList.contains("fa-solid"); // Determine if it’s currently saved
         var providerId = '@Model.ProviderId';
         var customerId = '@ViewBag.CustomerId';
         var providerName = '@Model.ProviderName';
+
+        // Toggle icon class to represent save/unsave
+        if (isSaved) {
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+            document.getElementById('saveState').value = false; // Update hidden field
+        } else {
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+            document.getElementById('saveState').value = true; // Update hidden field
+        }
 
         $.ajax({
             url: '@Url.Action("SavedProvider", "Provider")',
@@ -171,12 +204,12 @@
             data: {
                 customerId: customerId,
                 providerId: providerId,
-                isSaved: isChecked
+                isSaved: !isSaved // Pass the updated save state
             },
             success: function (response) {
-                var message = isChecked
-                    ? providerName + " has been saved successfully!"
-                    : providerName + " has been removed from the saved list!";
+                var message = !isSaved
+                    ? " تم حفظ " + providerName + " بنجاح"
+                    : "تم حذف " + providerName + " بنجاح";
                 $('.modal-body').text(message);
                 $('#saveModal').modal('show');
 
@@ -189,6 +222,8 @@
             }
         });
     }
+
+
     function addReview(event) {
         event.preventDefault();
 
@@ -234,6 +269,9 @@
     // };
 </script>
 
+@section Provider {
+    <link href="~/css/Provider.css" rel="stylesheet" />
+}
 @section ModalValid {
     <!-- Include Bootstrap and jQuery (necessary for the modal) -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
@@ -243,93 +281,7 @@
 
 
 @*
-<h1>Details</h1>
 
-<div>
-    <h4>ProviderWithAllDataViewModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProviderName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProviderName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Age)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Bio)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Bio)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfilePicture_ID)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProfilePicture_ID)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Rating)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MinPrice)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MinPrice)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxPrice)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MaxPrice)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ServiceName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ServiceName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Save)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.CheckBoxFor(model => model.Save, new { @id = "saveCheckbox", @onchange = "saveProvider()" })
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Days)
-        </dt>
         <dd class="col-sm-10">
             <ul>
                 @foreach (var day in Model.Days)
