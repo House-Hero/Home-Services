@@ -91,7 +91,7 @@ namespace HouseHero.Controllers
                     }
                 }
                 _provider.UpdateProviderApplactionUser(provider, user);
-                return RedirectToAction("GetAll", "Category");
+                return RedirectToAction("Details");
             }
             catch (Exception ex)
             {

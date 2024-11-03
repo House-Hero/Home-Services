@@ -150,7 +150,7 @@ namespace HouseHero.Controllers
                     }
                 }
                 _customerRepository.UpdateCustomerApplactionUser(user);
-                return RedirectToAction("GetAll", "Category");
+                return RedirectToAction("CustomerProfile");
             }
             catch (Exception ex)
             {
