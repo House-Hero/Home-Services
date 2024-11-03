@@ -5,6 +5,7 @@ namespace HouseHero.Models.ViewModels.Provider
 {
     public class ProviderAvailabilityViewModel
     {
+        [Required]
         public string Bio { get; set; }
 
         //[Display(Name = "Profile Picture")]

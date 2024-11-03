@@ -51,6 +51,7 @@ namespace HouseHero.Models.ViewModels.Customer
         [Display(Name = "Profile Picture")]
         [FileExtensions(Extensions = "jpg,jpeg,png", ErrorMessage = "Profile picture must" +
             " be a JPG, JPEG, or PNG file.")]
-        public IFormFile? ProfilePicture { get; set; }
+		[MaxFileSize(2 * 1024 * 1024, ErrorMessage = "File size cannot exceed 2MB.")]
+		public IFormFile? ProfilePicture { get; set; }
     }
 }

@@ -16,12 +16,14 @@ namespace HouseHero.Models.ViewModels.Provider
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         [Display(Name = "Email Address")]
         public string Email { get; set; } = null!;
-        public int? Age { get; set; }
+		[Range(18, 120, ErrorMessage = "Age must be between 18 and 120.")]
+		public int? Age { get; set; }
         public string? Bio { get; set; } = null!;
 
         [Display(Name = "Profile Picture")]
         public string? ProfilePicture_ID { get; set; }
-        public IFormFile? Image { get; set; }
+		[MaxFileSize(2 * 1024 * 1024, ErrorMessage = "File size cannot exceed 2MB.")]
+		public IFormFile? Image { get; set; }
         public string Address { get; set; } = null!;
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = null!;
@@ -92,7 +94,7 @@ namespace HouseHero.Models.ViewModels.Provider
                 Id=viewModel.ApplactionUserId,
                 UserName = viewModel.ProviderName,
                 Email = viewModel.Email,
-                Age = viewModel.Age ?? 0,
+                Age = viewModel.Age ?? 18,
                 Address = viewModel.Address,
                 PhoneNumber = viewModel.PhoneNumber,
                 ProfilePicture_ID = viewModel.ProfilePicture_ID

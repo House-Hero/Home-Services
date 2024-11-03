@@ -1,4 +1,5 @@
 ﻿using DAL.Models;
+using HouseHero.Models.Attributes;
 
 namespace HouseHero.Models.ViewModels.Customer
 {
@@ -11,7 +12,8 @@ namespace HouseHero.Models.ViewModels.Customer
         public int CityID { get; set; }
         public string PhoneNumber { get; set; }
         public int Age {  get; set; }
-        public IFormFile? Image { get; set; }
+		[MaxFileSize(2 * 1024 * 1024, ErrorMessage = "File size cannot exceed 2MB.")]
+		public IFormFile? Image { get; set; }
         public string? ImageUrl { get; set; }
         public List<City> Cities { get; set; }
 

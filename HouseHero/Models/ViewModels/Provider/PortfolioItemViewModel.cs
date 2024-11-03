@@ -1,5 +1,6 @@
 ﻿using DAL.Models;
-using System.ComponentModel.DataAnnotations;
+using HouseHero.Models.Attributes;
+
 
 namespace HouseHero.Models.ViewModels.Provider
 {
@@ -10,9 +11,10 @@ namespace HouseHero.Models.ViewModels.Provider
         public string Name { get; set; }
         public string? Bio { get; set; }
         public string? image {  get; set; }
-        //[Display(Name ="Images")]
-        //public List<Portfolio_image>? Images_URL { get; set; }
-        public List<IFormFile>? Images { get; set; }
+		//[Display(Name ="Images")]
+		//public List<Portfolio_image>? Images_URL { get; set; }
+		[MaxFileSize(2 * 1024 * 1024, ErrorMessage = "File size cannot exceed 2MB.")]
+		public List<IFormFile>? Images { get; set; }
 
 
         public static implicit operator Portfolio_image(PortfolioItemViewModel model)

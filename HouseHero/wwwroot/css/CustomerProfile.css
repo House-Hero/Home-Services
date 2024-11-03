@@ -189,6 +189,7 @@ a {
     background: #e5e5e5;
     gap: 0.45rem;
     transition: transform 0.3s, box-shadow 0.3s;
+    width: 270px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -262,6 +263,11 @@ a {
 }
 
 .comment {
+    word-wrap: break-word;
+    height: 35px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #e5e5e5;
     color: #303e42;
     font-size: 14px;
     text-overflow: ellipsis;
