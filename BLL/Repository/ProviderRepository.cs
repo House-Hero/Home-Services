@@ -35,6 +35,15 @@ namespace BLL.Repository
                 .ThenInclude(r => r.Customer) // Include Customer here
                 .ThenInclude(c => c.ApplicationUser) // Include ApplicationUser here
                 .FirstOrDefault(c => c.Id == ProviderId);
+
+                if (provider?.Reviews != null && provider.Reviews.Any())
+                {
+                  provider.Rating = (int)Math.Round(provider.Reviews.Average(r => r.Rating), MidpointRounding.AwayFromZero);
+                }
+                else
+                {
+                    provider.Rating = 0; 
+                }
             return provider;
         }
         public int GetServiceIdForProvider(int ProviderId)

@@ -18,5 +18,6 @@ namespace BLL.Interface
         public void AddPortfolioItem(Portfolio_item Portfolio);
         public void AddPortfolioImage(Portfolio_image Images);
 
+
     }
 }
