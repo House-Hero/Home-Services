@@ -100,7 +100,7 @@
 
                 // Update pagination
                 const totalPages = Math.ceil(totalRequests / pageSize);
-                document.getElementById("pageInfo").innerText = `Page ${currentPage} of ${totalPages}`;
+                document.getElementById("pageInfo").innerText = `صفحه ${currentPage} من ${totalPages}`;
                 document.getElementById("prevPage").disabled = currentPage === 1;
                 document.getElementById("nextPage").disabled = currentPage === totalPages;
             }
