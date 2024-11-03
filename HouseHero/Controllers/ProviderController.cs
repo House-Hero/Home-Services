@@ -27,6 +27,13 @@ namespace HouseHero.Controllers
         {
             try
             {
+                if (User.IsInRole("Provider"))
+                {
+                    var requestId = HttpContext.TraceIdentifier;
+                    var errorModel = new ErrorViewModel { RequestId = requestId };
+                    return View("Error", errorModel);
+
+                }
                 var Result = _provider.GetProviderWithAllRelatedData(id);
                 if (Result == null)
                 {
