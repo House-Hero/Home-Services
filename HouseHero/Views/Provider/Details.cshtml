@@ -248,25 +248,27 @@
             type: 'POST',
             data: form.serialize(),
             success: function (response) {
-                // Append the new review to the reviews section dynamically
-                $('#reviewsSection').append(
+                // Directly insert the new review into the #reviewsSection div
+                $('#reviewsSection').html(
+                    $('#reviewsSection').html() +
                     `<div class="comment">
-                    <div class="comment-topside">
-                      <div class="user-data">
-                        <div class="user-info">
-                          <p class="user-name">
-                              ${response.customerName}
-                          </p>
+                        <div class="comment-topside">
+                          <div class="user-data">
+                            <img src="${response.customerImage}" class="user-pic" />
+                            <div class="user-info">
+                              <p class="user-name">
+                                  ${response.customerName}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="user-rating">
+                            <i class="fa-solid fa-star"></i>${response.rating}
+                          </div>
                         </div>
-                      </div>
-                      <div class="user-rating">
-                        <i class="fa-solid fa-star"></i>${response.rating}
-                      </div>
-                    </div>
-                    <p class="the-comment">
-                        ${response.comment}
-                    </p>
-                  </div>`
+                        <p class="the-comment">
+                            ${response.comment}
+                        </p>
+                      </div>`
                 );
                 form[0].reset(); // Clear the form after submission
             },
