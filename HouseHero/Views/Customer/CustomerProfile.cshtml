@@ -92,7 +92,7 @@
             success: function (result) {
                 var requestHistoryDiv = document.getElementById("requestHistory");
                 requestHistoryDiv.innerHTML = "";
-
+                
                 if (result.requests.length > 0) {
                     result.requests.forEach(function (request) {
                         let statusContent;
@@ -109,7 +109,7 @@
                         requestHistoryDiv.innerHTML += `
                                 <div class="card">
                                     <div class="card-top-side">
-                                            <img src=${request.providerPicture}" class="card-image" />
+                                            <img src="${request.providerPicture}" class="card-image" />
                                             <div class="card-info">
                                             <h6>${request.providerName}</h6>
                                             <p>${request.serviceName}</p>
