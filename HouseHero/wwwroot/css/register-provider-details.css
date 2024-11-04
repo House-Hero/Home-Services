@@ -59,6 +59,7 @@ body {
     border-radius: 21.18px;
     border: 2.54px solid transparent;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 345px;
 }
 
 .frame .div {
@@ -97,19 +98,20 @@ body {
     gap: 24px;
 }
 
-.frame .input-wrapper {
-    display: flex;
-    flex: 1;
-    height: 48px;
-    align-items: center;
-    gap: 8px;
-    padding: 0 12px;
-    background-color: #ffffff; /* Changed from #f9f9f9 to white */
-    border-radius: 8px;
-    border: 1px solid #d3d3d3;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-    flex-direction: row-reverse; /* This will move the icon to the right */
-}
+    .frame .input-wrapper {
+        display: flex;
+        flex: 1;
+        height: 48px;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        background-color: #ffffff; /* Changed from #f9f9f9 to white */
+        border-radius: 8px;
+        border: 1px solid #d3d3d3;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        flex-direction: row-reverse; /* This will move the icon to the right */
+        margin-bottom: 22px;
+    }
 
 .frame input {
     width: 100%;

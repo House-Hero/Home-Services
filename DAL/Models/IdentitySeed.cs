@@ -38,17 +38,41 @@ namespace DAL.Models
                         context.Cities.Add(new City { Name = cityName });
                     }
                 }
-                string[] categoryNames = { "اعطال منزلية", "تشطيبات وترميمات", "صيانة اجهزة", "نظافة" };
-                foreach (var categoryName in categoryNames)
+            // Seed Categories and Services
+            var categoriesWithServices = new Dictionary<string, List<string>>
+        {
+            { "اعطال منزلية", new List<string> { "كهرباء", "غاز", "سباكة" } },
+            { "تشطيبات وترميمات", new List<string> { "نقاشة", "نجارة" } },
+            { "صيانة اجهزة", new List<string> { "ثلاجات", "غسالات", "تكيفات" } },
+            { "نظافة", new List<string> { "منزل", "سيارات" } }
+        };
+
+            foreach (var category in categoriesWithServices)
+            {
+                // Check if category exists
+                var existingCategory = context.Categories.FirstOrDefault(c => c.Name == category.Key);
+                if (existingCategory == null)
                 {
-                    if (!context.Categories.Any(c => c.Name == categoryName))
+                    // Add category if it doesn't exist
+                    existingCategory = new Category { Name = category.Key };
+                    context.Categories.Add(existingCategory);
+                    await context.SaveChangesAsync();  // Save to get the CategoryId
+                }
+
+                // Add services for this category
+                foreach (var serviceName in category.Value)
+                {
+                    if (!context.Services.Any(s => s.Name == serviceName && s.CategoryId == existingCategory.Id))
                     {
-                        context.Categories.Add(new Category { Name = categoryName });
+                        context.Services.Add(new Service { Name = serviceName, CategoryId = existingCategory.Id });
                     }
                 }
+            }
+
+            // Save changes to the database
             await context.SaveChangesAsync();
-                // Create admin user if it doesn't exist
-                var admin = new ApplicationUser { Email = "admin@HouseHero.com",
+            // Create admin user if it doesn't exist
+            var admin = new ApplicationUser { Email = "admin@HouseHero.com",
                         UserName = "admin@HouseHero" ,
                         Address = "Ismailia Main Street ",
                         CityId = 1 };
