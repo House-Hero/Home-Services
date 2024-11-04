@@ -29,23 +29,44 @@ namespace DAL.Models
                     }
                     await roleManager.CreateAsync(new ApplicationRole { Name  = role });    
                 }
-                // Create admin user if it doesn't exist
-                var admin = new ApplicationUser { Email = "admin@HouseHero.com", UserName = "admin@HouseHero" , Address = "Ismailia Main Street ", CityId = 1 };
-                var existingAdmin = await userManager.FindByEmailAsync(admin.Email);
-
-                if (existingAdmin == null)
+                // Seed cities if they don't exist
+                var cities = new List<string> { "أسماعيلية", "القاهرة" }; 
+                foreach (var cityName in cities)
                 {
-                    var result = await userManager.CreateAsync(admin, "9910Pe@");
-                    if (result.Succeeded)
+                    if (!context.Cities.Any(c => c.Name == cityName))
                     {
-                        await userManager.AddToRoleAsync(admin, "Admin");
-                    }
-                    else
-                    {
-                        // Handle creation failure (optional: log or throw an exception)
-                        throw new Exception($"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                        context.Cities.Add(new City { Name = cityName });
                     }
                 }
+                string[] categoryNames = { "اعطال منزلية", "تشطيبات وترميمات", "صيانة اجهزة", "نظافة" };
+                foreach (var categoryName in categoryNames)
+                {
+                    if (!context.Categories.Any(c => c.Name == categoryName))
+                    {
+                        context.Categories.Add(new Category { Name = categoryName });
+                    }
+                }
+            await context.SaveChangesAsync();
+                // Create admin user if it doesn't exist
+                var admin = new ApplicationUser { Email = "admin@HouseHero.com",
+                        UserName = "admin@HouseHero" ,
+                        Address = "Ismailia Main Street ",
+                        CityId = 1 };
+                    var existingAdmin = await userManager.FindByEmailAsync(admin.Email);
+
+            if (existingAdmin == null)
+            {
+                var result = await userManager.CreateAsync(admin, "9910Pe@");
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(admin, "Admin");
+                }
+                else
+                {
+                    // Handle creation failure (optional: log or throw an exception)
+                    throw new Exception($"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
 
         }
     }
