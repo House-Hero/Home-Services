@@ -1,9 +1,18 @@
 @model ProviderAvailabilityViewModel
 
-<h4>بعض الإضافات لصفحتك الشخصية</h4>
-<hr />
-
-<div class="row">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/register-provider-availability.css" />
+</head>
+<body>
+    <div class="top-right-widget">
+        <div class="view">
+            <div class="text-wrapper">خدماتك</div>
+        </div>
+        <img class="img" src="~/assets/frame-7.svg" alt="Icon">
+    </div>
+    <div class="frame">
     <div class="col-md-6">
         <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -56,6 +65,7 @@
         </table>
     </div>
 </div>
+</body>
 
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
