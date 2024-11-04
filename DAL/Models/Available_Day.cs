@@ -5,13 +5,14 @@ namespace DAL.Models
 
     public enum Day
     {
-        Sunday,
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday
+       السبت , 
+       الاحد,
+       الاثنين,
+       الثلاثاء,
+       الاربعاء,
+       الخميس,
+       الجمعة
+      
     }
 
     public class Available_Day:ModelBase
