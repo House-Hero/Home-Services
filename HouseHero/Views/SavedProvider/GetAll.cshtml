@@ -1,59 +1,118 @@
 ﻿@using DAL.VM
 @model PaginatedVM<Provider>
-<h1>Saved Provider</h1>
-<div>
-    <form method="post" asp-action="sorted" asp-controller="SavedProvider">
-        <input name="id" hidden value="@ViewBag.CustomerId" />
-        <label>Sort by Service</label>
-        <select name="serviceid" id="serviceid">
-            <option value="0" selected>select service</option>
-            @foreach (var item in Model.Services)
-            {
-                <option value="@item.Id">@item.Name</option>
-            }
-        </select>
-        <br />
-        <input type="submit" value="sort">
-    </form>
-</div>
-<div>
-<table class="table table-bordered table-hover">
-    <tr>
-        <th>Service Name</th>
-        <th>Provider Name</th>
-        <th>Bio</th>
-        <th>Rating</th>
-        <th></th>
-    </tr>
-    @foreach (var Provider in Model.item)
-    {          
-                <tr>
-                    <th>@Provider.Service.Name</th>
-                    <th>@Provider.ApplicationUser.UserName</th>
-                    <th>@Provider.Bio</th>
-                    <th>@Provider.Rating</th>
-                    <th>
-                    <a href="/SavedProvider/Delete?CustomerId=@ViewBag.CustomerId&ProviderId=@Provider.Id">Delete</a>
-                    </th>
-                </tr>       
-    }
-</table>
-</div>
-<div>
-    <form asp-action="GetAll" asp-controller="SavedProvider">
-        @if (Model.Haspreviouspage)
-        {
-            <input name="id" hidden value="@ViewBag.CustomerId"/>
-            <input name="pagenumber" hidden value="@(Model.pagenum-1)" />
-            <input type="submit" value="Previous" class="btn btn-primary">
-        }
-        <span>page @Model.pagenum of @Model.totalpage</span>
-        @if (Model.Hasnextpage)
-        {
-            <input name="id" hidden value="@ViewBag.CustomerId" />
-            <input name="pagenumber" hidden value="@(Model.pagenum+1)" />
-            <input type="submit" value="Next" class="btn btn-primary">
-        }
 
-    </form>
+@{
+    ViewData["Title"] = "قائمة المفضلين";
+
+    Layout = "_NewLayout";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/saved-provider.css">
+</head>
+
+<body>
+<div class="main">
+    <div class="container">
+        <div class="title">
+            قائمة المفضلين
+        </div>
+
+        <form method="post" asp-action="sorted" asp-controller="SavedProvider" class="sorting">
+            <input name="id" hidden value="@ViewBag.CustomerId" />
+            <div class="dropdown">
+                <select name="serviceid" id="serviceid">
+                    <option value="0" selected>اختر نوع الخدمة</option>
+                    @foreach (var item in Model.Services)
+
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="button2">فرز</button>
+        </form>
+
+        <div class="cards">
+            @foreach (var Provider in Model.item)
+            {
+                <a href="#">
+                    <div class="card">
+                        <div class="card-top-side">
+                            <img src="/Images/ProfilePic.png" class="card-image" alt="Provider Image">
+                            <div class="card-info">
+                                <h6>@Provider.ApplicationUser.UserName</h6>
+                                <p>@Provider.Service.Name</p>
+                            </div>
+                            <div class="card-rating">
+                                <p>@Provider.Rating</p>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <p>@Provider.Bio</p>
+                        </div>
+                        <div style="text-align: left;">
+                            <a href="/SavedProvider/Delete?CustomerId=@ViewBag.CustomerId&ProviderId=@Provider.Id"
+                               class="button1"
+                               style="color: #303e42;">
+                                حذف
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <form asp-action="GetAll" asp-controller="SavedProvider" class="pagination-controls">
+            <div style="display: flex; gap: 20px; align-items: center; margin: 20px 0;">
+                @if (Model.Haspreviouspage)
+
+                {
+                    <input name="id" hidden value="@ViewBag.CustomerId" />
+                    <input name="pagenumber" hidden value="@(Model.pagenum-1)" />
+                    <button type="submit" class="button2">السابق</button>
+                }
+                <span style="color: #303e42; font-weight: 600;">
+                    صفحة @Model.pagenum من @Model.totalpage
+                </span>
+                @if (Model.Hasnextpage)
+
+                {
+                    <input name="id" hidden value="@ViewBag.CustomerId" />
+                    <input name="pagenumber" hidden value="@(Model.pagenum+1)" />
+                    <button type="submit" class="button2">التالي</button>
+                }
+            </div>
+        </form>
+    </div>
 </div>
+</body>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileBtn = document.getElementById("profile-btn");
+            const profileMenu = document.getElementById("profile-menu");
+
+            profileBtn.addEventListener("click", function () {
+                if (profileMenu.style.display === "none" || profileMenu.style.display === "") {
+                    profileMenu.style.display = "block";
+                } else {
+                    profileMenu.style.display = "none";
+                }
+            });
+
+            window.addEventListener("click", function (event) {
+                if (!profileBtn.contains(event.target)) {
+                    profileMenu.style.display = "none";
+                }
+            });
+        });
+    </script>
+    </html>
+}
