@@ -1,9 +1,20 @@
 @model ProviderAvailabilityViewModel
 
+@{
+
+    ViewData["Title"] = "اختيار نوع التسجيل";
+
+    Layout = null;
+}
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/register-provider-availability.css" />
+    <style>
+            table, th, td{
+                border: 1px solid black;
+            }
+    </style>
 </head>
 <body>
     <div class="top-right-widget">
@@ -13,82 +24,163 @@
         <img class="img" src="~/assets/frame-7.svg" alt="Icon">
     </div>
     <div class="frame">
-    <div class="col-md-6">
-        <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="row" style=" 
+                            width: 100%;
+                            height: 95%;
+                            display: flex;
+                            flex-direction: row-reverse;
+                            flex-wrap: wrap;
+                            align-content: flex-start;
+                            justify-content: space-between;
+                            align-items: flex-start;">
+            <div class="col-md-6" style="
+                width: 300px;
+                display: flex;
+                flex-direction: row-reverse;">
+                <form id="availabilityForm" asp-action="RegisterProviderAvailability" method="post">
 
-            <div class="form-group">
-                <label asp-for="Bio">قم بإضافة وصف لحسابك الشخصي:</label>
-                <textarea asp-for="Bio" class="form-control" placeholder="إختياري"></textarea>
+                    <div class="form-group">
+                        <label asp-for="Bio" style="
+                        display: block;
+                        margin-bottom: 10px;
+                        font-size: 20px;
+                        font-weight: 600;">:قم بإضافة وصف لحسابك الشخصي</label>
+                        <textarea asp-for="Bio" class="form-control" placeholder="وصف" style="
+                        width: 230px;
+                        height: 60px;
+                        text-align: right;
+                        border-radius: 10px;
+                        margin-bottom: 20px;"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="day"
+                            style="
+                        display: block;
+                        margin-left: 200px;
+                        font-size: 25px;
+                        margin-bottom: 12px;">اليوم</label>
+                        
+                        <select asp-for="SelectedDays" class="form-control" id="day"
+                            style="height: 125px;
+                                height: 125px;
+                                width: 200px;
+                                border-radius: 10px;
+                                text-align: center;
+                                font-size: 25px;
+                                margin-left: 30px;">
+                            @foreach (var day in Enum.GetValues(typeof(DAL.Models.Day)))
+                            {
+                                <option value="@day">@day</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fromTime" style="    display: block;
+                            margin-left: 150px;
+                            font-size: 25px;
+                            margin-top: 20px;">من الساعة</label>
+                        <br />
+                        <input type="time" asp-for="StartTimes" class="form-control" id="fromTime" style="margin-left: 55px;
+                        width: 175px;
+                        margin-top: -5px;
+                        font-size: 20px;" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="toTime" style="display: block;
+                        margin-left: 150px;
+                        font-size: 25px;
+                        margin-top: 15px;">حتى الساعة</label>
+                        <br />
+                        <input type="time" asp-for="EndTimes" class="form-control" id="toTime" style="margin-left: 55px;
+                        width: 175px;
+                        margin-top: -5px;
+                        font-size: 20px;" />
+                    </div>
+                    <div class="container" style="
+                        width: 300px;
+                        display: flex;
+                        flex-direction: row-reverse;
+                        margin-top: 15px;
+                        justify-content: space-between;">
+                        <button type="button" id="addDayButton" class="btn btn-primary"
+                                style="
+                    background-color: rgb(50, 62, 66);
+                    color: white;
+                    width: 135px;
+                    height: 40px;
+                    border-radius: 10px;
+                    font-size: 20px;">
+                            إضافة للجدول
+                        </button>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" style="
+                        background-color: rgb(50, 62, 66);
+                        color: white;
+                        width: 135px;
+                        height: 40px;
+                        border-radius: 10px;
+                        font-size: 20px;">
+                                إنشاء
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
 
-            <div class="form-group">
-                <label for="day">اليوم</label>
-                <select asp-for="SelectedDays" class="form-control" id="day">
-                    @foreach (var day in Enum.GetValues(typeof(DAL.Models.Day)))
-                    {
-                        <option value="@day">@day</option>
-                    }
-                </select>
+            <div class="col-md-6" style="   
+               width: 300px;">
+                <h5 style="
+                direction: rtl;
+                width: 100%;
+                font-size: 25px;
+                text-align: center;">
+                    :جدولك الشخصي
+                </h5>
+                <table class="table " style="
+                    direction: rtl;
+                    text-align: center;
+                    width: 300px;
+                    font-size: 25px;">
+                    <thead>
+                        <tr>
+                            <th>اليوم</th>
+                            <th>من الساعة</th>
+                            <th>حتى الساعة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleTableBody">
+                        <!-- Days will be added here dynamically -->
+                    </tbody>
+                </table>
             </div>
-
-            <div class="form-group">
-                <label for="fromTime">من الساعة</label>
-                <input type="time" asp-for="StartTimes" class="form-control" id="fromTime" />
-            </div>
-
-            <div class="form-group">
-                <label for="toTime">حتى الساعة</label>
-                <input type="time" asp-for="EndTimes" class="form-control" id="toTime" />
-            </div>
-
-            <button type="button" id="addDayButton" class="btn btn-primary">إضافة للجدول</button>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">إنشاء</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="col-md-6">
-        <h5>جدولك الشخصي:</h5>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>اليوم</th>
-                    <th>من الساعة</th>
-                    <th>حتى الساعة</th>
-                </tr>
-            </thead>
-            <tbody id="scheduleTableBody">
-                <!-- Days will be added here dynamically -->
-            </tbody>
-        </table>
-    </div>
-</div>
+        </div>
+        
 </body>
 
-@section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#addDayButton').on('click', function () {
-                var day = $('#day').val();
-                var fromTime = $('#fromTime').val();
-                var toTime = $('#toTime').val();
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#addDayButton').on('click', function () {
+            var day = $('#day').val();
+            var fromTime = $('#fromTime').val();
+            var toTime = $('#toTime').val();
 
-                $.ajax({
-                    url: '@Url.Action("AddDayToSchedule", "Account")',
-                    type: 'POST',
-                    data: { day: day, fromTime: fromTime, toTime: toTime },
-                    success: function (result) {
-                        if (result.success === false) {
-                            alert(result.message);
-                        } else {
-                            $('#scheduleTableBody').append(result);
-                        }
+            $.ajax({
+                url: '@Url.Action("AddDayToSchedule", "Account")',
+                type: 'POST',
+                data: { day: day, fromTime: fromTime, toTime: toTime },
+                success: function (result) {
+                    if (result.success === false) {
+                        alert(result.message);
+                    } else {
+                        $('#scheduleTableBody').append(result);
                     }
-                });
+                }
             });
         });
-    </script>
-}
+    });
+</script>
