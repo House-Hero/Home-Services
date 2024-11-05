@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Intrinsics.X86;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace HouseHero.Controllers
 {
@@ -173,12 +174,18 @@ namespace HouseHero.Controllers
                 Age = providerDetails.Age,
                 CityId = providerDetails.CityId,
             };
+            user.ProfilePicture_ID = "https://res.cloudinary.com/djoaajj05/image/upload/v1730834030/nrjg27ubs2vnj1gwjygx.jpg";
 
 
 
             var result = await UserManager.CreateAsync(user, providerIdentity.Password);
             if (result.Succeeded)
             {
+                user = await UserManager.FindByIdAsync(user.Id.ToString());
+                user.ProfilePicture_ID = "https://res.cloudinary.com/djoaajj05/image/upload/v1730834030/nrjg27ubs2vnj1gwjygx.jpg";
+
+                // Update user
+                await UserManager.UpdateAsync(user);
                 var provider = new Provider
                 {
 
@@ -275,7 +282,8 @@ namespace HouseHero.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Age = model.Age,
                 Address = model.Address,
-                CityId = model.CityId
+                CityId = model.CityId,
+                ProfilePicture_ID = "https://res.cloudinary.com/djoaajj05/image/upload/v1730834030/nrjg27ubs2vnj1gwjygx.jpg"
             };
 
             var result = await UserManager.CreateAsync(user, model.Password);
