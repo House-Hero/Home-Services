@@ -43,7 +43,7 @@
                     <a asp-controller="Provider" asp-action="Details" asp-route-id="@Provider.Id">
                     <div class="card">
                         <div class="card-top-side">
-                        <img src="/Images/ProfilePic.png" class="card-image" alt="Provider Image">
+                        <img src="@Provider.ApplicationUser.ProfilePicture_ID" class="card-image" alt="Provider Image">
                             <div class="card-info">
                                 <h6>@Provider.ApplicationUser.UserName</h6>
                                 <p><i class="fa-solid fa-location-dot"></i>@Provider.ApplicationUser.City.Name</p>
