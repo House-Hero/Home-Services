@@ -44,18 +44,18 @@
                     <div class="card">
                         <div class="card-top-side">
                         <img src="/Images/ProfilePic.png" class="card-image" alt="Provider Image">
-                        <p><i class="fa-solid fa-location-dot"></i>@Provider.ApplicationUser.City.Name</p>
                             <div class="card-info">
                                 <h6>@Provider.ApplicationUser.UserName</h6>
+                                <p><i class="fa-solid fa-location-dot"></i>@Provider.ApplicationUser.City.Name</p>
                                 <p>@Provider.Service.Name</p>
                                 <p>
                                     <i class="fa-solid fa-hand-holding-dollar"></i> @Provider.MinPrice : @Provider.MaxPrice
                                     جنيه
                                 </p>
                             </div>
-                                <div class="card-rating">
-                                    <p dir="ltr">@Provider.Rating <i class="fa-solid fa-star"></i></p>
-                                </div>
+                            <div class="card-rating">
+                                 <p dir="ltr">@Provider.Rating <i class="fa-solid fa-star"></i></p>
+                            </div>
                         </div>
                         <div class="description">
                             <p>@Provider.Bio</p>
