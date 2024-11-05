@@ -17,6 +17,7 @@ namespace BLL.Interface
         public List<Portfolio_item> GetPortfolio(int PortfolioId);
         public void AddPortfolioItem(Portfolio_item Portfolio);
         public void AddPortfolioImage(Portfolio_image Images);
+        public void Update_Rating(int ProviderId);
 
 
     }
