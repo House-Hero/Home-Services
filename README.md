@@ -111,8 +111,32 @@ This Home Services Platform is designed to bridge the gap between customers seek
 1. Clone the repository:  
    ```bash
    git clone https://github.com/your-repo/home-services-platform.git
-2.Navigate to the project folder:
+   
+2. Navigate to the project folder:
    ```bash
    cd home-services-platform
+   
+3. Configure the database connection string in appsettings.json with your SQL Server details.
+   
+4. Run migrations to set up the database schema.
+   
+5. dotnet ef database update:
+   ```bash
+    dotnet ef database update
+ 
+6. Build the project:
+   ```bash
+   dotnet build
+
+7. Start the application:
+    ```bash
+   dotnet run
+
+
+
+
+
+
+
 
    
