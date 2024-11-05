@@ -111,3 +111,8 @@ This Home Services Platform is designed to bridge the gap between customers seek
 1. Clone the repository:  
    ```bash
    git clone https://github.com/your-repo/home-services-platform.git
+2.Navigate to the project folder:
+   ```bash
+   cd home-services-platform
+
+   
