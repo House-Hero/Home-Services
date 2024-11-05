@@ -163,6 +163,9 @@ namespace HouseHero.Controllers
                 };
 
                 _provider.AddReview(review);
+                //update rating 
+                _provider.Update_Rating(ProviderId);
+
                 // Return the review data as JSON for the AJAX success callback
                 return Json(new { customerName = customer.ApplicationUser?.UserName ?? "Unknown", comment = review.Comment, rating = review.Rating , customerImage =customer.ApplicationUser.ProfilePicture_ID });
             }

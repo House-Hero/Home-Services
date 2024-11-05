@@ -36,15 +36,42 @@ namespace BLL.Repository
                 .ThenInclude(c => c.ApplicationUser) // Include ApplicationUser here
                 .FirstOrDefault(c => c.Id == ProviderId);
 
-                if (provider?.Reviews != null && provider.Reviews.Any())
+                //if (provider?.Reviews != null && provider.Reviews.Any())
+                //{
+                //  provider.Rating = (int)Math.Round(provider.Reviews.Average(r => r.Rating), MidpointRounding.AwayFromZero);
+                //}
+                //else
+                //{
+                //    provider.Rating = 0; 
+                //}
+            return provider;
+        }
+
+        //update rating after each comment 
+        public void Update_Rating(int ProviderId)
+        {
+            var provider = _app.Providers
+               .Include(p => p.Reviews)
+               .FirstOrDefault(c => c.Id == ProviderId);
+
+            if (provider?.Reviews != null && provider.Reviews.Any())
+            {
+                var rating = (int)Math.Round(provider.Reviews.Average(r => r.Rating), MidpointRounding.AwayFromZero);
+                if(rating < 5)
                 {
-                  provider.Rating = (int)Math.Round(provider.Reviews.Average(r => r.Rating), MidpointRounding.AwayFromZero);
+                    provider.Rating = rating;
                 }
                 else
                 {
-                    provider.Rating = 0; 
+                    provider.Rating = 5;
                 }
-            return provider;
+            }
+            else
+            {
+                provider.Rating = 0;
+            }
+            _app.SaveChanges(); 
+
         }
         public int GetServiceIdForProvider(int ProviderId)
         {
