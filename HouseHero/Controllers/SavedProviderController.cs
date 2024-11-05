@@ -17,7 +17,7 @@ namespace HouseHero.Controllers
         //SavedProvider/GetAll/1
         public IActionResult GetAll(int id , int pagenumber = 1)
         {
-            int pagesize = 2;
+            int pagesize = 10;
             var savedproviders = SavedProvider.SavedProviderWithProviderwithService();
             List<Provider> List = new List<Provider>();
             foreach (var item in savedproviders)

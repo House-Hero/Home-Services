@@ -23,6 +23,7 @@ namespace BLL.Repository
             var savedProviders = _app.SavedProviders
                 .Include(s => s.Provider)
                 .ThenInclude(p=> p.ApplicationUser)
+                .ThenInclude(A=>A.City)
                 .Include(s => s.Provider)
                 .ThenInclude(p => p.Service)
                 .ToList();
