@@ -131,6 +131,8 @@ This Home Services Platform is designed to bridge the gap between customers seek
 7. Start the application:
     ```bash
    dotnet run
+    
+  ---
 
 
 
