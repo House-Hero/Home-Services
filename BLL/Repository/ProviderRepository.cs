@@ -56,7 +56,15 @@ namespace BLL.Repository
 
             if (provider?.Reviews != null && provider.Reviews.Any())
             {
-                provider.Rating = (int)Math.Round(provider.Reviews.Average(r => r.Rating), MidpointRounding.AwayFromZero);
+                var rating = (int)Math.Round(provider.Reviews.Average(r => r.Rating), MidpointRounding.AwayFromZero);
+                if(rating < 5)
+                {
+                    provider.Rating = rating;
+                }
+                else
+                {
+                    provider.Rating = 5;
+                }
             }
             else
             {
